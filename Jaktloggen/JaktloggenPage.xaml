@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Jaktloggen" x:Class="Jaktloggen.JaktloggenPage">
-	<Label Text="Welcome to Jaktloggen!" VerticalOptions="Center" HorizontalOptions="Center" />
+	<Label Text="Velkommen til Jaktloggen!" VerticalOptions="Center" HorizontalOptions="Center" />
 </ContentPage>

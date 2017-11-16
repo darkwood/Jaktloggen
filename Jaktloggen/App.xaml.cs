@@ -8,7 +8,11 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            MainPage = new JaktloggenPage();
+            if (Device.RuntimePlatform == Device.iOS)
+                MainPage = new JaktloggenPage();
+            else
+                MainPage = new NavigationPage(new JaktloggenPage());
+            
         }
 
         protected override void OnStart()

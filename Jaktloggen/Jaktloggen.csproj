@@ -29,7 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.xaml" />
-    <EmbeddedResource Include="JaktloggenPage.xaml" />
+    <EmbeddedResource Include="MainPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="About\AboutPage.xaml.cs">
@@ -52,8 +52,8 @@
     <Compile Include="Hunts\NewHuntPage.xaml.cs">
       <DependentUpon>NewHuntPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JaktloggenPage.xaml.cs">
-      <DependentUpon>JaktloggenPage.xaml</DependentUpon>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logs\Log.cs" />
     <Compile Include="Logs\LogsPage.xaml.cs">

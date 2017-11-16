@@ -4,7 +4,7 @@ namespace Jaktloggen
 {
     public partial class JaktloggenPage : TabbedPage
     {
-        public JaktloggenPage()
+        public JaktloggenPage() 
         {
             Page itemsPage, aboutPage = null;
 

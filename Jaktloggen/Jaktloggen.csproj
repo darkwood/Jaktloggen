@@ -89,26 +89,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="About\AboutPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <EmbeddedResource Include="About\AboutPage.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Hunts\HuntDetailPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hunts\HuntDetailPage.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Hunts\HuntsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hunts\HuntsPage.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Hunts\NewHuntPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hunts\NewHuntPage.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Logs\LogsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Logs\LogsPage.xaml">
       <SubType>Designer</SubType>
-    </Page>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.5.0.77107\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.0.77107\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />

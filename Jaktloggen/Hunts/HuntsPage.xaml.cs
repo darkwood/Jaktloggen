@@ -23,7 +23,7 @@ namespace Jaktloggen
             if (item == null)
                 return;
 
-            await Navigation.PushAsync(new LogsPage(new LogsViewModel(item)));
+            await Navigation.PushAsync(new HuntDetailPage(new HuntDetailViewModel(item)));
 
             // Manually deselect item
             ItemsListView.SelectedItem = null;
@@ -31,7 +31,7 @@ namespace Jaktloggen
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new NewHuntPage());
+            await Navigation.PushAsync(new HuntDetailPage());
         }
 
         protected override void OnAppearing()

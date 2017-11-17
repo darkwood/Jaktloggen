@@ -20,12 +20,12 @@ namespace Jaktloggen
             Items = new ObservableCollection<Log>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            MessagingCenter.Subscribe<NewHuntPage, Log>(this, "AddLog", async (obj, item) =>
-            {
-                var _item = item as Log;
-                Items.Add(_item);
-                //await DataStore.AddItemAsync(_item);
-            });
+            //MessagingCenter.Subscribe<LogDetailPage, Log>(this, "AddLog", async (obj, item) =>
+            //{
+            //    var _item = item as Log;
+            //    Items.Add(_item);
+            //    await App.LogDataStore.AddItemAsync(_item);
+            //});
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -38,10 +38,10 @@ namespace Jaktloggen
             try
             {
                 Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                var items = await App.LogDataStore.GetItemsAsync(true);
                 foreach (var item in items)
                 {
-                    //Items.Add(item);
+                    Items.Add(item);
                 }
             }
             catch (Exception ex)

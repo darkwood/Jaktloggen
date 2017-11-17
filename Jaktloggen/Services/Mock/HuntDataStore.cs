@@ -3,41 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Jaktloggen
+namespace Jaktloggen.Mock
 {
-    public class MockDataStore : IDataStore<Hunt>
+    public class HuntDataStore : IDataStore<Hunt>
     {
         List<Hunt> items;
 
-        public MockDataStore()
+        public HuntDataStore()
         {
             items = new List<Hunt>();
-            var mockItems = new List<Hunt>
+            for (var i = 1; i <= 10; i++)
             {
-                CreateHunt(),
-                CreateHunt(),
-                CreateHunt(),
-                CreateHunt(),
-                CreateHunt(),
-                CreateHunt(),
-                CreateHunt(),
-                CreateHunt(),
-            };
-
-            foreach (var item in mockItems)
-            {
-                items.Add(item);
+                items.Add(CreateHunt(i));
             }
         }
 
-        private Hunt CreateHunt(){
-            return new Hunt { 
-                Id = Guid.NewGuid().ToString(), 
+        private Hunt CreateHunt(int id){
+            var hunt = new Hunt { 
+                Id = id.ToString(), 
                 Location = "Høylandet", 
-                DateFrom = DateTime.Today,
-                DateTo = DateTime.Today.AddDays(3),
-                Notes="This is a note of some length. It can be short, but it can also be of, well, some length." };
-
+                DateFrom = DateTime.Today.AddDays(new Random().Next(-2000, 0)),
+                Notes="This is a note of some length. It can be short, but it can also be of, well, some length."
+            };
+            hunt.DateTo = hunt.DateFrom.AddDays(new Random().Next(0, 10));
+            return hunt;
         }
         public async Task<bool> AddItemAsync(Hunt item)
         {

@@ -9,8 +9,6 @@ namespace Jaktloggen
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Hunt> DataStore => DependencyService.Get<IDataStore<Hunt>>() ?? new MockDataStore();
-
         bool isBusy = false;
         public bool IsBusy
         {

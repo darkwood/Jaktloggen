@@ -7,6 +7,7 @@ namespace Jaktloggen
     public partial class HuntDetailPage : ContentPage
     {
         HuntDetailViewModel viewModel;
+        public Hunt Item { get; set; }
 
         // Note - The Xamarin.Forms Previewer requires a default, parameterless constructor to render a page.
         public HuntDetailPage()
@@ -28,6 +29,13 @@ namespace Jaktloggen
             InitializeComponent();
 
             BindingContext = this.viewModel = viewModel;
+        }
+
+        async void Save_Clicked(object sender, EventArgs e)
+        {
+            MessagingCenter.Send(this, "SaveHunt", viewModel.Item);
+            
+            await Navigation.PopToRootAsync();
         }
     }
 }

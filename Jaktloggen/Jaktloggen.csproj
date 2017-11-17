@@ -29,7 +29,6 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.xaml" />
-    <EmbeddedResource Include="MainPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="About\AboutPage.xaml.cs">
@@ -49,12 +48,7 @@
     <Compile Include="Hunts\HuntsPage.xaml.cs">
       <DependentUpon>HuntsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Hunts\NewHuntPage.xaml.cs">
-      <DependentUpon>NewHuntPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="MainPage.cs" />
     <Compile Include="Logs\Log.cs" />
     <Compile Include="Logs\LogsPage.xaml.cs">
       <DependentUpon>LogsPage.xaml</DependentUpon>
@@ -63,7 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CloudDataStore.cs" />
     <Compile Include="Services\IDataStore.cs" />
-    <Compile Include="Services\MockDataStore.cs" />
+    <Compile Include="Services\Mock\LogDataStore.cs" />
+    <Compile Include="Services\Mock\HuntDataStore.cs" />
+    <Compile Include="Utils\Converters\DateTimeToShortDateConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -96,9 +92,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Hunts\HuntsPage.xaml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hunts\NewHuntPage.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Logs\LogsPage.xaml">

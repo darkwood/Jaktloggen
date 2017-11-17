@@ -2,10 +2,9 @@
 
 namespace Jaktloggen
 {
-    public partial class MainPage : TabbedPage
+    public class MainPage : TabbedPage
     {
-        
-        public MainPage() 
+        public MainPage()
         {
             Page itemsPage, aboutPage = null;
 

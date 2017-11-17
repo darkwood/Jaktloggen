@@ -9,55 +9,55 @@ using Plugin.Connectivity;
 
 namespace Jaktloggen
 {
-    public class CloudDataStore : IDataStore<Hunt>
+    public class CloudDataStore<T> : IDataStore<T>
     {
         HttpClient client;
-        IEnumerable<Hunt> items;
+        IEnumerable<T> items;
 
         public CloudDataStore()
         {
             client = new HttpClient();
             client.BaseAddress = new Uri($"{App.BackendUrl}/");
 
-            items = new List<Hunt>();
+            items = new List<T>();
         }
 
-        public async Task<IEnumerable<Hunt>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false)
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
-                var json = await client.GetStringAsync($"api/item");
-                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Hunt>>(json));
+                var json = await client.GetStringAsync($"api/{typeof(T).Name.ToLower()}");
+                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<T>>(json));
             }
 
             return items;
         }
 
-        public async Task<Hunt> GetItemAsync(string id)
+        public async Task<T> GetItemAsync(string id)
         {
             if (id != null && CrossConnectivity.Current.IsConnected)
             {
-                var json = await client.GetStringAsync($"api/item/{id}");
-                return await Task.Run(() => JsonConvert.DeserializeObject<Hunt>(json));
+                var json = await client.GetStringAsync($"api/{typeof(T).Name.ToLower()}/{id}");
+                return await Task.Run(() => JsonConvert.DeserializeObject<T>(json));
             }
-
-            return null;
+            return default(T);
         }
 
-        public async Task<bool> AddItemAsync(Hunt item)
+        public async Task<bool> AddItemAsync(T item)
         {
             if (item == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
             var serializedItem = JsonConvert.SerializeObject(item);
 
-            var response = await client.PostAsync($"api/item", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
+            var response = await client.PostAsync($"api/{typeof(T).Name.ToLower()}", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateItemAsync(Hunt item)
+        public async Task<bool> UpdateItemAsync(T i)
         {
+            Hunt item = i as Hunt; //TODO: replace with base class
             if (item == null || item.Id == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
@@ -65,7 +65,7 @@ namespace Jaktloggen
             var buffer = Encoding.UTF8.GetBytes(serializedItem);
             var byteContent = new ByteArrayContent(buffer);
 
-            var response = await client.PutAsync(new Uri($"api/item/{item.Id}"), byteContent);
+            var response = await client.PutAsync(new Uri($"api/{typeof(T).Name.ToLower()}/{item.Id}"), byteContent);
 
             return response.IsSuccessStatusCode;
         }
@@ -75,7 +75,7 @@ namespace Jaktloggen
             if (string.IsNullOrEmpty(id) && !CrossConnectivity.Current.IsConnected)
                 return false;
 
-            var response = await client.DeleteAsync($"api/item/{id}");
+            var response = await client.DeleteAsync($"api/{typeof(T).Name.ToLower()}/{id}");
 
             return response.IsSuccessStatusCode;
         }

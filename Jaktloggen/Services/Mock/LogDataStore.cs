@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Jaktloggen.Mock
+namespace Jaktloggen.Services.Mock
 {
     public class LogDataStore : IDataStore<Log>
     {

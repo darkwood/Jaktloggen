@@ -55,7 +55,8 @@
     </Compile>
     <Compile Include="Logs\LogsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\CloudDataStore.cs" />
+    <Compile Include="Services\Cloud\LogDataStore.cs" />
+    <Compile Include="Services\Cloud\HuntDataStore.cs" />
     <Compile Include="Services\IDataStore.cs" />
     <Compile Include="Services\Mock\LogDataStore.cs" />
     <Compile Include="Services\Mock\HuntDataStore.cs" />

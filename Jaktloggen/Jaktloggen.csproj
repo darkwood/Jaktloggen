@@ -61,6 +61,8 @@
     <Compile Include="Services\Mock\LogDataStore.cs" />
     <Compile Include="Services\Mock\HuntDataStore.cs" />
     <Compile Include="Utils\Converters\DateTimeToShortDateConverter.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Base\EntityBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

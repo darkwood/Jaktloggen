@@ -21,8 +21,9 @@ namespace Jaktloggen
 
             MessagingCenter.Subscribe<HuntDetailPage, Hunt>(this, "SaveHunt", async (obj, item) =>
             {
-                if (!string.IsNullOrEmpty(item.Id))
+                if (!string.IsNullOrEmpty(item.ID))
                 {
+                    HuntItems.Replace(item);
                     await App.HuntDataStore.UpdateItemAsync(item);
                 }
                 else

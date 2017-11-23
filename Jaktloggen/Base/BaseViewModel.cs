@@ -9,6 +9,12 @@ namespace Jaktloggen
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        public string ID
+        {
+            get;
+            set;
+        }
+
         bool isBusy = false;
         public bool IsBusy
         {

@@ -6,8 +6,6 @@ namespace Jaktloggen
 {
     public class Hunt : BaseViewModel
     {
-        public string Id { get; set; }
-
         string location;
         public string Location
         {
@@ -22,12 +20,23 @@ namespace Jaktloggen
             set { SetProperty(ref dateFrom, value); }
         }
 
-        public DateTime DateTo { get; set; }
+        DateTime dateTo;
+        public DateTime DateTo
+        {
+            get { return dateTo; }
+            set { SetProperty(ref dateTo, value); }
+        }
         public List<int> HunterIds { get; set; }
         public List<int> DogIds { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string ImagePath { get; set; }
-        public string Notes { get; set; }
+
+        string notes;
+        public string Notes
+        {
+            get { return notes; }
+            set { SetProperty(ref notes, value); }
+        }
     }
 }

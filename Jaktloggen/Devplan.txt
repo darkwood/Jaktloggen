@@ -9,4 +9,7 @@ Rediger jakt:
 - Velg jakt i lista
 - Hent jakt fra minnet
 - Rediger data, trykk save
-- jakt oppdateres i minnet? Databinding? Hvis cancel -> hent fra backup da eller?
+- jakt oppdateres via databinding. I tillegg, kall service for lagring av entitet.
+- returner til liste
+
+Hvis cancel -> erstatt data med kopi.

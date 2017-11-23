@@ -8,7 +8,7 @@ namespace Jaktloggen
         public HuntDetailViewModel(Hunt item = null)
         {
             Title = item?.Location;
-            Item = item;
+            Item = item.DeepClone();
         }
     }
 }

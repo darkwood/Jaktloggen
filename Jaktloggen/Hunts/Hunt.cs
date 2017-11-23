@@ -7,13 +7,19 @@ namespace Jaktloggen
     public class Hunt : BaseViewModel
     {
         public string Id { get; set; }
-        public string Location { get; set; }
+
+        string location;
+        public string Location
+        {
+            get { return location; }
+            set { SetProperty(ref location, value); }
+        }
 
         DateTime dateFrom;
         public DateTime DateFrom
         {
             get { return dateFrom; }
-            set { dateFrom = value; }
+            set { SetProperty(ref dateFrom, value); }
         }
 
         public DateTime DateTo { get; set; }

@@ -4,11 +4,18 @@ using System.Collections.Generic;
 
 namespace Jaktloggen
 {
-    public class Hunt
+    public class Hunt : BaseViewModel
     {
         public string Id { get; set; }
         public string Location { get; set; }
-        public DateTime DateFrom { get; set; }
+
+        DateTime dateFrom;
+        public DateTime DateFrom
+        {
+            get { return dateFrom; }
+            set { dateFrom = value; }
+        }
+
         public DateTime DateTo { get; set; }
         public List<int> HunterIds { get; set; }
         public List<int> DogIds { get; set; }

@@ -4,7 +4,7 @@ namespace Jaktloggen
 {
     public partial class App : Application
     {
-        public static bool UseMockDataStore = false;
+        public static bool UseMockDataStore = true;
         public static string BackendUrl = "http://localhost:8607";
         public static IDataStore<Hunt> HuntDataStore => DependencyService.Get<IDataStore<Hunt>>();
         public static IDataStore<Log> LogDataStore => DependencyService.Get<IDataStore<Log>>();

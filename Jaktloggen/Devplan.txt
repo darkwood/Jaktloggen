@@ -1,0 +1,12 @@
+﻿Dataflyt:
+
+Vise jakter:
+- Hent jakter fra server
+- Lagre i minnet
+- Vis i viewet
+
+Rediger jakt:
+- Velg jakt i lista
+- Hent jakt fra minnet
+- Rediger data, trykk save
+- jakt oppdateres i minnet? Databinding? Hvis cancel -> hent fra backup da eller?

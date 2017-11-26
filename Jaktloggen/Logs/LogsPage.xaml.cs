@@ -29,7 +29,7 @@ namespace Jaktloggen
             if (item == null)
                 return;
 
-            //await Navigation.PushAsync(new HuntDetailPage(new LogsViewModel(item)));
+            //await Navigation.PushAsync(new HuntPage(new LogsViewModel(item)));
 
             // Manually deselect item
             ItemsListView.SelectedItem = null;

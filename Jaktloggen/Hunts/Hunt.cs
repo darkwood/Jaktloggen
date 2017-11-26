@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Jaktloggen
 {
-    public class Hunt : BaseViewModel
+    public class Hunt : BaseEntity
     {
         string location;
         public string Location
@@ -28,8 +28,30 @@ namespace Jaktloggen
         }
         public List<int> HunterIds { get; set; }
         public List<int> DogIds { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
+        string latitude;
+        public string Latitude
+        {
+            get { return latitude; }
+            set { 
+                SetProperty(ref latitude, value); 
+                OnPropertyChanged(nameof(PositionInfo));
+            }
+        }
+        string longitude;
+        public string Longitude
+        {
+            get { return longitude; }
+            set { 
+                SetProperty(ref longitude, value); 
+                OnPropertyChanged(nameof(PositionInfo));
+            }
+        }
+        public string PositionInfo
+        {
+            get { 
+                return string.IsNullOrEmpty(Latitude) ? "" : $"{Latitude}, {Longitude}"; 
+            }
+        }
         public string ImagePath { get; set; }
 
         string notes;

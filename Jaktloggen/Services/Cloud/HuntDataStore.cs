@@ -17,6 +17,7 @@ namespace Jaktloggen.Services.Cloud
         public HuntDataStore()
         {
             client = new HttpClient();
+            //TODO: Authenticate user
             client.BaseAddress = new Uri($"{App.BackendUrl}/");
 
             items = new List<Hunt>();

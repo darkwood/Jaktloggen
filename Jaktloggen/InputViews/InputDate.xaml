@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Jaktloggen.InputViews.InputDate"
+    xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+             >
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Ferdig" Clicked="Done_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" Padding="10">
+            <DatePicker 
+                x:Name="date"
+                Date="{Binding Value}" 
+                IsVisible="false"
+                />
+            <Label 
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand"
+                FontSize="24" 
+                Text="{Binding Value, Converter={Converters:DateTimeToShortDateConverter}}"
+                >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Handle_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>  
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.HuntPage" Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Lagre" Clicked="Save_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+<!--        <StackLayout Spacing="20" Padding="15">
+            <Label Text="Text" FontSize="Medium" />
+            <Entry Text="{Binding Item.Location}" FontSize="Small" />
+            <Label Text="Description" FontSize="Medium" />
+            <Editor Text="{Binding Item.Notes}" FontSize="Small" Margin="0" />
+            <Label Text="Date" FontSize="Medium" />
+            <Editor Text="{Binding Item.DateFrom}" FontSize="Small" Margin="0" />
+        </StackLayout>  -->  
+
+        <TableView Intent="Settings" Margin="0" VerticalOptions="StartAndExpand">
+            <TableRoot>
+                <TableSection Title="">
+                    <ImageCell Text="Custom header cell med bilde osv" ImageSource="{Binding Item.ImagePath}" />
+                    <TextCell Command="{Binding LocationCommand}" Text="{Binding Item.Location}" />
+                    <TextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding Item.DateFrom}" />
+                    <TextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding Item.DateTo}" />
+                </TableSection>
+                <TableSection Title="{Binding InfoMessage}">
+                    <TextCell Text="Posisjon" Detail="{Binding Item.PositionInfo}" />
+                </TableSection>
+                <TableSection Title="Notater">
+                    <TextCell Command="{Binding NotesCommand}" Text="Notater" Detail="{Binding Item.Notes}" />
+                </TableSection>
+            </TableRoot>
+        </TableView>
+        
+    </ContentPage.Content>
+</ContentPage>

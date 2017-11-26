@@ -19,7 +19,7 @@ namespace Jaktloggen
             HuntItems = new ObservableCollection<Hunt>();
             LoadHuntItemsCommand = new Command(async () => await ExecuteLoadHuntItemsCommand());
 
-            MessagingCenter.Subscribe<HuntDetailPage, Hunt>(this, "SaveHunt", async (obj, item) =>
+            MessagingCenter.Subscribe<HuntPage, Hunt>(this, "Save", async (obj, item) =>
             {
                 if (!string.IsNullOrEmpty(item.ID))
                 {
@@ -29,8 +29,8 @@ namespace Jaktloggen
                 else
                 {
                     HuntItems.Add(item);
-                    await App.HuntDataStore.AddItemAsync(item);
                     SortItems();
+                    await App.HuntDataStore.AddItemAsync(item);
                 }
             });
         }

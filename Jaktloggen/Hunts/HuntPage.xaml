@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.HuntPage" Title="{Binding Title}">
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+    xmlns:Cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
+    x:Class="Jaktloggen.HuntPage" 
+    Title="{Binding Title}">
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Lagre" Clicked="Save_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-<!--        <StackLayout Spacing="20" Padding="15">
-            <Label Text="Text" FontSize="Medium" />
-            <Entry Text="{Binding Item.Location}" FontSize="Small" />
-            <Label Text="Description" FontSize="Medium" />
-            <Editor Text="{Binding Item.Notes}" FontSize="Small" Margin="0" />
-            <Label Text="Date" FontSize="Medium" />
-            <Editor Text="{Binding Item.DateFrom}" FontSize="Small" Margin="0" />
-        </StackLayout>  -->  
-
+        
         <TableView Intent="Settings" Margin="0" VerticalOptions="StartAndExpand">
             <TableRoot>
                 <TableSection Title="">
-                    <ImageCell Text="Custom header cell med bilde osv" ImageSource="{Binding Item.ImagePath}" />
+                    <Cells:LabelValueCell LabelText="Sted"  />
                     <TextCell Command="{Binding LocationCommand}" Text="{Binding Item.Location}" />
-                    <TextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding Item.DateFrom}" />
-                    <TextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding Item.DateTo}" />
+                    <TextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding Item.DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
+                    <TextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding Item.DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
                 </TableSection>
                 <TableSection Title="{Binding InfoMessage}">
                     <TextCell Text="Posisjon" Detail="{Binding Item.PositionInfo}" />

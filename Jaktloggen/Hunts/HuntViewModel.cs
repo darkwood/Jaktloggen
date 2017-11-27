@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Jaktloggen.InputViews;
+using Plugin.Geolocator;
 using Xamarin.Forms;
 
 namespace Jaktloggen
@@ -54,11 +55,15 @@ namespace Jaktloggen
         private async Task SetPositionAsync()
         {
             InfoMessage = "Henter din posisjon...";
-            await Task.Delay(2000);
+
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 20L;
+            var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null);
+
             InfoMessage = "Posisjon funnet!";
 
-            Item.Latitude = "new lat";
-            Item.Longitude = "new long";
+            Item.Latitude = position.Latitude.ToString();
+            Item.Longitude = position.Longitude.ToString();
         }
 
         private void CreateCommands(Hunt item)

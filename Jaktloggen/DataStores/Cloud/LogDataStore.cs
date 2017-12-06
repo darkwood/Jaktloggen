@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
 
-namespace Jaktloggen.Services.Cloud
+namespace Jaktloggen.DataStores.Cloud
 {
     public class LogDataStore : IDataStore<Log>
     {
         HttpClient client;
-        IEnumerable<Log> items;
+        List<Log> items;
 
         public LogDataStore()
         {
@@ -22,12 +22,12 @@ namespace Jaktloggen.Services.Cloud
             items = new List<Log>();
         }
 
-        public async Task<IEnumerable<Log>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<List<Log>> GetItemsAsync(bool forceRefresh = false)
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
                 var json = await client.GetStringAsync($"api/Logs/");
-                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Log>>(json));
+                items = await Task.Run(() => JsonConvert.DeserializeObject<List<Log>>(json));
             }
 
             return items;

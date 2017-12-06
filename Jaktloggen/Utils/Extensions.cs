@@ -14,7 +14,7 @@ namespace Jaktloggen
             return JsonConvert.DeserializeObject<T>(tmp);
         }
 
-        public static void Replace<T>(this ObservableCollection<T> toReplace, T item) where T : BaseEntity
+        public static void Replace<T>(this ObservableCollection<T> toReplace, T item) where T : BaseViewModel
         {
             var index = toReplace.ToList().FindIndex(i => i.ID == item.ID);
             toReplace[index] = item;

@@ -37,37 +37,30 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="App\About\AboutPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\Hunts\HuntPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\Hunts\HuntsPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\Logs\LogsPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="About\AboutPage.xaml.cs">
-      <DependentUpon>AboutPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="About\AboutViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base\BaseViewModel.cs" />
-    <Compile Include="Hunts\Hunt.cs" />
-    <Compile Include="Hunts\HuntViewModel.cs" />
-    <Compile Include="Hunts\HuntsViewModel.cs" />
-    <Compile Include="Hunts\HuntPage.xaml.cs">
-      <DependentUpon>HuntPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Hunts\HuntsPage.xaml.cs">
-      <DependentUpon>HuntsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainPage.cs" />
-    <Compile Include="Logs\Log.cs" />
-    <Compile Include="Logs\LogsPage.xaml.cs">
-      <DependentUpon>LogsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Logs\LogsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Cloud\LogDataStore.cs" />
-    <Compile Include="Services\Cloud\HuntDataStore.cs" />
-    <Compile Include="Services\IDataStore.cs" />
-    <Compile Include="Services\Mock\LogDataStore.cs" />
-    <Compile Include="Services\Mock\HuntDataStore.cs" />
+    <Compile Include="DataStores\Cloud\LogDataStore.cs" />
+    <Compile Include="DataStores\Cloud\HuntDataStore.cs" />
+    <Compile Include="DataStores\IDataStore.cs" />
+    <Compile Include="DataStores\Mock\LogDataStore.cs" />
+    <Compile Include="DataStores\Mock\HuntDataStore.cs" />
     <Compile Include="Utils\Converters\DateTimeToShortDateConverter.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Base\BaseEntity.cs" />
@@ -78,7 +71,36 @@
       <DependentUpon>InputDate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\PositionUtil.cs" />
-    <Compile Include="Cells\LabelValueCell.cs" />
+    <Compile Include="Cells\JTextCell.cs" />
+    <Compile Include="Base\JTableView.cs" />
+    <Compile Include="DataStores\File\HuntDataStore.cs" />
+    <Compile Include="DataStores\File\LogDataStore.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Interfaces\IFileUtility.cs" />
+    <Compile Include="App\About\AboutPage.xaml.cs">
+      <DependentUpon>..\..\About\About\AboutPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App\About\AboutViewModel.cs" />
+    <Compile Include="App\Hunts\Hunt.cs" />
+    <Compile Include="App\Hunts\HuntPage.xaml.cs">
+      <DependentUpon>..\..\Hunts\Hunts\HuntPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App\Hunts\HuntsPage.xaml.cs">
+      <DependentUpon>..\..\Hunts\Hunts\HuntsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App\Hunts\HuntsViewModel.cs" />
+    <Compile Include="App\Hunts\HuntViewModel.cs" />
+    <Compile Include="App\Logs\Log.cs" />
+    <Compile Include="App\Logs\LogsPage.xaml.cs">
+      <DependentUpon>..\..\Logs\Logs\LogsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App\Logs\LogsViewModel.cs" />
+    <Compile Include="App\MainPage.cs" />
+    <Compile Include="DataStores\FileService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -120,22 +142,15 @@
     <None Include="Devplan.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="About\AboutPage.xaml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hunts\HuntPage.xaml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Hunts\HuntsPage.xaml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Logs\LogsPage.xaml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="InputViews\" />
     <Folder Include="Cells\" />
+    <Folder Include="DataStores\File\" />
+    <Folder Include="Services\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="App\" />
+    <Folder Include="App\About\" />
+    <Folder Include="App\Hunts\" />
+    <Folder Include="App\Logs\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.5.0.91635\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.0.91635\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />

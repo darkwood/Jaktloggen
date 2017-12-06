@@ -11,6 +11,8 @@ namespace Jaktloggen
     {
         public INavigation Navigation { get; set; }
 
+        public virtual string ID { get; set; }
+
         bool isBusy = false;
         public bool IsBusy
         {

@@ -16,7 +16,7 @@ namespace Jaktloggen
             var item = new Hunt
             {
                 ID = "1",
-                Location = "Høylandet",
+                Sted = "Høylandet",
                 Notes = "Høstjakta 2017 med gutta krutt. 3 dager i telt langt inne på vidda. Kødda. Kos på hytta som vanlig."
             };
 
@@ -40,9 +40,16 @@ namespace Jaktloggen
 
         async void Save_Clicked(object sender, EventArgs e)
         {
-            MessagingCenter.Send(this, "Save", viewModel.Item);
+            MessagingCenter.Send(this, "Save", viewModel);
             
-            await Navigation.PopToRootAsync();
+            await Navigation.PopAsync();
+        }
+
+        async void Delete_Clicked(object sender, System.EventArgs e)
+        {
+            MessagingCenter.Send(this, "Delete", viewModel);
+
+            await Navigation.PopAsync();
         }
     }
 }

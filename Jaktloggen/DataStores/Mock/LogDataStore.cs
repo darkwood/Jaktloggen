@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Jaktloggen.Services.Mock
+namespace Jaktloggen.DataStores.Mock
 {
     public class LogDataStore : IDataStore<Log>
     {
@@ -57,7 +57,7 @@ namespace Jaktloggen.Services.Mock
             return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
         }
 
-        public async Task<IEnumerable<Log>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<List<Log>> GetItemsAsync(bool forceRefresh = false)
         {
             return await Task.FromResult(items);
         }

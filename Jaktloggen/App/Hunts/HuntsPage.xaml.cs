@@ -14,16 +14,16 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new HuntsViewModel();
+            BindingContext = viewModel = new HuntsViewModel(Navigation);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as Hunt;
+            var item = args.SelectedItem as HuntViewModel;
             if (item == null)
                 return;
 
-            await Navigation.PushAsync(new HuntPage(new HuntViewModel(item, Navigation)));
+            await Navigation.PushAsync(new HuntPage(item));
             ItemsListView.SelectedItem = null;
         }
 
@@ -32,12 +32,13 @@ namespace Jaktloggen
             await Navigation.PushAsync(new HuntPage(new HuntViewModel(new Hunt(), Navigation)));
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            if (viewModel.HuntItems.Count == 0)
-                viewModel.LoadHuntItemsCommand.Execute(null);
+            if(viewModel.HuntItems.Count == 0)
+                await viewModel.ExecuteLoadHuntItemsCommand();
         }
+
     }
 }

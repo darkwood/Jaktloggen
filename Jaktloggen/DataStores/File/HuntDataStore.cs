@@ -2,35 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Jaktloggen.Services;
 
-namespace Jaktloggen.Services.Mock
+namespace Jaktloggen.DataStores.File
 {
     public class HuntDataStore : IDataStore<Hunt>
     {
-        List<Hunt> items;
+        List<Hunt> items = new List<Hunt>();
+        private static string FILENAME = "jakt.json";
 
-        public HuntDataStore()
-        {
-            items = new List<Hunt>();
-            for (var i = 1; i <= 10; i++)
-            {
-                items.Add(CreateHunt(i));
-            }
-        }
-
-        private Hunt CreateHunt(int id){
-            var hunt = new Hunt { 
-                ID = id.ToString(), 
-                Location = "Høylandet", 
-                DateFrom = DateTime.Today.AddDays(new Random().Next(-2000, 0)),
-                Notes="This is a note of some length. It can be short, but it can also be of, well, some length."
-            };
-            hunt.DateTo = hunt.DateFrom.AddDays(new Random().Next(0, 10));
-            return hunt;
-        }
         public async Task<bool> AddItemAsync(Hunt item)
         {
+            item.Changed = DateTime.Now;
+            item.Created = DateTime.Now;
+            item.ID = Guid.NewGuid().ToString();
             items.Add(item);
+
+            items.SaveToLocalStorage(FILENAME);
 
             return await Task.FromResult(true);
         }
@@ -41,6 +29,8 @@ namespace Jaktloggen.Services.Mock
             items.Remove(_item);
             items.Add(item);
 
+            items.SaveToLocalStorage(FILENAME);
+
             return await Task.FromResult(true);
         }
 
@@ -49,6 +39,7 @@ namespace Jaktloggen.Services.Mock
             var _item = items.Where((Hunt arg) => arg.ID == id).FirstOrDefault();
             items.Remove(_item);
 
+            items.SaveToLocalStorage(FILENAME);
             return await Task.FromResult(true);
         }
 
@@ -57,8 +48,9 @@ namespace Jaktloggen.Services.Mock
             return await Task.FromResult(items.FirstOrDefault(s => s.ID == id));
         }
 
-        public async Task<IEnumerable<Hunt>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<List<Hunt>> GetItemsAsync(bool forceRefresh = false)
         {
+            items = FileService.LoadFromLocalStorage<List<Hunt>>(FILENAME);
             return await Task.FromResult(items);
         }
     }

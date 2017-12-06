@@ -9,14 +9,14 @@ namespace Jaktloggen
 {
     public class LogsViewModel : BaseViewModel
     {
-        public Hunt Hunt { get; set; }
+        public HuntViewModel Hunt { get; set; }
         public ObservableCollection<Log> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        public LogsViewModel(Hunt hunt = null)
+        public LogsViewModel(HuntViewModel hunt = null)
         {
-            Title = hunt?.Location;
             Hunt = hunt;
+            Title = Hunt?.Location;
             Items = new ObservableCollection<Log>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 

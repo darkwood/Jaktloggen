@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+    xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
+    xmlns:local="clr-namespace:Jaktloggen;assembly=Jaktloggen"
+    x:Class="Jaktloggen.HuntPage" 
+    Title="{Binding Title}">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Lagre" Clicked="Save_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <local:JTableView HasUnevenRows="true" Intent="Settings" Margin="0" VerticalOptions="StartAndExpand">
+            <TableRoot>
+
+                <TableSection Title="{Binding InfoMessage}">
+                     <cells:JTextCell Text="Sted" Detail="{Binding Location}" Command="{Binding LocationCommand}" />
+                    <cells:JTextCell Text="Posisjon" Detail="{Binding PositionInfo}" />
+                </TableSection>
+                
+                <TableSection Title="">
+                   <cells:JTextCell Text="Bilde" Detail="{Binding Image}" Command="{Binding ImageCommand}" />
+                    <cells:JTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
+                    <cells:JTextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
+                    <cells:JTextCell Text="Jegere" Detail="{Binding HuntIds}" Command="{Binding HuntersCommand}" />
+                    <cells:JTextCell Text="Hunder" Detail="{Binding DogIds}" Command="{Binding DogCommands}" />
+                    
+                </TableSection>
+
+                <TableSection Title="Notater">
+                    <cells:JTextCell Command="{Binding NotesCommand}" Text="Notater" Detail="{Binding Notes}" />
+                </TableSection>
+                <TableSection Title="">
+                    <ViewCell>
+                        <Button Clicked="Delete_Clicked" Command="{Binding DeleteCommand}" Text="Slett jakt" />
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </local:JTableView>
+
+
+
+
+
+         <!--<ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+            <StackLayout Spacing="1" BackgroundColor="Silver">
+                <Image 
+                    Source="https://i.pinimg.com/originals/10/42/e2/1042e218cc7a352c850a559ae37ffc92.jpg"
+                    HeightRequest="200"
+                    Aspect="AspectFill"
+                />
+
+                <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="10">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Command="{Binding LocationCommand}"
+                            NumberOfTapsRequired="1"
+                         />
+                    </StackLayout.GestureRecognizers>
+                    <Label Text="Sted"></Label>
+                    <Label Text="{Binding Location}" HorizontalOptions="EndAndExpand" />
+                </StackLayout>
+
+                 <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="10">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Command="{Binding DateFromCommand}"
+                            NumberOfTapsRequired="1"
+                         />
+                    </StackLayout.GestureRecognizers>
+                    <Label Text="Dato fra"></Label>
+                    <Label Text="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" HorizontalOptions="EndAndExpand" />
+                </StackLayout>
+
+                 <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="10">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Command="{Binding DateToCommand}"
+                            NumberOfTapsRequired="1"
+                         />
+                    </StackLayout.GestureRecognizers>
+                    <Label Text="Dato til"></Label>
+                    <Label Text="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" HorizontalOptions="EndAndExpand" />
+                </StackLayout>
+
+                <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="White" Padding="10"></StackLayout>
+                 
+                
+            </StackLayout>
+        </ScrollView>-->
+
+        
+        
+    </ContentPage.Content>
+</ContentPage>

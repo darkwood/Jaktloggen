@@ -12,16 +12,18 @@
         <ToolbarItem Text="Lagre" Clicked="Save_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <local:JTableView HasUnevenRows="true" Intent="Settings" Margin="0" VerticalOptions="StartAndExpand">
+        <local:JTableView HasUnevenRows="true" Intent="Settings">
             <TableRoot>
-
                 <TableSection Title="{Binding InfoMessage}">
-                     <cells:JTextCell Text="Sted" Detail="{Binding Location}" Command="{Binding LocationCommand}" />
+                    <ViewCell>
+                        <Image HeightRequest="150" Source="{Binding Image}" Aspect="AspectFill" />
+                    </ViewCell>
+                    <cells:JTextCell Text="Sted" Detail="{Binding Location}" Command="{Binding LocationCommand}" />
                     <cells:JTextCell Text="Posisjon" Detail="{Binding PositionInfo}" />
                 </TableSection>
                 
                 <TableSection Title="">
-                   <cells:JImageCell Text="Bilde" ImageSource="{Binding Image}" Detail="{Binding Image}" Command="{Binding ImageCommand}" />
+                   <!--<cells:JImageCell Text="Velg bilde" ImageSource="{Binding Image}" Detail="{Binding Image}" Command="{Binding ImageCommand}" />-->
                     <cells:JTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:JTextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:JTextCell Text="Jegere" Detail="{Binding HuntIds}" Command="{Binding HuntersCommand}" />

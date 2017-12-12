@@ -109,6 +109,8 @@ namespace Jaktloggen
         public ICommand NotesCommand { protected set; get; }
         public ICommand DeleteCommand { protected set; get; }
 
+        private bool isLoaded { get; set; }
+
         public HuntViewModel(Hunt item, INavigation navigation)
         {
             Item = item.DeepClone();
@@ -120,23 +122,24 @@ namespace Jaktloggen
 
         public async Task OnAppearing()
         {
-            if (string.IsNullOrEmpty(Item.ID))
+            if (string.IsNullOrEmpty(Item.ID) && isLoaded)
             {
                 DateFrom = DateTime.Today;
                 DateTo = DateTime.Today;
 
                 await SetPositionAsync();
 
+                isLoaded = true;
             }
         }
-
+        
         private async Task SetPositionAsync()
         {
             InfoMessage = "Henter din posisjon...";
             try
             {
                 var locator = CrossGeolocator.Current;
-                locator.DesiredAccuracy = 20L;
+                locator.DesiredAccuracy = 10L;
                 var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null);
 
                 InfoMessage = "";

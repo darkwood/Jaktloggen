@@ -30,7 +30,7 @@ namespace Jaktloggen
 
             BindingContext = this.viewModel = viewModel;
         }
-
+        
         protected async override void OnAppearing()
         {
             base.OnAppearing();

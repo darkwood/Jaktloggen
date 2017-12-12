@@ -35,6 +35,13 @@ namespace Jaktloggen.InputViews
             BindingContext = this;
             InitializeComponent();
         }
+
+        async void Handle_Completed(object sender, System.EventArgs e)
+        {
+            _callback(this);
+            await Navigation.PopAsync();
+        }
+
         async void Done_Clicked(object sender, EventArgs e)
         {
             _callback(this);
@@ -45,7 +52,14 @@ namespace Jaktloggen.InputViews
         {
             base.OnAppearing();
 
-            entry.Focus();
+            if(Multiline)
+            {
+                editor.Focus();
+            }
+            else
+            {
+                entry.Focus();
+            } 
 
         }
     }

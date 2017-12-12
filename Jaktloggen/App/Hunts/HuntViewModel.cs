@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Jaktloggen.InputViews;
 using Plugin.Geolocator;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace Jaktloggen
 {
@@ -70,7 +73,22 @@ namespace Jaktloggen
                 return string.IsNullOrEmpty(Latitude) ? "" : $"{Latitude}, {Longitude}";
             }
         }
-        public string ImagePath { get; set; }
+        public string ImagePath 
+        {
+            get { return Item.ImagePath; }
+            set { Item.ImagePath = value; OnPropertyChanged(nameof(ImagePath)); }
+        }
+
+        public ImageSource Image
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(ImagePath)){
+                    return ImageSource.FromUri(new Uri("http://iliketowastemytime.com/sites/default/files/imagecache/blog_image/Evergreen-Mountain-Lookout-Sunset-by-Michael-Matti.jpg"));
+                }
+                return ImageSource.FromFile(ImagePath);
+            }
+        }
 
         string notes;
         public string Notes
@@ -108,25 +126,64 @@ namespace Jaktloggen
                 DateTo = DateTime.Today;
 
                 await SetPositionAsync();
+
             }
         }
 
         private async Task SetPositionAsync()
         {
             InfoMessage = "Henter din posisjon...";
+            try
+            {
+                var locator = CrossGeolocator.Current;
+                locator.DesiredAccuracy = 20L;
+                var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null);
 
-            var locator = CrossGeolocator.Current;
-            locator.DesiredAccuracy = 20L;
-            var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null);
+                InfoMessage = "";
 
-            InfoMessage = "";
+                Latitude = position.Latitude.ToString();
+                Longitude = position.Longitude.ToString();
 
-            Latitude = position.Latitude.ToString();
-            Longitude = position.Longitude.ToString();
+                OnPropertyChanged(nameof(PositionInfo));
 
-            OnPropertyChanged(nameof(PositionInfo));
+                Location = await GetLocationNameForPosition(position.Latitude, position.Longitude);
+            }
+            catch(Exception ex)
+            {
+                //todo: log this
+                throw new Exception(ex.Message, ex);
+            }
         }
 
+        public static async Task<string> GetLocationNameForPosition(double latitude, double longitude)
+        {
+            string sted = string.Empty;
+            try
+            {
+                var geoCoder = new Geocoder();
+                var geoPos = new Xamarin.Forms.Maps.Position(latitude, longitude);
+                var possibleAddresses = await geoCoder.GetAddressesForPositionAsync(geoPos);
+                if (possibleAddresses.Any())
+                {
+                    sted = possibleAddresses.First();
+                    int newLinePos = sted.IndexOf(Environment.NewLine, StringComparison.CurrentCultureIgnoreCase);
+                    if (newLinePos > 0) //removes line 2
+                    {
+                        sted = sted.Substring(0, newLinePos);
+                    }
+                    if (sted.Length > 5 && Regex.IsMatch(sted, "^\\d{4}[\" \"]")) //removes zipcode
+                    {
+                        sted = sted.Substring(5);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log this
+                throw new Exception(ex.Message, ex);
+            }
+            return sted;
+        }
         private void CreateCommands(Hunt item)
         {
             LocationCommand = new Command(async () =>

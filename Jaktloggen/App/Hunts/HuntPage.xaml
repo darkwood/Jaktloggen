@@ -21,7 +21,7 @@
                 </TableSection>
                 
                 <TableSection Title="">
-                   <cells:JTextCell Text="Bilde" Detail="{Binding Image}" Command="{Binding ImageCommand}" />
+                   <cells:JImageCell Text="Bilde" ImageSource="{Binding Image}" Detail="{Binding Image}" Command="{Binding ImageCommand}" />
                     <cells:JTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:JTextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:JTextCell Text="Jegere" Detail="{Binding HuntIds}" Command="{Binding HuntersCommand}" />

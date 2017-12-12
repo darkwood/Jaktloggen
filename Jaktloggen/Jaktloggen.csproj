@@ -100,7 +100,8 @@
     </Compile>
     <Compile Include="App\Logs\LogsViewModel.cs" />
     <Compile Include="App\MainPage.cs" />
-    <Compile Include="DataStores\FileService.cs" />
+    <Compile Include="Utils\Converters\InvertedBooleanConverter.cs" />
+    <Compile Include="Cells\JImageCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

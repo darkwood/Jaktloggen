@@ -27,6 +27,18 @@ namespace Jaktloggen
             ItemsListView.SelectedItem = null;
         }
 
+        async void OnDelete(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            var item = mi.CommandParameter as HuntViewModel;
+            var doit = await DisplayAlert("Bekreft sletting", "Jakta blir permanent slettet", "OK", "Avbryt");
+            if(doit)
+            {
+                await viewModel.DeleteItem(item);
+            }
+
+        }
+
         async void AddItem_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new HuntPage(new HuntViewModel(new Hunt(), Navigation)));

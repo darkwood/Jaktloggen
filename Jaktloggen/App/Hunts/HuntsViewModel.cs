@@ -36,9 +36,14 @@ namespace Jaktloggen
 
             MessagingCenter.Subscribe<HuntPage, HuntViewModel>(this, "Delete", async (obj, item) =>
             {
-                await App.HuntDataStore.DeleteItemAsync(item.ID);
-                HuntItems.Remove(item);
+                await DeleteItem(item);
             });
+        }
+
+        public async Task DeleteItem(HuntViewModel item)
+        {
+            await App.HuntDataStore.DeleteItemAsync(item.ID);
+            HuntItems.Remove(item);
         }
 
         private async Task PopulateItems()

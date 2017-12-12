@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using Xamarin;
 
 namespace Jaktloggen.iOS
 {
@@ -18,7 +19,7 @@ namespace Jaktloggen.iOS
 #if DEBUG
 			Xamarin.Calabash.Start();
 #endif
-
+            FormsMaps.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

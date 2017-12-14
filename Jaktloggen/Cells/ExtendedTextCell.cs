@@ -40,14 +40,20 @@ namespace Jaktloggen.Cells
             typeof(string), 
             typeof(ExtendedTextCell), 
             "",
-            propertyChanged: (bindable, oldValue, newValue) => {
-            ((ExtendedTextCell)bindable).DetailLabel.Text = newValue as string;
+            propertyChanged: (bindable, oldValue, newValue) => 
+            {
+                var text = (newValue as string);
+                if(text != null && text.Length > 30){
+                    text = text.Substring(0, 26) + "...";
+                }
+                ((ExtendedTextCell)bindable).DetailLabel.Text = text;
             });
 
         public string Detail
         {
             get { return (string)GetValue(DetailProperty); }
-            set { SetValue(DetailProperty, value); }
+            set { 
+            SetValue(DetailProperty, value); }
         }
 
         public Label DetailLabel { get; private set; }

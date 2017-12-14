@@ -44,7 +44,7 @@ namespace Jaktloggen
         {
             // Handle when your app starts
             AppCenter.Start("android=8ce55db8-e0f4-42aa-8839-db304d8bfe52;" + "uwp={Your UWP App secret here};" +
-                            "ios={Your iOS App secret here}",
+                            "ios=8ec886eb-d541-4ae6-ab45-e263af15f58a;",
                 typeof(Analytics), typeof(Crashes));
         }
 

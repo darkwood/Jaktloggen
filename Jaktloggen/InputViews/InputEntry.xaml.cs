@@ -27,6 +27,8 @@ namespace Jaktloggen.InputViews
         private Action<InputEntry> _callback { get; set; }
         public bool Multiline { get; set; }
 
+        public InputEntry(){}
+
         public InputEntry(string title, string value, Action<InputEntry> callback)
         {
             Title = title;

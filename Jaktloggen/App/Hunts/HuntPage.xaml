@@ -14,25 +14,28 @@
     <ContentPage.Content>
         <local:JTableView HasUnevenRows="true" Intent="Settings">
             <TableRoot>
-                <TableSection Title="{Binding InfoMessage}">
-                    <ViewCell>
-                        <Image HeightRequest="150" Source="{Binding Image}" Aspect="AspectFill" />
-                    </ViewCell>
-                    <cells:JTextCell Text="Sted" Detail="{Binding Location}" Command="{Binding LocationCommand}" />
-                    <cells:JTextCell Text="Posisjon" Detail="{Binding PositionInfo}" />
-                </TableSection>
+                <TableSection Title="">
+                    <cells:ImageHeaderCell HeightRequest="200" Source="{Binding Image}" Command="{Binding ImageCommand}" />
+                    <cells:JTextCell Command="{Binding DateFromCommand}" Text="Loggføringer" Detail="0" />
+                 </TableSection>
                 
                 <TableSection Title="">
-                   <!--<cells:JImageCell Text="Velg bilde" ImageSource="{Binding Image}" Detail="{Binding Image}" Command="{Binding ImageCommand}" />-->
-                    <cells:JTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
+                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Posisjon" Detail="{Binding PositionInfo}" />
+                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Sted" Detail="{Binding Location}" Command="{Binding LocationCommand}" />
+                 </TableSection>
+                
+                <TableSection Title="">
+                    <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:JTextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
-                    <cells:JTextCell Text="Jegere" Detail="{Binding HuntIds}" Command="{Binding HuntersCommand}" />
-                    <cells:JTextCell Text="Hunder" Detail="{Binding DogIds}" Command="{Binding DogCommands}" />
+                    <cells:ExtendedTextCell Text="Jegere" Detail="{Binding HuntIds}" Command="{Binding HuntersCommand}" />
+                    <cells:ExtendedTextCell Text="Hunder" Detail="{Binding DogIds}" Command="{Binding DogCommands}" />
                     
                 </TableSection>
 
                 <TableSection Title="Notater">
-                    <cells:JTextCell Command="{Binding NotesCommand}" Text="Notater" Detail="{Binding Notes}" />
+                    <ViewCell>
+                        <Editor Text="{Binding Notes}" HeightRequest="100" />
+                    </ViewCell>
                 </TableSection>
                 <TableSection Title="">
                     <ViewCell>

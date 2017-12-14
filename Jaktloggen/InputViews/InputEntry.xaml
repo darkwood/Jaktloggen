@@ -7,20 +7,22 @@
         <ToolbarItem Text="Ferdig" Clicked="Done_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
-        <Entry 
-            x:Name="entry"
-            Text="{Binding Value}" 
-            FontSize="18" 
-            IsVisible="{Binding Multiline, Converter={Converters:InvertedBooleanConverter}}"
+        <StackLayout Margin="10">
+            <Entry 
+                x:Name="entry"
+                Text="{Binding Value}" 
+                FontSize="18" 
+                HeightRequest="35"
+                Placeholder="{Binding Title}"
+                IsVisible="{Binding Multiline, Converter={Converters:InvertedBooleanConverter}}"
                 Completed="Handle_Completed"
-            />
-        <Editor 
-            x:Name="editor"
-            Text="{Binding Value}" 
-            FontSize="18" 
-            IsVisible="{Binding Multiline}"
-            />
+                />
+            <Editor 
+                x:Name="editor"
+                Text="{Binding Value}" 
+                FontSize="18" 
+                IsVisible="{Binding Multiline}"
+                />
         </StackLayout>
 	</ContentPage.Content>
 </ContentPage>

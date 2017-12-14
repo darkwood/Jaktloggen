@@ -34,6 +34,10 @@ namespace Jaktloggen.iOS.Controls
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)
             {
+                if(section == 0)
+                {
+                    return 0.0f;
+                }
                 return base.GetHeightForHeader(tableView, section);
             }
 

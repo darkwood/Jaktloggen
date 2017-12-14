@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.InputViews.InputImage">
+	<ContentPage.ToolbarItems>
+        <ToolbarItem Text="Ferdig" Clicked="Done_Clicked" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <Grid VerticalOptions="CenterAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Image 
+                Grid.Row="0"
+                Source="{Binding Source}"
+                Aspect="AspectFill"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                IsVisible="{Binding ImageExists}"
+            />
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="0" Text="Kamera" Clicked="Camera_Clicked" />
+                <Button Grid.Column="1" Text="Bilder" Clicked="Library_Clicked"/>
+                <!--<Button Grid.Column="2" Text="Slett" IsVisible="{Binding ImageExists}" Clicked="Delete_Clicked" />-->
+            </Grid>
+        </Grid>
+
+	</ContentPage.Content>
+</ContentPage>

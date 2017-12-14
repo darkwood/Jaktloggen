@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Jaktloggen.InputViews;
+using Jaktloggen.Interfaces;
 using Plugin.Geolocator;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -70,13 +71,16 @@ namespace Jaktloggen
         {
             get
             {
+                if(!string.IsNullOrEmpty(InfoMessage)){
+                    return InfoMessage;
+                }
                 return string.IsNullOrEmpty(Latitude) ? "" : $"{Latitude}, {Longitude}";
             }
         }
         public string ImagePath 
         {
             get { return Item.ImagePath; }
-            set { Item.ImagePath = value; OnPropertyChanged(nameof(ImagePath)); }
+            set { Item.ImagePath = value; OnPropertyChanged(nameof(ImagePath)); OnPropertyChanged(nameof(Image)); }
         }
 
         public ImageSource Image
@@ -84,9 +88,12 @@ namespace Jaktloggen
             get
             {
                 if(string.IsNullOrEmpty(ImagePath)){
-                    return ImageSource.FromUri(new Uri("http://iliketowastemytime.com/sites/default/files/imagecache/blog_image/Evergreen-Mountain-Lookout-Sunset-by-Michael-Matti.jpg"));
+                    return ImageSource.FromUri(new Uri("http://imaginations.csj.ualberta.ca/wp-content/themes/15zine/library/images/placeholders/placeholder-759x500.png"));
+                    //return ImageSource.FromUri(new Uri("http://iliketowastemytime.com/sites/default/files/imagecache/blog_image/Evergreen-Mountain-Lookout-Sunset-by-Michael-Matti.jpg"));
                 }
-                return ImageSource.FromFile(ImagePath);
+                var filepath = DependencyService.Get<ICamera>().GetPictureFromDisk(ImagePath);
+
+                return ImageSource.FromFile(filepath);
             }
         }
 
@@ -94,19 +101,21 @@ namespace Jaktloggen
         public string Notes
         {
             get { return notes; }
-            set { SetProperty(ref notes, value); }
+            set { SetProperty(ref notes, value); OnPropertyChanged(nameof(Notes)); }
         }
 
         string infoMessage;
         public string InfoMessage
         {
             get { return infoMessage; }
-            set { SetProperty(ref infoMessage, value); }
+            set { SetProperty(ref infoMessage, value); OnPropertyChanged(nameof(PositionInfo)); }
         }
         public ICommand LocationCommand { protected set; get; }
+        public ICommand ImageCommand { protected set; get; }
         public ICommand DateFromCommand { protected set; get; }
         public ICommand DateToCommand { protected set; get; }
         public ICommand NotesCommand { protected set; get; }
+        public ICommand HuntersCommand { protected set; get; }
         public ICommand DeleteCommand { protected set; get; }
 
         private bool isLoaded { get; set; }
@@ -116,13 +125,13 @@ namespace Jaktloggen
             Item = item.DeepClone();
             Navigation = navigation;
 
-            Title = Location; 
+            Title = string.IsNullOrEmpty(item.ID) ? "Ny jakt" : Location; 
             CreateCommands(item);
         }
 
         public async Task OnAppearing()
         {
-            if (string.IsNullOrEmpty(Item.ID) && isLoaded)
+            if (string.IsNullOrEmpty(Item.ID) && !isLoaded)
             {
                 DateFrom = DateTime.Today;
                 DateTo = DateTime.Today;
@@ -138,6 +147,7 @@ namespace Jaktloggen
             InfoMessage = "Henter din posisjon...";
             try
             {
+                await Task.Delay(3000);
                 var locator = CrossGeolocator.Current;
                 locator.DesiredAccuracy = 10L;
                 var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null);
@@ -187,14 +197,23 @@ namespace Jaktloggen
             }
             return sted;
         }
+
         private void CreateCommands(Hunt item)
         {
+            ImageCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new InputImage("Bilde", ImagePath, (InputImage obj) => {
+                    ImagePath = obj.Filename;
+                }));
+            });
+
             LocationCommand = new Command(async () =>
             {
                 await Navigation.PushAsync(new InputEntry("Sted", Location, (InputEntry obj) => {
                     Location = obj.Value;
                 }));
             });
+
             DateFromCommand = new Command(async () =>
             {
                 await Navigation.PushAsync(new InputDate("Dato fra", DateFrom, (InputDate obj) => {
@@ -204,6 +223,7 @@ namespace Jaktloggen
                     }
                 }));
             });
+
             DateToCommand = new Command(async () =>
             {
                 await Navigation.PushAsync(new InputDate("Dato til", DateTo, (InputDate obj) => {
@@ -214,6 +234,22 @@ namespace Jaktloggen
                     }
                 }));
             });
+
+            HuntersCommand = new Command(async () =>
+            {
+                var items = new[] { "1", "2", "3", "4" };
+                var inputView = new InputPicker(
+                    "Velg jegere", 
+                    HunterIds?.Select(h => h.ToString()).ToArray(), 
+                    items, 
+                    (InputPicker obj) =>
+                {
+                    HunterIds = obj.SelectedItems.Select(i => int.Parse(i)).ToList();
+                });
+
+                await Navigation.PushAsync(inputView);
+            });
+
             NotesCommand = new Command(async () =>
             {
                 var inputView = new InputEntry("Notater", Notes, (InputEntry obj) =>

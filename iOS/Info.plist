@@ -48,5 +48,11 @@
 	<string>NSLocationWhenInUseUsageDescription</string>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Tillat bruk av kamera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Tillat bruk av bildebibliotek</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Tillat bruk av mediabibliotek</string>
 </dict>
 </plist>

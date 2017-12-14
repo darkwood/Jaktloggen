@@ -1,5 +1,11 @@
 ﻿using Xamarin.Forms;
 
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+
+using Device = Xamarin.Forms.Device;
+
 namespace Jaktloggen
 {
     public partial class App : Application
@@ -37,6 +43,9 @@ namespace Jaktloggen
         protected override void OnStart()
         {
             // Handle when your app starts
+            AppCenter.Start("android=8ce55db8-e0f4-42aa-8839-db304d8bfe52;" + "uwp={Your UWP App secret here};" +
+                            "ios={Your iOS App secret here}",
+                typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()

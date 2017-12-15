@@ -203,7 +203,7 @@ namespace Jaktloggen
             ImageCommand = new Command(async () =>
             {
                 await Navigation.PushAsync(new InputImage("Bilde", ImagePath, (InputImage obj) => {
-                    ImagePath = obj.Filename;
+                    ImagePath = obj.Filepath;
                 }));
             });
 

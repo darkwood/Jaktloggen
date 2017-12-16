@@ -12,12 +12,12 @@ namespace Jaktloggen.Services
 {
     public static class FileService
     {
-        public static async void SaveToLocalStorage<T>(this T objToSerialize, string filename)
+        public static async Task SaveToLocalStorage<T>(this T objToSerialize, string filename)
         {
-            if (filename.ToLower().EndsWith(".json"))
+            if (filename.ToLower().EndsWith(".json", StringComparison.CurrentCultureIgnoreCase))
             {
                 var jsonString = JsonConvert.SerializeObject(objToSerialize);
-                DependencyService.Get<IFileUtility>().Save(filename, jsonString);
+                await DependencyService.Get<IFileUtility>().SaveAsync(filename, jsonString);
                 return;
             }
             else
@@ -27,18 +27,18 @@ namespace Jaktloggen.Services
                 using (StringWriter textWriter = new StringWriter())
                 {
                     xmlSerializer.Serialize(textWriter, objToSerialize);
-                    DependencyService.Get<IFileUtility>().Save(filename, textWriter.ToString());
+                    await DependencyService.Get<IFileUtility>().SaveAsync(filename, textWriter.ToString());
                 }
             }
         }
 
-        public static T LoadFromLocalStorage<T>(string filename, bool loadFromserver = false)
+        public static async Task<T> LoadFromLocalStorage<T>(string filename, bool loadFromserver = false)
         {
             var localObj = (T)Activator.CreateInstance(typeof(T));
             // 1 read json
-            if (filename.EndsWith(".json") && Exists(filename))
+            if (filename.EndsWith(".json", StringComparison.CurrentCultureIgnoreCase) && Exists(filename))
             {
-                var jsonString = DependencyService.Get<IFileUtility>().Load(filename);
+                var jsonString = await DependencyService.Get<IFileUtility>().LoadAsync(filename);
 
                 try
                 {
@@ -58,14 +58,14 @@ namespace Jaktloggen.Services
 
                 if (localFileExists)
                 {
-                    var xmlString = DependencyService.Get<IFileUtility>().Load(xmlFilename);
+                    var xmlString = await DependencyService.Get<IFileUtility>().LoadAsync(xmlFilename);
                     try
                     {
                         using (var reader = new StringReader(xmlString))
                         {
                             XmlSerializer serializer = new XmlSerializer(typeof(T));
                             localObj = (T)serializer.Deserialize(reader);
-                            localObj.SaveToLocalStorage(filename); //Save to json format
+                            await localObj.SaveToLocalStorage(filename); //Save to json format
                         }
                     }
                     catch (Exception ex)
@@ -88,20 +88,23 @@ namespace Jaktloggen.Services
             return DependencyService.Get<IFileUtility>().GetLastWriteTime(filename);
         }
 
-        public static void CopyToAppFolder(string file)
+        public static async Task CopyToAppFolderAsync(string file)
         {
             var assembly = typeof(App).GetTypeInfo().Assembly;
             Stream stream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".Xml." + file);
 
             using (var reader = new StreamReader(stream))
             {
-                DependencyService.Get<IFileUtility>().Save(file, reader.ReadToEnd());
+                await DependencyService.Get<IFileUtility>().SaveAsync(file, reader.ReadToEnd());
             }
         }
 
-        public static string SaveImage(string filename, byte[] imageData)
+        public static async Task<string> SaveImage(string filename, byte[] imageData)
         {
-            return DependencyService.Get<IFileUtility>().SaveImage(filename, imageData);
+            return await DependencyService.Get<IFileUtility>().SaveImageAsync(filename, imageData);
         }
+
+        public static async Task CopyAsync(string sourcePath, string destinationPath) 
+            => await DependencyService.Get<IFileUtility>().CopyAsync(sourcePath, destinationPath);
     }
 }

@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace Jaktloggen.InputViews
 {
-    public partial class InputDate : ContentPage, INotifyPropertyChanged
+    public partial class InputDate : ContentPage
     {
         private DateTime? _value;
         public DateTime Value
@@ -65,17 +65,5 @@ namespace Jaktloggen.InputViews
             OnPropertyChanged(propertyName);
             return true;
         }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
-
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

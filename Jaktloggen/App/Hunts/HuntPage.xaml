@@ -26,7 +26,7 @@
                 
                 <TableSection Title="">
                     <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
-                    <cells:JTextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
+                    <cells:ExtendedTextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:ExtendedTextCell Text="Jegere" Detail="{Binding HuntIds}" Command="{Binding HuntersCommand}" />
                     <cells:ExtendedTextCell Text="Hunder" Detail="{Binding DogIds}" Command="{Binding DogCommands}" />
                     

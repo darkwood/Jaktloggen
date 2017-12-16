@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using Jaktloggen.Interfaces;
 
 using Plugin.Media;
+using Jaktloggen.Services;
 
 namespace Jaktloggen.InputViews
 {
@@ -45,7 +46,12 @@ namespace Jaktloggen.InputViews
         public string Filepath
         {
             get => m_filepath;
-            set { m_filepath = value; OnPropertyChanged(nameof(Filepath)); }
+            set { 
+                m_filepath = value; 
+                OnPropertyChanged(nameof(Filepath)); 
+                OnPropertyChanged(nameof(Source)); 
+                OnPropertyChanged(nameof(ImageExists));
+            }
         }
 
         public bool ImageExists => !string.IsNullOrEmpty(Filepath);
@@ -91,10 +97,7 @@ namespace Jaktloggen.InputViews
 
             var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
-                Directory = "Photos",
-                //Name = DateTime.Now.ToString("yyMMdd-hhmmss") + ".jpg",
-                CompressionQuality = 92,
-                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large
+                Directory = "Photos"
             });
 
             if (file == null)
@@ -102,13 +105,7 @@ namespace Jaktloggen.InputViews
 
             await DisplayAlert("File Location", file.Path, "OK");
 
-            Source = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                file.Dispose();
-                return stream;
-            });
-
+            _source = null;
             Filepath = file.Path;
 
             //or:
@@ -124,24 +121,16 @@ namespace Jaktloggen.InputViews
                 await DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
                 return;
             }
-            var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
-            {
-                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large,
-                CompressionQuality = 92
-            });
-
+            var file = await CrossMedia.Current.PickPhotoAsync();
 
             if (file == null)
                 return;
 
-            Source = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                file.Dispose();
-                return stream;
-            });
+            string destinationPath = file.Path.Replace("/temp/", "/Photos/");
+            await FileService.CopyAsync(file.Path, destinationPath);
 
-            Filepath = file.Path;
+            _source = null;
+            Filepath = destinationPath;
         }
 
         void Delete_Clicked(object sender, EventArgs e)

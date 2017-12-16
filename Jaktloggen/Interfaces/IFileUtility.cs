@@ -11,12 +11,13 @@ namespace Jaktloggen.Interfaces
 {
     public interface IFileUtility
     {
-        void Save(string filename, string text);
-        string SaveImage(string filename, byte[] imageData);
-        string Load(string filename);
+        Task<string> SaveAsync(string filename, string text);
+        Task<string> SaveImageAsync(string filename, byte[] imageData);
+        Task<string> LoadAsync(string filename);
         DateTime GetLastWriteTime(string filename);
         bool Exists(string filename);
-        void LogError(string error);
+        Task LogErrorAsync(string error);
         void Delete(string filename);
+        Task CopyAsync(string sourcePath, string destinationPath);
     }
 }

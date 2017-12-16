@@ -43,7 +43,7 @@ namespace Jaktloggen
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: Log this
             }

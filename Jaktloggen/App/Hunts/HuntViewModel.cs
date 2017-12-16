@@ -91,9 +91,9 @@ namespace Jaktloggen
                     return ImageSource.FromUri(new Uri("http://imaginations.csj.ualberta.ca/wp-content/themes/15zine/library/images/placeholders/placeholder-759x500.png"));
                     //return ImageSource.FromUri(new Uri("http://iliketowastemytime.com/sites/default/files/imagecache/blog_image/Evergreen-Mountain-Lookout-Sunset-by-Michael-Matti.jpg"));
                 }
-                var filepath = DependencyService.Get<ICamera>().GetPictureFromDisk(ImagePath);
+                //var filepath = DependencyService.Get<ICamera>().GetPictureFromDisk(ImagePath);
 
-                return ImageSource.FromFile(filepath);
+                return ImageSource.FromFile(ImagePath);
             }
         }
 

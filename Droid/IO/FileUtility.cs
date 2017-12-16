@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Jaktloggen.Droid.IO;
 using Jaktloggen.Interfaces;
 using Xamarin.Forms;
@@ -11,24 +13,28 @@ namespace Jaktloggen.Droid.IO
 {
     public class FileUtility : IFileUtility
     {
-        public void Save(string filename, string text)
+        public async Task<string> SaveAsync(string filename, string text)
         {
             string filePath = GetFilePath(filename);
-            File.WriteAllText(filePath, text);
-        }
-
-        public string SaveImage(string filename, byte[] imageData)
-        {
-            string filePath = GetFilePath(filename);
-            File.WriteAllBytes(filePath, imageData);
+            await WriteDataToDisk(filePath, Encoding.GetEncoding(28591).GetBytes(text));
             return filePath;
         }
 
-        public string Load(string filename)
+        public async Task<string> SaveImageAsync(string filename, byte[] imageData)
         {
             string filePath = GetFilePath(filename);
-            return File.ReadAllText(filePath);
+            await WriteDataToDisk(filePath, imageData);
+            return filePath;
         }
+
+
+        public async Task<string> LoadAsync(string filename)
+        {
+            string filePath = GetFilePath(filename);
+            var result = await ReadDataFromDisk(filePath);
+            return Encoding.GetEncoding(28591).GetString(result);
+        }
+
 
         public bool Exists(string filename)
         {
@@ -36,16 +42,16 @@ namespace Jaktloggen.Droid.IO
             return File.Exists(filePath);
         }
 
-        public void LogError(string error)
+        public async Task LogErrorAsync(string error)
         {
             string filePath = GetFilePath("error.txt");
-            var errorlog = File.ReadAllLines(filePath)?.ToList();
-            if (errorlog == null)
+            using (FileStream sourceStream = new FileStream(filePath,
+                            FileMode.Append, FileAccess.Write, FileShare.None,
+                            bufferSize: 4096, useAsync: true))
             {
-                errorlog = new List<string>();
-            }
-            errorlog.Add(error);
-            File.WriteAllText(filePath, String.Join(System.Environment.NewLine, errorlog));
+                byte[] bytes = Encoding.GetEncoding(28591).GetBytes(error);
+                await sourceStream.WriteAsync(bytes, 0, bytes.Length);
+            };
         }
 
         public void Delete(string filename)
@@ -67,6 +73,39 @@ namespace Jaktloggen.Droid.IO
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var filePath = Path.Combine(documentsPath, filename);
             return filePath;
+        }
+
+        public async Task CopyAsync(string sourcePath, string destinationPath)
+        {
+            using (Stream source = File.Open(sourcePath, FileMode.Append))
+            {
+                new FileInfo(destinationPath).Directory.Create();
+                using (Stream destination = File.Create(destinationPath))
+                {
+                    await source.CopyToAsync(destination);
+                }
+            }
+        }
+
+        async Task WriteDataToDisk(string filePath, byte[] encodedText)
+        {
+            using (FileStream sourceStream = new FileStream(filePath,
+                            FileMode.OpenOrCreate, FileAccess.Write, FileShare.None,
+                            bufferSize: 4096, useAsync: true))
+            {
+                await sourceStream.WriteAsync(encodedText, 0, encodedText.Length);
+            };
+        }
+
+        async Task<byte[]> ReadDataFromDisk(string filePath)
+        {
+            byte[] result;
+            using (FileStream stream = File.Open(filePath, FileMode.Open))
+            {
+                result = new byte[stream.Length];
+                await stream.ReadAsync(result, 0, (int)stream.Length);
+            }
+            return result;
         }
     }
 }

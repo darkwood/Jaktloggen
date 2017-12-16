@@ -18,9 +18,9 @@ namespace Jaktloggen.DataStores.File
             item.ID = Guid.NewGuid().ToString();
             items.Add(item);
 
-            items.SaveToLocalStorage(FILENAME);
+            await items.SaveToLocalStorage(FILENAME);
 
-            return await Task.FromResult(true);
+            return true;
         }
 
         public async Task<bool> UpdateItemAsync(Hunt item)
@@ -29,9 +29,9 @@ namespace Jaktloggen.DataStores.File
             items.Remove(_item);
             items.Add(item);
 
-            items.SaveToLocalStorage(FILENAME);
+            await items.SaveToLocalStorage(FILENAME);
 
-            return await Task.FromResult(true);
+            return true;
         }
 
         public async Task<bool> DeleteItemAsync(string id)
@@ -39,8 +39,8 @@ namespace Jaktloggen.DataStores.File
             var _item = items.Where((Hunt arg) => arg.ID == id).FirstOrDefault();
             items.Remove(_item);
 
-            items.SaveToLocalStorage(FILENAME);
-            return await Task.FromResult(true);
+            await items.SaveToLocalStorage(FILENAME);
+            return true;
         }
 
         public async Task<Hunt> GetItemAsync(string id)
@@ -50,8 +50,8 @@ namespace Jaktloggen.DataStores.File
 
         public async Task<List<Hunt>> GetItemsAsync(bool forceRefresh = false)
         {
-            items = FileService.LoadFromLocalStorage<List<Hunt>>(FILENAME);
-            return await Task.FromResult(items);
+            items = await FileService.LoadFromLocalStorage<List<Hunt>>(FILENAME);
+            return items;
         }
     }
 }

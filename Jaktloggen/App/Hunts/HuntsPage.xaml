@@ -8,7 +8,7 @@
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
 		<StackLayout>
-			<ListView x:Name="ItemsListView" ItemsSource="{Binding HuntItems}" VerticalOptions="FillAndExpand" HasUnevenRows="true" 
+			<ListView x:Name="ItemsListView" ItemsSource="{Binding HuntItems}" VerticalOptions="FillAndExpand" HasUnevenRows="false" 
                       RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
                       CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
 				<ListView.ItemTemplate>
@@ -17,6 +17,7 @@
                             Text="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}"
                             Detail="{Binding Location}"
                             ImageSource="{Binding Image}"
+                            Height="40"
                             >
                             <ImageCell.ContextActions>
                                 <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"

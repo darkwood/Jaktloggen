@@ -115,6 +115,20 @@ namespace Jaktloggen
             get { return infoMessage; }
             set { SetProperty(ref infoMessage, value); OnPropertyChanged(nameof(PositionInfo)); }
         }
+
+        List<Log> _logs = new List<Log>();
+        public List<Log> Logs
+        {
+            get => _logs;
+            set {
+                _logs = value; 
+                OnPropertyChanged(nameof(Logs));
+                OnPropertyChanged(nameof(LogsTitle));
+            }
+        }
+
+        public string LogsTitle => $"{Logs.Count} loggføringer";
+
         public ICommand LocationCommand { protected set; get; }
         public ICommand ImageCommand { protected set; get; }
         public ICommand DateFromCommand { protected set; get; }
@@ -122,6 +136,8 @@ namespace Jaktloggen
         public ICommand NotesCommand { protected set; get; }
         public ICommand HuntersCommand { protected set; get; }
         public ICommand DeleteCommand { protected set; get; }
+        public ICommand LogsCommand { protected set; get; }
+        public ICommand NewLogCommand { protected set; get; }
 
         private bool isLoaded { get; set; }
 
@@ -136,6 +152,8 @@ namespace Jaktloggen
 
         public async Task OnAppearing()
         {
+            Logs = await App.LogDataStore.GetItemsAsync();
+
             if (string.IsNullOrEmpty(Item.ID) && !isLoaded)
             {
                 DateFrom = DateTime.Today;
@@ -152,7 +170,6 @@ namespace Jaktloggen
             InfoMessage = "Henter din posisjon...";
             try
             {
-                await Task.Delay(3000);
                 var locator = CrossGeolocator.Current;
                 locator.DesiredAccuracy = 10L;
                 var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null);
@@ -263,6 +280,22 @@ namespace Jaktloggen
                 });
                 inputView.Multiline = true;
                 await Navigation.PushAsync(inputView);
+            });
+
+            LogsCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new LogsPage(new LogsViewModel(this)));
+            });
+
+            NewLogCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new LogPage(new LogViewModel(new Log(), Navigation)));
+            });
+
+            DeleteCommand = new Command(async () => {
+                // TODO: Move messageincenter.subscribe() to xaml.cs... MessagingCenter.Send(this, "Delete");
+
+                //await Navigation.PopAsync();
             });
         }
     }

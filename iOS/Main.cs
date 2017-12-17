@@ -6,7 +6,7 @@ using Foundation;
 using UIKit;
 
 namespace Jaktloggen.iOS
-{
+{       
     public class Application
     {
         // This is the main entry point of the application.

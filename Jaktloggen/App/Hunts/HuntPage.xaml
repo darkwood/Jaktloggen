@@ -16,7 +16,19 @@
             <TableRoot>
                 <TableSection Title="">
                     <cells:ImageHeaderCell HeightRequest="200" Source="{Binding Image}" Command="{Binding ImageCommand}" />
-                    <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Loggføringer" Detail="0" />
+                    <ViewCell>
+                        <Grid Padding="12" HeightRequest="40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" Text="{Binding LogsTitle}" HorizontalOptions="Start" />
+
+                            <Button Grid.Column="1" Text="Ny loggføring" WidthRequest="200" Command="{Binding NewLogCommand}" HorizontalOptions="End" BackgroundColor="{StaticResource Primary}" TextColor="White" BorderRadius="4" />
+
+                        </Grid>
+                    </ViewCell>
                  </TableSection>
                 
                 <TableSection Title="">
@@ -35,10 +47,8 @@
                     <ViewCell>
                         <Editor Text="{Binding Notes}" HeightRequest="100" />
                     </ViewCell>
-                </TableSection>
-                <TableSection Title="">
                     <ViewCell>
-                        <Button Clicked="Delete_Clicked" Command="{Binding DeleteCommand}" Text="Slett jakt" />
+                        <Button Command="{Binding DeleteCommand}" Text="Slett jakt"  IsVisible="{Binding ID, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" />
                     </ViewCell>
                 </TableSection>
             </TableRoot>

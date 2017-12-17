@@ -44,12 +44,5 @@ namespace Jaktloggen
             
             await Navigation.PopAsync();
         }
-
-        async void Delete_Clicked(object sender, System.EventArgs e)
-        {
-            MessagingCenter.Send(this, "Delete", viewModel);
-
-            await Navigation.PopAsync();
-        }
     }
 }

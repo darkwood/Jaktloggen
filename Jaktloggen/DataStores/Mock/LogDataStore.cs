@@ -20,7 +20,7 @@ namespace Jaktloggen.DataStores.Mock
 
         private Log CreateLog(int id){
             return new Log { 
-                Id = id.ToString(),
+                ID = id.ToString(),
                 HuntId = new Random().Next(1, 10).ToString(),
                 Date = DateTime.Now.AddHours(new Random().Next(-5, 5)).AddMinutes(new Random().Next(0, 59)),
                 Latitude = "63." + new Random().Next(3800, 4300),
@@ -37,7 +37,7 @@ namespace Jaktloggen.DataStores.Mock
 
         public async Task<bool> UpdateItemAsync(Log item)
         {
-            var _item = items.Where((Log arg) => arg.Id == item.Id).FirstOrDefault();
+            var _item = items.Where((Log arg) => arg.ID == item.ID).FirstOrDefault();
             items.Remove(_item);
             items.Add(item);
 
@@ -46,7 +46,7 @@ namespace Jaktloggen.DataStores.Mock
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var _item = items.Where((Log arg) => arg.Id == id).FirstOrDefault();
+            var _item = items.Where((Log arg) => arg.ID == id).FirstOrDefault();
             items.Remove(_item);
 
             return await Task.FromResult(true);
@@ -54,7 +54,7 @@ namespace Jaktloggen.DataStores.Mock
 
         public async Task<Log> GetItemAsync(string id)
         {
-            return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(items.FirstOrDefault(s => s.ID == id));
         }
 
         public async Task<List<Log>> GetItemsAsync(bool forceRefresh = false)

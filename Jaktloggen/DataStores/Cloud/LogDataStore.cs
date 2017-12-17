@@ -57,14 +57,14 @@ namespace Jaktloggen.DataStores.Cloud
 
         public async Task<bool> UpdateItemAsync(Log item)
         {
-            if (item == null || item.Id == null || !CrossConnectivity.Current.IsConnected)
+            if (item == null || item.ID == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
             var serializedItem = JsonConvert.SerializeObject(item);
             var buffer = Encoding.UTF8.GetBytes(serializedItem);
             var byteContent = new ByteArrayContent(buffer);
 
-            var response = await client.PutAsync(new Uri($"api/Log/{item.Id}"), byteContent);
+            var response = await client.PutAsync(new Uri($"api/Log/{item.ID}"), byteContent);
 
             return response.IsSuccessStatusCode;
         }

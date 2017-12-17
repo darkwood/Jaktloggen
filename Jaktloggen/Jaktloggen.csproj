@@ -57,6 +57,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="App\Logs\LogPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -120,6 +123,11 @@
     <Compile Include="Utils\Converters\EmptyStringToBooleanConverter.cs" />
     <Compile Include="Utils\Converters\InvertedEmptyStringToBooleanConverter.cs" />
     <Compile Include="Utils\Utility.cs" />
+    <Compile Include="App\Logs\LogPage.xaml.cs">
+      <DependentUpon>..\..\Logs\Logs\LogsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App\Logs\LogViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">

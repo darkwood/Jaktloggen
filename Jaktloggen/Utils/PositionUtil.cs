@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Plugin.Geolocator;
 using Plugin.Permissions;
+using Microsoft.AppCenter.Crashes;
 
 namespace Jaktloggen
 {
@@ -43,9 +44,9 @@ namespace Jaktloggen
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //TODO: Log this
+                //TODO: Log this and move on with life
             }
             return sted;
         }

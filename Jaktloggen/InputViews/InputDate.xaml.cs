@@ -13,10 +13,7 @@ namespace Jaktloggen.InputViews
         public DateTime Value
         {
             get { return _value ?? DateTime.Today; }
-            set
-            {
-                SetProperty(ref _value, value);
-            }
+            set { _value = value; OnPropertyChanged(nameof(Value)); }
         }
         private Action<InputDate> _callback { get; set; }
 
@@ -52,30 +49,5 @@ namespace Jaktloggen.InputViews
             date.Focus();
 
         }
-
-        protected bool SetProperty<T>(ref T backingStore, T value,
-                                      [CallerMemberName]string propertyName = "",
-            Action onChanged = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
-
-            backingStore = value;
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
-
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

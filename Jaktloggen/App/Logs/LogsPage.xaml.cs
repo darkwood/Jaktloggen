@@ -29,6 +29,7 @@ namespace Jaktloggen
             if (item == null)
                 return;
 
+            await DisplayAlert("Not implemented", "Yet.", "Cancel");
             //await Navigation.PushAsync(new HuntPage(new LogsViewModel(item)));
 
             // Manually deselect item
@@ -37,6 +38,7 @@ namespace Jaktloggen
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
+            await DisplayAlert("Not implemented", "Yet.", "Cancel");
             //await Navigation.PushAsync(new NewHuntPage());
         }
 

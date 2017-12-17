@@ -12,7 +12,7 @@ namespace Jaktloggen.Services
 {
     public static class FileService
     {
-        public static async void SaveToLocalStorage<T>(this T objToSerialize, string filename)
+        public static void SaveToLocalStorage<T>(this T objToSerialize, string filename)
         {
             if (filename.ToLower().EndsWith(".json"))
             {

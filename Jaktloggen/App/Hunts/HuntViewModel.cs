@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Jaktloggen.InputViews;
 using Jaktloggen.Interfaces;
+using Jaktloggen.Services;
 using Plugin.Geolocator;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -77,23 +78,27 @@ namespace Jaktloggen
                 return string.IsNullOrEmpty(Latitude) ? "" : $"{Latitude}, {Longitude}";
             }
         }
-        public string ImagePath 
+        public string ImageFilename 
         {
-            get { return Item.ImagePath; }
-            set { Item.ImagePath = value; OnPropertyChanged(nameof(ImagePath)); OnPropertyChanged(nameof(Image)); }
+            get {
+                var f = Item.ImagePath;
+                if(!string.IsNullOrEmpty(f) && f.Contains("/")){
+                    f = f.Substring(f.LastIndexOf("/", StringComparison.CurrentCulture)+1);
+                }
+                return f; 
+            }
+            set { 
+                Item.ImagePath = value; 
+                OnPropertyChanged(nameof(ImageFilename)); 
+                OnPropertyChanged(nameof(Image)); 
+            }
         }
 
         public ImageSource Image
         {
             get
             {
-                if(string.IsNullOrEmpty(ImagePath)){
-                    return ImageSource.FromUri(new Uri("http://imaginations.csj.ualberta.ca/wp-content/themes/15zine/library/images/placeholders/placeholder-759x500.png"));
-                    //return ImageSource.FromUri(new Uri("http://iliketowastemytime.com/sites/default/files/imagecache/blog_image/Evergreen-Mountain-Lookout-Sunset-by-Michael-Matti.jpg"));
-                }
-                var filepath = DependencyService.Get<ICamera>().GetPictureFromDisk(ImagePath);
-
-                return ImageSource.FromFile(filepath);
+                return Utility.GetImageSource(ImageFilename);
             }
         }
 
@@ -202,8 +207,8 @@ namespace Jaktloggen
         {
             ImageCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputImage("Bilde", ImagePath, (InputImage obj) => {
-                    ImagePath = obj.Filepath;
+                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, (InputImage obj) => {
+                    ImageFilename = obj.ImageFilename;
                 }));
             });
 

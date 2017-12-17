@@ -5,9 +5,9 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <Grid VerticalOptions="CenterAndExpand">
+        <Grid VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -17,7 +17,6 @@
                 Aspect="AspectFill"
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
-                IsVisible="{Binding ImageExists}"
             />
 
             <Grid Grid.Row="1">

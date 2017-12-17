@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using Jaktloggen.Interfaces;
 
 using Plugin.Media;
+using Jaktloggen.Services;
 
 namespace Jaktloggen.InputViews
 {
@@ -21,16 +22,7 @@ namespace Jaktloggen.InputViews
                     return _source;
                 }
 
-                if (string.IsNullOrEmpty(Filepath))
-                {
-                    _source = ImageSource.FromUri(new Uri("http://imaginations.csj.ualberta.ca/wp-content/themes/15zine/library/images/placeholders/placeholder-759x500.png"));
-                    //return ImageSource.FromUri(new Uri("http://iliketowastemytime.com/sites/default/files/imagecache/blog_image/Evergreen-Mountain-Lookout-Sunset-by-Michael-Matti.jpg"));
-                }
-                else
-                {
-                    //var filepath = DependencyService.Get<ICamera>().GetPictureFromDisk(Filepath);
-                    _source = ImageSource.FromFile(Filepath);
-                }
+                _source = Utility.GetImageSource(ImageFilename);
 
                 return _source;
             }
@@ -41,35 +33,29 @@ namespace Jaktloggen.InputViews
                 OnPropertyChanged(nameof(ImageExists));
             }
         }
+
         private string m_filepath;
-        public string Filepath
+        public string ImageFilename
         {
             get => m_filepath;
-            set { m_filepath = value; OnPropertyChanged(nameof(Filepath)); }
+            set
+            {
+                m_filepath = value;
+                OnPropertyChanged(nameof(ImageFilename));
+                OnPropertyChanged(nameof(Source));
+                OnPropertyChanged(nameof(ImageExists));
+            }
         }
 
-        public bool ImageExists => !string.IsNullOrEmpty(Filepath);
+        public bool ImageExists => !string.IsNullOrEmpty(ImageFilename);
 
         private Action<InputImage> _callback { get; set; }
         public InputImage(string title, string filepath, Action<InputImage> callback)
         {
-            Filepath = filepath;
+            ImageFilename = filepath;
             Title = title;
             _callback = callback;
             BindingContext = this;
-
-
-            //MessagingCenter.Subscribe<byte[]>(this, "ImageSelected", (bytes) =>
-            //{
-            //    Device.BeginInvokeOnMainThread(() =>
-            //    {
-            //        //Set the source of the image view with the byte array
-            //        Source = ImageSource.FromStream(() => new MemoryStream(bytes));
-            //        string f = "img" + DateTime.Now.ToString("yyMMdd-hhmmss");
-            //        var filePath = Services.FileService.SaveImage(f, bytes);
-            //        Filename = f;
-            //    });
-            //});
 
             InitializeComponent();
         }
@@ -80,7 +66,6 @@ namespace Jaktloggen.InputViews
         }
         async void Camera_Clicked(object sender, System.EventArgs e)
         {
-            //DependencyService.Get<ICamera>().BringUpCamera(); 
             await CrossMedia.Current.Initialize();
 
             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
@@ -91,37 +76,25 @@ namespace Jaktloggen.InputViews
 
             var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
-                Directory = "Photos",
-                //Name = DateTime.Now.ToString("yyMMdd-hhmmss") + ".jpg",
+                Directory = "",
                 CompressionQuality = 92,
                 PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large
             });
 
             if (file == null)
                 return;
+            
+            _source = null;
+            string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture)+1);
 
-            await DisplayAlert("File Location", file.Path, "OK");
-
-            Source = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                file.Dispose();
-                return stream;
-            });
-
-            Filepath = file.Path;
-
-            //or:
-            //image.Source = ImageSource.FromFile(file.Path);
-            //image.Dispose();
+            ImageFilename = filename;
         }
 
         async void Library_Clicked(object sender, System.EventArgs e)
         {
-            //DependencyService.Get<ICamera>().BringUpPhotoGallery();
             if (!CrossMedia.Current.IsPickPhotoSupported)
             {
-                await DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
+                await DisplayAlert("Bilder støttes ikke", "Tilgang er ikke gitt til bildebiblioteket. Kan endres i innstillinger på telefonen.", "OK");
                 return;
             }
             var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
@@ -134,14 +107,11 @@ namespace Jaktloggen.InputViews
             if (file == null)
                 return;
 
-            Source = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                file.Dispose();
-                return stream;
-            });
+            string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture)+1);
+            FileService.Copy("temp/"+filename, filename);
 
-            Filepath = file.Path;
+            _source = null;
+            ImageFilename = filename;
         }
 
         void Delete_Clicked(object sender, EventArgs e)

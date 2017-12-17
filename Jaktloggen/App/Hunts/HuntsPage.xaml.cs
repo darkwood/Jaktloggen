@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Jaktloggen.Services;
 using Xamarin.Forms;
 
 namespace Jaktloggen
@@ -34,6 +34,7 @@ namespace Jaktloggen
             var doit = await DisplayAlert("Bekreft sletting", "Jakta blir permanent slettet", "OK", "Avbryt");
             if(doit)
             {
+                FileService.Delete(item.ImageFilename);
                 await viewModel.DeleteItem(item);
             }
 

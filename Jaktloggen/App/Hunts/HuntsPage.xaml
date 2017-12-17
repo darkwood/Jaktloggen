@@ -13,16 +13,16 @@
                       CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
 				<ListView.ItemTemplate>
 					<DataTemplate>
-						<ViewCell>
-                            <ViewCell.ContextActions>
+						<ImageCell 
+                            Text="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}"
+                            Detail="{Binding Location}"
+                            ImageSource="{Binding Image}"
+                            >
+                            <ImageCell.ContextActions>
                                 <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
                                    Text="Slett" IsDestructive="True" />
-                             </ViewCell.ContextActions>
-							<StackLayout Padding="10">
-                                <Label Text="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="10" />
-                                <Label Text="{Binding Location}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                            </StackLayout>
-						</ViewCell>
+                             </ImageCell.ContextActions>
+						</ImageCell>
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>

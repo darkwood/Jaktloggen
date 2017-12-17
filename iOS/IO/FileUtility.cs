@@ -63,11 +63,19 @@ namespace Jaktloggen.iOS.IO
             string filePath = GetFilePath(filename);
             return File.GetLastWriteTime(filePath);
         }
-        private string GetFilePath(string filename)
+
+        public string GetFilePath(string filename)
         {
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var filePath = Path.Combine(documentsPath, filename);
             return filePath;
+        }
+
+        public void Copy(string sourceFile, string destinationFile)
+        {
+            var dest = GetFilePath(destinationFile);
+            new FileInfo(dest).Directory.Create();
+            File.Copy(GetFilePath(sourceFile), dest);
         }
     }
 }

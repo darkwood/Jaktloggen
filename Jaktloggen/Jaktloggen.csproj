@@ -113,13 +113,13 @@
     <Compile Include="InputViews\InputImage.xaml.cs">
       <DependentUpon>InputImage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\ICamera.cs" />
     <Compile Include="InputViews\InputPicker.xaml.cs">
       <DependentUpon>InputPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Cells\ImageHeaderCell.cs" />
     <Compile Include="Utils\Converters\EmptyStringToBooleanConverter.cs" />
     <Compile Include="Utils\Converters\InvertedEmptyStringToBooleanConverter.cs" />
+    <Compile Include="Utils\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">

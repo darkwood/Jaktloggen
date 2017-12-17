@@ -62,11 +62,17 @@ namespace Jaktloggen.Droid.IO
             string filePath = GetFilePath(filename);
             return File.GetLastWriteTime(filePath);
         }
-        private string GetFilePath(string filename)
+
+        public string GetFilePath(string filename)
         {
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var filePath = Path.Combine(documentsPath, filename);
             return filePath;
+        }
+
+        public void Copy(string sourcePath, string destinationPath)
+        {
+            File.Copy(sourcePath, destinationPath);
         }
     }
 }

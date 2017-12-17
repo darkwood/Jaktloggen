@@ -99,9 +99,17 @@ namespace Jaktloggen.Services
             }
         }
 
+        public static void Delete(string filename)
+        {
+            DependencyService.Get<IFileUtility>().Delete(filename);
+        }
+
         public static string SaveImage(string filename, byte[] imageData)
         {
             return DependencyService.Get<IFileUtility>().SaveImage(filename, imageData);
         }
+
+        public static void Copy(string sourceFile, string destinationFile)
+        => DependencyService.Get<IFileUtility>().Copy(sourceFile, destinationFile);
     }
 }

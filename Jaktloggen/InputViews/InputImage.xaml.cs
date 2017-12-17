@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Jaktloggen.Interfaces;
 
+using Plugin.Media;
+using Jaktloggen.Services;
+
 namespace Jaktloggen.InputViews
 {
     public partial class InputImage : ContentPage
@@ -14,56 +17,45 @@ namespace Jaktloggen.InputViews
         {
             get
             {
-                if(_source != null){
+                if (_source != null)
+                {
                     return _source;
                 }
 
-                if (string.IsNullOrEmpty(Filename))
-                {
-                    _source = ImageSource.FromUri(new Uri("http://imaginations.csj.ualberta.ca/wp-content/themes/15zine/library/images/placeholders/placeholder-759x500.png"));
-                    //return ImageSource.FromUri(new Uri("http://iliketowastemytime.com/sites/default/files/imagecache/blog_image/Evergreen-Mountain-Lookout-Sunset-by-Michael-Matti.jpg"));
-                } else{
-                    var filepath = DependencyService.Get<ICamera>().GetPictureFromDisk(Filename);
-                    _source = ImageSource.FromFile(filepath);
-                }
-               
+                _source = Utility.GetImageSource(ImageFilename);
+
                 return _source;
             }
-            set{
+            set
+            {
                 _source = value;
                 OnPropertyChanged(nameof(Source));
                 OnPropertyChanged(nameof(ImageExists));
             }
         }
-        private string _filename;
-        public string Filename
+
+        private string m_filepath;
+        public string ImageFilename
         {
-            get => _filename;
-            set { _filename = value; OnPropertyChanged(nameof(Filename)); }
+            get => m_filepath;
+            set
+            {
+                m_filepath = value;
+                OnPropertyChanged(nameof(ImageFilename));
+                OnPropertyChanged(nameof(Source));
+                OnPropertyChanged(nameof(ImageExists));
+            }
         }
 
-        public bool ImageExists => !string.IsNullOrEmpty(Filename);
+        public bool ImageExists => !string.IsNullOrEmpty(ImageFilename);
 
         private Action<InputImage> _callback { get; set; }
-        public InputImage(string title, string filename, Action<InputImage> callback)
+        public InputImage(string title, string filepath, Action<InputImage> callback)
         {
-            Filename = filename;
+            ImageFilename = filepath;
             Title = title;
             _callback = callback;
             BindingContext = this;
-
-
-            MessagingCenter.Subscribe<byte[]>(this, "ImageSelected", (bytes) =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    //Set the source of the image view with the byte array
-                    Source = ImageSource.FromStream(() => new MemoryStream(bytes));
-                    string f = "img" + DateTime.Now.ToString("yyMMdd-hhmmss");
-                    var filePath = Services.FileService.SaveImage(f, bytes);
-                    Filename = f;
-                });
-            });
 
             InitializeComponent();
         }
@@ -72,19 +64,59 @@ namespace Jaktloggen.InputViews
         {
             InitializeComponent();
         }
-        void Camera_Clicked(object sender, System.EventArgs e)
+        async void Camera_Clicked(object sender, System.EventArgs e)
         {
-            DependencyService.Get<ICamera>().BringUpCamera(); 
+            await CrossMedia.Current.Initialize();
+
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                await DisplayAlert("No Camera", ":( No camera available.", "OK");
+                return;
+            }
+
+            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                Directory = "",
+                CompressionQuality = 92,
+                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large
+            });
+
+            if (file == null)
+                return;
+            
+            _source = null;
+            string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture)+1);
+
+            ImageFilename = filename;
         }
 
-        void Library_Clicked(object sender, System.EventArgs e)
+        async void Library_Clicked(object sender, System.EventArgs e)
         {
-            DependencyService.Get<ICamera>().BringUpPhotoGallery();
+            if (!CrossMedia.Current.IsPickPhotoSupported)
+            {
+                await DisplayAlert("Bilder støttes ikke", "Tilgang er ikke gitt til bildebiblioteket. Kan endres i innstillinger på telefonen.", "OK");
+                return;
+            }
+            var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+            {
+                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large,
+                CompressionQuality = 92
+            });
+
+
+            if (file == null)
+                return;
+
+            string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture)+1);
+            FileService.Copy("temp/"+filename, filename);
+
+            _source = null;
+            ImageFilename = filename;
         }
 
         void Delete_Clicked(object sender, EventArgs e)
         {
-            
+
         }
 
         async void Done_Clicked(object sender, EventArgs e)

@@ -113,13 +113,13 @@
     <Compile Include="InputViews\InputImage.xaml.cs">
       <DependentUpon>InputImage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\ICamera.cs" />
     <Compile Include="InputViews\InputPicker.xaml.cs">
       <DependentUpon>InputPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Cells\ImageHeaderCell.cs" />
     <Compile Include="Utils\Converters\EmptyStringToBooleanConverter.cs" />
     <Compile Include="Utils\Converters\InvertedEmptyStringToBooleanConverter.cs" />
+    <Compile Include="Utils\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -145,6 +145,12 @@
     </Reference>
     <Reference Include="Plugin.Geolocator">
       <HintPath>..\packages\Xam.Plugin.Geolocator.4.1.3\lib\netstandard1.0\Plugin.Geolocator.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xam.Plugin.Media.3.1.1\lib\netstandard1.0\Plugin.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media.Abstractions, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xam.Plugin.Media.3.1.1\lib\netstandard1.0\Plugin.Media.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.Permissions.Abstractions">
       <HintPath>..\packages\Plugin.Permissions.2.1.0\lib\netstandard1.0\Plugin.Permissions.Abstractions.dll</HintPath>

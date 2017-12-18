@@ -6,7 +6,7 @@ namespace Jaktloggen
     {
         public MainPage()
         {
-            Page itemsPage, aboutPage = null;
+            Page itemsPage, aboutPage, huntersPage = null;
 
             switch (Device.RuntimePlatform)
             {
@@ -14,6 +14,11 @@ namespace Jaktloggen
                     itemsPage = new NavigationPage(new HuntsPage())
                                 {
                                     Title = "Browse"
+                                };
+
+                    huntersPage = new NavigationPage(new HuntersPage())
+                                {
+                                    Title = "Jegere"
                                 };
 
                     aboutPage = new NavigationPage(new AboutPage())
@@ -29,6 +34,11 @@ namespace Jaktloggen
                                     Title = "Browse"
                                 };
 
+                    huntersPage = new HuntersPage()
+                                {
+                                    Title = "Jegere"
+                                };
+
                     aboutPage = new AboutPage()
                                 {
                                     Title = "About"
@@ -37,6 +47,7 @@ namespace Jaktloggen
             }
 
             Children.Add(itemsPage);
+            Children.Add(huntersPage);
             Children.Add(aboutPage);
 
             Title = Children[0].Title;

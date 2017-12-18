@@ -7,25 +7,21 @@ using Xamarin.Forms;
 
 namespace Jaktloggen
 {
-    public class LogsViewModel : BaseViewModel
+    public class HuntersViewModel : BaseViewModel
     {
-        public HuntViewModel Hunt { get; set; }
-        public ObservableCollection<LogViewModel> Items { get; set; }
+        public ObservableCollection<HunterViewModel> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        public LogsViewModel(HuntViewModel hunt = null)
+        public HuntersViewModel()
         {
-            Hunt = hunt;
-            Title = Hunt?.Location;
-            Items = new ObservableCollection<LogViewModel>();
+            Items = new ObservableCollection<HunterViewModel>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+        }
 
-            //MessagingCenter.Subscribe<LogDetailPage, Log>(this, "AddLog", async (obj, item) =>
-            //{
-            //    var _item = item as Log;
-            //    Items.Add(_item);
-            //    await App.LogDataStore.AddItemAsync(_item);
-            //});
+        public async Task DeleteItem(HunterViewModel item)
+        {
+            await App.HunterDataStore.DeleteItemAsync(item.ID);
+            Items.Remove(item);
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -38,10 +34,10 @@ namespace Jaktloggen
             try
             {
                 Items.Clear();
-                var items = await App.LogDataStore.GetItemsAsync(true);
+                var items = await App.HunterDataStore.GetItemsAsync(true);
                 foreach (var item in items)
                 {
-                    Items.Add(new LogViewModel(item, Navigation));
+                    Items.Add(new HunterViewModel(item, Navigation));
                 }
             }
             catch (Exception ex)

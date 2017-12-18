@@ -14,6 +14,7 @@ namespace Jaktloggen
         public static string BackendUrl = "http://localhost:8607";
         public static IDataStore<Hunt> HuntDataStore => DependencyService.Get<IDataStore<Hunt>>();
         public static IDataStore<Log> LogDataStore => DependencyService.Get<IDataStore<Log>>();
+        public static IDataStore<Hunter> HunterDataStore => DependencyService.Get<IDataStore<Hunter>>();
         public App()
         {
             InitializeComponent();
@@ -36,7 +37,8 @@ namespace Jaktloggen
             else
             {
                 DependencyService.Register<DataStores.File.HuntDataStore>();
-                DependencyService.Register<DataStores.Cloud.LogDataStore>();
+                DependencyService.Register<DataStores.File.LogDataStore>();
+                DependencyService.Register<DataStores.File.HunterDataStore>();
             }
         }
 

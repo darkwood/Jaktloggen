@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Jaktloggen.InputViews;
-using Jaktloggen.Interfaces;
-using Jaktloggen.Services;
+
 using Plugin.Geolocator;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -80,13 +81,7 @@ namespace Jaktloggen
         }
         public string ImageFilename 
         {
-            get {
-                var f = Item.ImagePath;
-                if(!string.IsNullOrEmpty(f) && f.Contains("/")){
-                    f = f.Substring(f.LastIndexOf("/", StringComparison.CurrentCulture)+1);
-                }
-                return f; 
-            }
+            get => Utility.GetImageFileName(Item.ImagePath);
             set { 
                 Item.ImagePath = value; 
                 OnPropertyChanged(nameof(ImageFilename)); 
@@ -196,7 +191,7 @@ namespace Jaktloggen
             try
             {
                 var geoCoder = new Geocoder();
-                var geoPos = new Xamarin.Forms.Maps.Position(latitude, longitude);
+                var geoPos = new Position(latitude, longitude);
                 var possibleAddresses = await geoCoder.GetAddressesForPositionAsync(geoPos);
                 if (possibleAddresses.Any())
                 {
@@ -224,23 +219,23 @@ namespace Jaktloggen
         {
             ImageCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, (InputImage obj) => {
+                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, obj => {
                     ImageFilename = obj.ImageFilename;
                 }));
             });
 
             LocationCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputEntry("Sted", Location, (InputEntry obj) => {
+                await Navigation.PushAsync(new InputEntry("Sted", Location, obj => {
                     Location = obj.Value;
                 }));
             });
 
             DateFromCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputDate("Dato fra", DateFrom, (InputDate obj) => {
+                await Navigation.PushAsync(new InputDate("Dato fra", DateFrom, obj => {
                     DateFrom = obj.Value;
-                    if (DateTo == null || DateTo < DateFrom){
+                    if (DateTo < DateFrom){
                         DateTo = DateFrom;
                     }
                 }));
@@ -248,7 +243,7 @@ namespace Jaktloggen
 
             DateToCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputDate("Dato til", DateTo, (InputDate obj) => {
+                await Navigation.PushAsync(new InputDate("Dato til", DateTo, obj => {
                     DateTo = obj.Value;
                     if (DateFrom == null || DateFrom > DateTo)
                     {
@@ -259,22 +254,27 @@ namespace Jaktloggen
 
             HuntersCommand = new Command(async () =>
             {
-                var items = new[] { "1", "2", "3", "4" };
+                var items = new List<PickerItem>
+                {
+                    new PickerItem{ID = "1", Title = "Jeger1", Details = "Details1", Selected = true},
+                    new PickerItem{ID = "2", Title = "Jeger2", Details = "Details2"},
+                    new PickerItem{ID = "3", Title = "Jeger3", Details = "Details3", Selected = true},
+                    new PickerItem{ID = "4", Title = "Jeger4", Details = "Details4"}
+                };
                 var inputView = new InputPicker(
                     "Velg jegere", 
-                    HunterIds?.Select(h => h.ToString()).ToArray(), 
                     items, 
-                    (InputPicker obj) =>
-                {
-                    HunterIds = obj.SelectedItems.Select(i => int.Parse(i)).ToList();
-                });
+                    obj =>
+                    {
+                        //HunterIds = obj.SelectedItems.Select(i => int.Parse(i)).ToList();
+                    });
 
                 await Navigation.PushAsync(inputView);
             });
 
             NotesCommand = new Command(async () =>
             {
-                var inputView = new InputEntry("Notater", Notes, (InputEntry obj) =>
+                var inputView = new InputEntry("Notater", Notes, obj =>
                 {
                     Notes = obj.Value;
                 });

@@ -25,7 +25,7 @@ namespace Jaktloggen.DataStores.File
 
         public async Task<bool> UpdateItemAsync(Hunt item)
         {
-            var _item = items.Where((Hunt arg) => arg.ID == item.ID).FirstOrDefault();
+            var _item = items.FirstOrDefault(i => i.ID == item.ID);
             items.Remove(_item);
             items.Add(item);
 
@@ -36,7 +36,7 @@ namespace Jaktloggen.DataStores.File
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var _item = items.Where((Hunt arg) => arg.ID == id).FirstOrDefault();
+            var _item = items.FirstOrDefault(i => i.ID == id);
             items.Remove(_item);
 
             items.SaveToLocalStorage(FILENAME);

@@ -65,7 +65,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="App\Hunters\Hunter.cs" />
+    <Compile Include="App\Hunters\HunterPage.xaml.cs" />
+    <Compile Include="App\Hunters\HuntersPage.xaml.cs" />
+    <Compile Include="App\Hunters\HuntersViewModel.cs" />
+    <Compile Include="App\Hunters\HunterViewModel.cs" />
     <Compile Include="Base\BaseViewModel.cs" />
+    <Compile Include="DataStores\File\HunterDataStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataStores\Cloud\LogDataStore.cs" />
     <Compile Include="DataStores\Cloud\HuntDataStore.cs" />
@@ -183,7 +189,16 @@
     <None Include="packages.config" />
     <None Include="Devplan.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="App\Hunters\HunterPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App\Hunters\HuntersPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.5.0.121934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.0.121934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />
 </Project>

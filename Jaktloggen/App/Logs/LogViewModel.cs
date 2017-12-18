@@ -51,15 +51,7 @@ namespace Jaktloggen
         }
         public string ImageFilename
         {
-            get
-            {
-                var f = Item.ImagePath;
-                if (!string.IsNullOrEmpty(f) && f.Contains("/"))
-                {
-                    f = f.Substring(f.LastIndexOf("/", StringComparison.CurrentCulture) + 1);
-                }
-                return f;
-            }
+            get => Utility.GetImageFileName(Item.ImagePath);
             set
             {
                 Item.ImagePath = value;

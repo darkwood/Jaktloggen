@@ -16,6 +16,25 @@ namespace Jaktloggen
         {
             Items = new ObservableCollection<HunterViewModel>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+
+            MessagingCenter.Subscribe<HunterPage, HunterViewModel>(this, "Save", async (obj, item) =>
+            {
+                if (!string.IsNullOrEmpty(item.ID))
+                {
+                    await App.HunterDataStore.UpdateItemAsync(item.Item);
+                }
+                else
+                {
+                    await App.HunterDataStore.AddItemAsync(item.Item);
+                }
+
+                await PopulateItems();
+            });
+
+            MessagingCenter.Subscribe<HunterPage, HunterViewModel>(this, "Delete", async (obj, item) =>
+            {
+                await DeleteItem(item);
+            });
         }
 
         public async Task DeleteItem(HunterViewModel item)
@@ -24,7 +43,7 @@ namespace Jaktloggen
             Items.Remove(item);
         }
 
-        async Task ExecuteLoadItemsCommand()
+        private async Task PopulateItems()
         {
             if (IsBusy)
                 return;
@@ -33,6 +52,7 @@ namespace Jaktloggen
 
             try
             {
+
                 Items.Clear();
                 var items = await App.HunterDataStore.GetItemsAsync(true);
                 foreach (var item in items)
@@ -48,6 +68,11 @@ namespace Jaktloggen
             {
                 IsBusy = false;
             }
+        }
+
+        public async Task ExecuteLoadItemsCommand()
+        {
+            await PopulateItems();
         }
     }
 }

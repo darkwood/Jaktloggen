@@ -55,12 +55,12 @@ namespace Jaktloggen
 
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
             if (viewModel.Items.Count == 0)
-                viewModel.LoadItemsCommand.Execute(null);
+                await viewModel.ExecuteLoadItemsCommand();
         }
     }
 }

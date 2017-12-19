@@ -5,31 +5,23 @@
     xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
     xmlns:local="clr-namespace:Jaktloggen;assembly=Jaktloggen"    
     x:Class="Jaktloggen.HunterPage">
-    
+
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Lagre auto?" />
+        <ToolbarItem Text="Lagre" Clicked="Save_Clicked" />
     </ContentPage.ToolbarItems>
-    
     <ContentPage.Content>
-       <local:JTableView HasUnevenRows="true" Intent="Settings">
+        <local:JTableView HasUnevenRows="true" Intent="Settings">
             <TableRoot>
                 <TableSection Title="">
                     <cells:ImageHeaderCell HeightRequest="200" Source="{Binding Image}" Command="{Binding ImageCommand}" />
-                 </TableSection>
-                
-                <TableSection Title="">
-                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Posisjon" Detail="{Binding PositionInfo}" />
-                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Sted" Detail="{Binding Location}" Command="{Binding LocationCommand}" />
-                 </TableSection>
-                
-                <TableSection Title="">
-                    <cells:ExtendedTextCell Command="{Binding DateCommand}" Text="Tidspunkt" Detail="{Binding Date, Converter={Converters:DateTimeToShortDateConverter}}" />
-
+                    <cells:ExtendedTextCell Command="{Binding FirstnameCommand}" Text="Fornavn" Detail="{Binding Firstname}" />
+                    <cells:ExtendedTextCell Command="{Binding LastnameCommand}" Text="Etternavn" Detail="{Binding Lastname}" />
+                    <cells:ExtendedTextCell Command="{Binding PhoneCommand}" Text="Telefon" Detail="{Binding Phone}" />
+                    <cells:ExtendedTextCell Command="{Binding EmailCommand}" Text="E-post" Detail="{Binding Email}" />
                 </TableSection>
-
-                <TableSection Title="Notater">
+                <TableSection Title="">
                     <ViewCell>
-                        <Editor Text="{Binding Notes}" HeightRequest="100" />
+                        <Button Command="{Binding DeleteCommand}" Text="Slett" IsEnabled="{Binding ID, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" />
                     </ViewCell>
                 </TableSection>
             </TableRoot>

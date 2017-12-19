@@ -292,7 +292,7 @@ namespace Jaktloggen
                 await Navigation.PushAsync(new LogPage(new LogViewModel(new Log(), Navigation)));
             });
 
-            DeleteCommand = new Command(async () => {
+            DeleteCommand = new Command( () => {
                 // TODO: Move messageincenter.subscribe() to xaml.cs... MessagingCenter.Send(this, "Delete");
 
                 //await Navigation.PopAsync();

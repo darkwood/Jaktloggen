@@ -18,7 +18,7 @@ namespace Jaktloggen
             Navigation = navigation;
             Title = "Jaktloggen";
             HuntItems = new ObservableCollection<HuntViewModel>();
-            LoadHuntItemsCommand = new Command(async () => await ExecuteLoadHuntItemsCommand());
+            LoadHuntItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
             MessagingCenter.Subscribe<HuntPage, HuntViewModel>(this, "Save", async (obj, item) =>
             {
@@ -56,7 +56,7 @@ namespace Jaktloggen
             }
         }
 
-        public async Task ExecuteLoadHuntItemsCommand()
+        public async Task ExecuteLoadItemsCommand()
         {
             if (IsBusy)
                 return;

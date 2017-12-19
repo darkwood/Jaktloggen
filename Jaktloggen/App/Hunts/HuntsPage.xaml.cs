@@ -50,7 +50,7 @@ namespace Jaktloggen
             base.OnAppearing();
 
             if(viewModel.HuntItems.Count == 0)
-                await viewModel.ExecuteLoadHuntItemsCommand();
+                await viewModel.ExecuteLoadItemsCommand();
         }
 
     }

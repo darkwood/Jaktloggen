@@ -11,7 +11,6 @@ namespace Jaktloggen
 {
     public class HunterViewModel : BaseViewModel
     {
-        public Hunter Hunter { get; set; }
         public Hunter Item { get; set; }
         public Command LoadItemsCommand { get; set; }
 
@@ -20,6 +19,31 @@ namespace Jaktloggen
             get { return Item.ID; }
             set { Item.ID = value; OnPropertyChanged(nameof(ID)); }
         }
+
+        public string Firstname
+        {
+            get { return Item.Fornavn; }
+            set { Item.Fornavn = value; OnPropertyChanged(nameof(Firstname)); }
+        }
+
+        public string Lastname
+        {
+            get { return Item.Etternavn; }
+            set { Item.Etternavn = value; OnPropertyChanged(nameof(Lastname)); }
+        }
+
+        public string Phone
+        {
+            get { return Item.Phone; }
+            set { Item.Phone = value; OnPropertyChanged(nameof(Phone)); }
+        }
+
+        public string Email
+        {
+            get { return Item.Email; }
+            set { Item.Email = value; OnPropertyChanged(nameof(Email)); }
+        }
+
         public string Name => (Item.Fornavn + " " + Item.Etternavn).Trim();
 
         public string ImageFilename
@@ -36,6 +60,10 @@ namespace Jaktloggen
         public ImageSource Image => Utility.GetImageSource(ImageFilename);
         
         public ICommand ImageCommand { protected set; get; }
+        public ICommand FirstnameCommand { protected set; get; }
+        public ICommand LastnameCommand { protected set; get; }
+        public ICommand PhoneCommand { protected set; get; }
+        public ICommand EmailCommand { protected set; get; }
         public ICommand DeleteCommand { protected set; get; }
 
         private bool isLoaded { get; set; }
@@ -48,14 +76,6 @@ namespace Jaktloggen
             Title = string.IsNullOrEmpty(Name) ? "Ny jeger" : Name;
             CreateCommands(item);
         }
-
-        public async Task OnAppearing()
-        {
-            if (string.IsNullOrEmpty(Item.ID) && !isLoaded)
-            {
-                isLoaded = true;
-            }
-        }
         
         private void CreateCommands(Hunter item)
         {
@@ -63,6 +83,30 @@ namespace Jaktloggen
             {
                 await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, obj => {
                     ImageFilename = obj.ImageFilename;
+                }));
+            });
+            FirstnameCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new InputEntry("Fornavn", Firstname, obj => {
+                    Firstname = obj.Value;
+                }));
+            });
+            LastnameCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new InputEntry("Etternavn", Lastname, obj => {
+                    Lastname = obj.Value;
+                }));
+            });
+            PhoneCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new InputEntry("Telefon", Phone, obj => {
+                    Phone = obj.Value;
+                }));
+            });
+            EmailCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new InputEntry("E-post", Email, obj => {
+                    Email    = obj.Value;
                 }));
             });
         }

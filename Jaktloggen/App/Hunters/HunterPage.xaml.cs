@@ -26,7 +26,12 @@ namespace Jaktloggen
         protected override void OnAppearing()
         {
             base.OnAppearing();
+        }
 
+        async void Save_Clicked(object sender, EventArgs e)
+        {
+            MessagingCenter.Send(this, "Save", viewModel);
+            await Navigation.PopAsync();
         }
     }
 }

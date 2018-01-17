@@ -11,9 +11,10 @@ namespace Jaktloggen
     {
         public ObservableCollection<HunterViewModel> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
-
-        public HuntersViewModel()
+        private bool isLoaded { get; set; }
+        public HuntersViewModel(INavigation navigation)
         {
+            Navigation = navigation;
             Items = new ObservableCollection<HunterViewModel>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
@@ -37,6 +38,15 @@ namespace Jaktloggen
             });
         }
 
+        public async Task OnAppearing()
+        {
+            if (!isLoaded)
+            {
+                await ExecuteLoadItemsCommand();
+            }
+            isLoaded = true;
+        }
+
         public async Task DeleteItem(HunterViewModel item)
         {
             await App.HunterDataStore.DeleteItemAsync(item.ID);
@@ -52,7 +62,6 @@ namespace Jaktloggen
 
             try
             {
-
                 Items.Clear();
                 var items = await App.HunterDataStore.GetItemsAsync(true);
                 foreach (var item in items)

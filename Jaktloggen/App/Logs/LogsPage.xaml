@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.LogsPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
+    xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Jaktloggen.LogsPage">
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Ny loggføring" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <ListView x:Name="ItemsListView" ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand" HasUnevenRows="true" RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
+            <ListView x:Name="ItemsListView" ItemsSource="{Binding Items}" 
+                VerticalOptions="FillAndExpand" HasUnevenRows="true" 
+                RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" 
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}" RowHeight="70"
+                CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Padding="10">
-                                <Label Text="{Binding Date}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                                <Label Text="{Binding Notes}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="11" />
-                            </StackLayout>
-                        </ViewCell>
+                         <cells:ExtendedTextCell 
+                            Detail="{Binding Date}" 
+                            ImageSource="{Binding Image}" 
+                            Text="{Binding LogTitle}">
+                            <cells:ExtendedTextCell.ContextActions>
+                                <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
+                                   Text="Slett" IsDestructive="True" />
+                            </cells:ExtendedTextCell.ContextActions>
+                        </cells:ExtendedTextCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Windows.Input;
+using ImageCircle.Forms.Plugin.Abstractions;
 using Xamarin.Forms;
 
 namespace Jaktloggen.Cells
 {
     public class ExtendedTextCell : ViewCell
     {
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(Command), typeof(ExtendedTextCell), null);
+        public static readonly BindableProperty CommandProperty = 
+            BindableProperty.Create(
+                nameof(Command), 
+                typeof(Command), 
+                typeof(ExtendedTextCell), 
+                null,
+                propertyChanged: (bindable, oldValue, newValue) => {
+                    ((ExtendedTextCell)bindable).ViewLayout.GestureRecognizers.Add(((ExtendedTextCell)bindable).GestureRecognizer);
+                }
+            );
 
         public ICommand Command
         {
@@ -42,11 +52,8 @@ namespace Jaktloggen.Cells
             "",
             propertyChanged: (bindable, oldValue, newValue) => 
             {
-                var text = (newValue as string);
-                if(text != null && text.Length > 30){
-                    text = text.Substring(0, 26) + "...";
-                }
-                ((ExtendedTextCell)bindable).DetailLabel.Text = text;
+                ((ExtendedTextCell)bindable).DetailLabel.IsVisible = true;
+                ((ExtendedTextCell)bindable).DetailLabel.Text = newValue as string;
             });
 
         public string Detail
@@ -57,6 +64,35 @@ namespace Jaktloggen.Cells
         }
 
         public Label DetailLabel { get; private set; }
+
+        /***************************************************************************/
+
+        public static readonly BindableProperty Text2Property = BindableProperty.Create(
+            nameof(Text2),
+            typeof(string),
+            typeof(ExtendedTextCell),
+            "",
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                var text = (newValue as string);
+                if (text != null && text.Length > 30)
+                {
+                    text = text.Substring(0, 26) + "...";
+                }
+            ((ExtendedTextCell)bindable).Text2Label.IsVisible = true;
+            ((ExtendedTextCell)bindable).Text2Label.Text = text;
+            });
+
+        public string Text2
+        {
+            get { return (string)GetValue(Text2Property); }
+            set
+            {
+                SetValue(Text2Property, value);
+            }
+        }
+
+        public Label Text2Label { get; private set; }
 
         /***************************************************************************/
 
@@ -77,40 +113,137 @@ namespace Jaktloggen.Cells
 
         public ActivityIndicator ActivityIndicator { get; private set; }
 
+        /***************************************************************************/
+
+        public static readonly BindableProperty ImageSourceProperty =
+            BindableProperty.Create(
+                nameof(ImageSource),
+                typeof(ImageSource),
+                typeof(ExtendedTextCell),
+                null,
+                propertyChanged: (bindable, oldValue, newValue) => {
+                    ((ExtendedTextCell)bindable).CellImage.Source = newValue as ImageSource;
+                    ((ExtendedTextCell)bindable).CellImage.IsVisible = true;
+                }
+            );
+
+        public ImageSource ImageSource
+        {
+            get { return (ImageSource)GetValue(ImageSourceProperty); }
+            set { SetValue(ImageSourceProperty, value); }
+        }
+
+        /***************************************************************************/
+
+        public static readonly BindableProperty ImageSizeProperty = BindableProperty.Create(
+            nameof(ImageSize),
+            typeof(int),
+            typeof(ExtendedTextCell),
+            50,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+            ((ExtendedTextCell)bindable).CellImage.HeightRequest = (int)newValue;
+            ((ExtendedTextCell)bindable).CellImage.WidthRequest = (int)newValue;
+            });
+
+        public int ImageSize
+        {
+            get { return (int)GetValue(ImageSizeProperty); }
+            set
+            {
+                SetValue(ImageSizeProperty, value);
+            }
+        }
+
+        /***************************************************************************/
+
+        public static readonly BindableProperty SelectedProperty = BindableProperty.Create(
+            nameof(Selected),
+            typeof(bool),
+            typeof(ExtendedTextCell),
+            false,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                ((ExtendedTextCell)bindable).SelectedImage.IsVisible = (bool)newValue;
+            });
+
+        public bool Selected
+        {
+            get { return (bool)GetValue(SelectedProperty); }
+            set
+            {
+                SetValue(SelectedProperty, value);
+            }
+        }
+
+        public CircleImage CellImage { get; private set; }
+        public StackLayout ViewLayout { get; private set; }
+        public TapGestureRecognizer GestureRecognizer { get; private set; }
+        public Image SelectedImage { get; private set; }
 
         public ExtendedTextCell()
         {
-            var viewLayout = new StackLayout
+            ViewLayout = new StackLayout
             {
                 Orientation=StackOrientation.Horizontal,
-                Padding=10
+                Padding = 10,
             };
 
-            TextLabel = new Label();
-            viewLayout.Children.Add(TextLabel);
+            CellImage = new CircleImage
+            {
+                BorderColor = Color.White,
+                BorderThickness = 0,
+                Aspect = Aspect.AspectFill,
+                WidthRequest = 50,
+                HeightRequest= 50,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                IsVisible = false
+            };
+            ViewLayout.Children.Add(CellImage);
 
-            DetailLabel = new Label{HorizontalOptions = LayoutOptions.EndAndExpand};
-            viewLayout.Children.Add(DetailLabel);
+            var sublayout = new StackLayout { VerticalOptions = LayoutOptions.CenterAndExpand };
+            TextLabel = new Label{ Margin = 0 };
+            sublayout.Children.Add(TextLabel);
+
+            DetailLabel = new Label { Margin = 0, IsVisible = false, FontSize = 11, TextColor = Color.FromHex("#597a59") };
+            sublayout.Children.Add(DetailLabel);
+
+            ViewLayout.Children.Add(sublayout);
+
+            Text2Label = new Label { VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.EndAndExpand };
+            ViewLayout.Children.Add(Text2Label);
 
             ActivityIndicator = new ActivityIndicator { 
                 HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.Center,
                 IsRunning = true,
                 IsVisible = false
             };
-            viewLayout.Children.Add(ActivityIndicator);
+            ViewLayout.Children.Add(ActivityIndicator);
 
-            var gestureRecognizer = new TapGestureRecognizer();
+            SelectedImage = new Image
+            {
+                IsVisible = false,
+                Source = ImageSource.FromUri(new Uri("http://bubbl.tech/wp-content/uploads/2017/05/accept-tick-icon-12.png")),
+                Aspect = Aspect.AspectFit,
+                WidthRequest = 30,
+                HeightRequest = 30,
+                Margin = 10,
+                VerticalOptions = LayoutOptions.Center
+            };
+            ViewLayout.Children.Add(SelectedImage);
 
-            gestureRecognizer.Tapped += (s, e) => {
+            GestureRecognizer = new TapGestureRecognizer();
+
+            GestureRecognizer.Tapped += (s, e) => {
                 if (Command != null && Command.CanExecute(null))
                 {
                     Command.Execute(null);
                 }
             };
 
-            viewLayout.GestureRecognizers.Add(gestureRecognizer);
-
-            View = viewLayout;
+            View = ViewLayout;
         }
     }
 }

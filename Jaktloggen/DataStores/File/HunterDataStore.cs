@@ -10,6 +10,7 @@ namespace Jaktloggen.DataStores.File
     {
         List<Hunter> items = new List<Hunter>();
         private static string FILENAME = "jegere.json";
+        private bool firstLoad = true;
 
         public async Task<bool> AddItemAsync(Hunter item)
         {
@@ -50,8 +51,17 @@ namespace Jaktloggen.DataStores.File
 
         public async Task<List<Hunter>> GetItemsAsync(bool forceRefresh = false)
         {
-            items = FileService.LoadFromLocalStorage<List<Hunter>>(FILENAME);
+            if (firstLoad || forceRefresh)
+            {
+                items = FileService.LoadFromLocalStorage<List<Hunter>>(FILENAME);
+                firstLoad = false;
+            }
             return await Task.FromResult(items);
+        }
+
+        public List<Hunter> GetCachedItems()
+        {
+            return items;
         }
     }
 }

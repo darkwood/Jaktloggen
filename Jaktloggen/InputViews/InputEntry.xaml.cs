@@ -26,6 +26,7 @@ namespace Jaktloggen.InputViews
 
         private Action<InputEntry> _callback { get; set; }
         public bool Multiline { get; set; }
+        public bool Numeric { get; internal set; }
 
         public InputEntry(){}
 
@@ -34,9 +35,12 @@ namespace Jaktloggen.InputViews
             Title = title;
             _callback = callback;
             _value = value;
+
+
             BindingContext = this;
             InitializeComponent();
         }
+
 
         async void Handle_Completed(object sender, System.EventArgs e)
         {
@@ -52,17 +56,23 @@ namespace Jaktloggen.InputViews
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
 
-            if(Multiline)
+            if (Multiline)
             {
                 editor.Focus();
+            }
+            else if (Numeric)
+            {
+                entry.Keyboard = Keyboard.Numeric;
+                entry.Focus();
+                entry.HorizontalTextAlignment = TextAlignment.Center;
             }
             else
             {
                 entry.Focus();
-            } 
+            }
 
+            base.OnAppearing();
         }
     }
 }

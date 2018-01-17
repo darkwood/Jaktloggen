@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -12,45 +13,46 @@ namespace Jaktloggen
         public HuntViewModel Hunt { get; set; }
         public ObservableCollection<LogViewModel> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
+        private bool isLoaded { get; set; }
 
-        public LogsViewModel(HuntViewModel hunt = null)
+        public LogsViewModel(HuntViewModel hunt, INavigation navigation)
         {
             Hunt = hunt;
+            Navigation = navigation;
             Title = Hunt?.Location;
             Items = new ObservableCollection<LogViewModel>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
-            //MessagingCenter.Subscribe<LogDetailPage, Log>(this, "AddLog", async (obj, item) =>
-            //{
-            //    var _item = item as Log;
-            //    Items.Add(_item);
-            //    await App.LogDataStore.AddItemAsync(_item);
-            //});
         }
 
-        async Task ExecuteLoadItemsCommand()
+        public async Task OnAppearing()
         {
-            if (IsBusy)
-                return;
+            if (!isLoaded)
+            {
+                await ExecuteLoadItemsCommand();
+            }
+            isLoaded = true;
+        }
+
+        public async Task ExecuteLoadItemsCommand()
+        {
+            if (IsBusy) { return; }
 
             IsBusy = true;
+            try { await PopulateItems(); }
+            catch (Exception ex) { Debug.WriteLine(ex); }
+            finally { IsBusy = false; }
+        }
 
-            try
+        private async Task PopulateItems()
+        {
+            Items.Clear();
+            var logs = await App.LogDataStore.GetItemsAsync();
+            await App.HunterDataStore.GetItemsAsync();
+            await App.DogDataStore.GetItemsAsync();
+            var items = logs.Where(l => l.JaktId == Hunt.ID).OrderByDescending(o => o.Dato).ThenByDescending(d => d.Created).ToList();
+            foreach (var item in items)
             {
-                Items.Clear();
-                var items = await App.LogDataStore.GetItemsAsync(true);
-                foreach (var item in items)
-                {
-                    Items.Add(new LogViewModel(item, Navigation));
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
+                Items.Add(new LogViewModel(Hunt, item, Navigation));
             }
         }
     }

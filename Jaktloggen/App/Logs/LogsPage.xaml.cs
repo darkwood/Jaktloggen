@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
+using Jaktloggen.Services;
 using Xamarin.Forms;
 
 namespace Jaktloggen
@@ -13,7 +14,11 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new LogsViewModel();
+            BindingContext = viewModel = new LogsViewModel(null, Navigation);
+            viewModel.Items.Add(new LogViewModel(null, new Log{
+                Dato = DateTime.Now,
+                Notes = "Lorem ipsum"
+            }, null));
         }
 
         public LogsPage(LogsViewModel viewModel)
@@ -21,33 +26,62 @@ namespace Jaktloggen
             InitializeComponent();
 
             BindingContext = this.viewModel = viewModel;
+
+            MessagingCenter.Subscribe<LogViewModel>(this, "Delete", async (item) =>
+            {
+                await DeleteItem(item);
+
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as Log;
+            var item = args.SelectedItem as LogViewModel;
             if (item == null)
                 return;
 
-            await DisplayAlert("Not implemented", "Yet.", "Cancel");
-            //await Navigation.PushAsync(new HuntPage(new LogsViewModel(item)));
-
-            // Manually deselect item
+            await Navigation.PushAsync(new LogPage(item));
             ItemsListView.SelectedItem = null;
+        }
+
+        async void OnDelete(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            var item = mi.CommandParameter as LogViewModel;
+            await DeleteItem(item);
         }
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Not implemented", "Yet.", "Cancel");
-            //await Navigation.PushAsync(new NewHuntPage());
+            await Navigation.PushAsync(
+                new LogPage(
+                    new LogViewModel(
+                        viewModel.Hunt,
+                        new Log(), 
+                        Navigation)));
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await viewModel.OnAppearing();
+        }
 
-            if (viewModel.Items.Count == 0)
-                viewModel.LoadItemsCommand.Execute(null);
+
+        public async Task DeleteItem(LogViewModel item)
+        {
+            var doit = await DisplayAlert("Bekreft sletting", "Loggføringen blir permanent slettet", "OK", "Avbryt");
+            if (doit)
+            {
+                if (!string.IsNullOrWhiteSpace(item.ImageFilename))
+                {
+                    FileService.Delete(item.ImageFilename);
+                }
+                await App.LogDataStore.DeleteItemAsync(item.ID);
+                viewModel.Items.Remove(item);
+
+                await Navigation.PopAsync();
+            }
         }
     }
 }

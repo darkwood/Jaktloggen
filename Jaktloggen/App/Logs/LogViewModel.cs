@@ -1,19 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Jaktloggen.InputViews;
 using Plugin.Geolocator;
 using Xamarin.Forms;
 
+
 namespace Jaktloggen
 {
     public class LogViewModel : BaseViewModel
     {
-        public HuntViewModel Hunt { get; set; }
+        HuntViewModel hunt;
+        public HuntViewModel Hunt
+        {
+            get { return hunt; }
+            set { hunt = value; Item.JaktId = value.ID; }
+        }
+
         public Log Item { get; set; }
-        public Command LoadItemsCommand { get; set; }
 
         public override string ID
         {
@@ -21,34 +29,61 @@ namespace Jaktloggen
             set { Item.ID = value; OnPropertyChanged(nameof(ID)); }
         }
 
+        public int Hits
+        {
+            get { return Item.Treff; }
+            set { Item.Treff = value; OnPropertyChanged(nameof(Hits)); }
+        }
+        public int Observed
+        {
+            get { return Item.Sett; }
+            set { Item.Sett = value; OnPropertyChanged(nameof(Observed)); }
+        }
+        public int Shots
+        {
+            get { return Item.Skudd; }
+            set { Item.Skudd = value; OnPropertyChanged(nameof(Shots)); }
+        }
+
         public DateTime Date
         {
-            get { return Item.Date; }
-            set { Item.Date = value; OnPropertyChanged(nameof(Date)); }
+            get { return Item.Dato; }
+            set { Item.Dato = value; OnPropertyChanged(nameof(Date)); }
         }
 
-        public string Latitude
-        {
-            get { return Item.Latitude; }
-            set { Item.Latitude = value; OnPropertyChanged(nameof(Latitude)); }
-        }
-
-        public string Longitude
-        {
-            get { return Item.Longitude; }
-            set { Item.Longitude = value; OnPropertyChanged(nameof(Longitude)); }
-        }
-        public string PositionInfo
+        public double Latitude
         {
             get
             {
-                if (!string.IsNullOrEmpty(InfoMessage))
-                {
-                    return InfoMessage;
-                }
-                return string.IsNullOrEmpty(Latitude) ? "" : $"{Latitude}, {Longitude}";
+                double lat = 0;
+                double.TryParse(Item.Latitude, out lat);
+                return lat;
+            }
+            set
+            {
+                Item.Latitude = value.ToString();
+                OnPropertyChanged(nameof(Latitude));
+                OnPropertyChanged(nameof(PositionInfo));
             }
         }
+
+        public double Longitude
+        {
+            get
+            {
+                double lon = 0;
+                double.TryParse(Item.Longitude, out lon);
+                return lon;
+            }
+            set
+            {
+                Item.Longitude = value.ToString();
+                OnPropertyChanged(nameof(Longitude));
+                OnPropertyChanged(nameof(PositionInfo));
+            }
+        }
+
+
         public string ImageFilename
         {
             get => Utility.GetImageFileName(Item.ImagePath);
@@ -60,6 +95,49 @@ namespace Jaktloggen
             }
         }
 
+        public string Notes
+        {
+            get { return Item.Notes; }
+            set { Item.Notes = value; OnPropertyChanged(nameof(Notes)); }
+        }
+
+        public string Gender
+        {
+            get { return Item.Gender; }
+            set { Item.Gender = value; OnPropertyChanged(nameof(Gender)); }
+        }
+        public string Weather
+        {
+            get { return Item.Weather; }
+            set { Item.Weather = value; OnPropertyChanged(nameof(Weather)); }
+        }
+        public string Age
+        {
+            get { return Item.Age; }
+            set { Item.Age = value; OnPropertyChanged(nameof(Age)); }
+        }
+        public string WeaponType
+        {
+            get { return Item.WeaponType; }
+            set { Item.WeaponType = value; OnPropertyChanged(nameof(WeaponType)); }
+        }
+        public int Weight
+        {
+            get { return Item.Weight; }
+            set { Item.Weight = value; OnPropertyChanged(nameof(Weight)); }
+        }
+        public int ButchWeight
+        {
+            get { return Item.ButchWeight; }
+            set { Item.ButchWeight = value; OnPropertyChanged(nameof(ButchWeight)); }
+        }
+        public int Tags
+        {
+            get { return Item.Tags; }
+            set { Item.Tags = value; OnPropertyChanged(nameof(Tags)); }
+        }
+
+
         public ImageSource Image
         {
             get
@@ -68,46 +146,128 @@ namespace Jaktloggen
             }
         }
 
-        string notes;
-        public string Notes
-        {
-            get { return notes; }
-            set { SetProperty(ref notes, value); OnPropertyChanged(nameof(Notes)); }
-        }
-
-        string infoMessage;
+        string infoMessage = "Posisjon";
         public string InfoMessage
         {
             get { return infoMessage; }
             set { SetProperty(ref infoMessage, value); OnPropertyChanged(nameof(PositionInfo)); }
         }
 
-        public ICommand LocationCommand { protected set; get; }
+        List<Hunter> _hunters = new List<Hunter>();
+        public List<Hunter> Hunters
+        {
+            get { return _hunters; }
+            set {
+                _hunters = value;
+                OnPropertyChanged(nameof(Hunter));
+                OnPropertyChanged(nameof(HunterText));
+            }
+        }
+        public Hunter Hunter
+        {
+            get => Hunters?.SingleOrDefault(h => h.ID == Item.JegerId);
+            set
+            {
+                Item.JegerId = value?.ID;
+                OnPropertyChanged(nameof(Hunter));
+                OnPropertyChanged(nameof(HunterText));
+                OnPropertyChanged(nameof(LogTitle));
+            }
+        }
+
+        List<Dog> _dogs = new List<Dog>();
+        public List<Dog> Dogs
+        {
+            get { return _dogs; }
+            set
+            {
+                _dogs = value;
+                OnPropertyChanged(nameof(Dogs));
+                OnPropertyChanged(nameof(DogText));
+            }
+        }
+        public Dog Dog
+        {
+            get => Dogs?.SingleOrDefault(d => d.ID == Item.DogId);
+            set
+            {
+                Item.DogId = value?.ID;
+                OnPropertyChanged(nameof(Dog));
+                OnPropertyChanged(nameof(DogText));
+                OnPropertyChanged(nameof(LogTitle));
+            }
+        }
+
+        public string PositionInfo
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(InfoMessage))
+                {
+                    return InfoMessage;
+                }
+                return Latitude <= 0 ? "" : $"{Latitude}, {Longitude}";
+            }
+        }
+
+        public string HunterText => Hunter?.Fornavn;
+        public string DogText => Dog?.Navn;
+        public string LogTitle 
+        { 
+            get
+            {
+                var lbl = "";
+                //string art = null;
+                //if (art != null)
+                //    lbl = Hits + " " + art.Navn + " / " + Shots + " skudd";
+                //else
+                lbl = $"{Shots} skudd, {Hits} treff";
+
+                if (Observed > 0)
+                {
+                    lbl += $", {Observed} sett";
+                }
+                if (Hunter != null)
+                {
+                    lbl += $" ({Hunter.Fornavn})";
+                }
+                return lbl;
+            } 
+        }
+
+        public ICommand LoadItemsCommand { protected get; set; }
+        public ICommand PositionCommand { protected set; get; }
         public ICommand ImageCommand { protected set; get; }
         public ICommand DateCommand { protected set; get; }
         public ICommand NotesCommand { protected set; get; }
         public ICommand DeleteCommand { protected set; get; }
+        public ICommand HunterCommand { protected set; get; }
+        public ICommand DogCommand { protected set; get; }
+        public ICommand SpeciesCommand { protected set; get; }
+        public ICommand ObservedCommand { protected set; get; }
+        public ICommand HitsCommand { protected set; get; }
+        public ICommand ShotsCommand { protected set; get; }
 
-        private bool isLoaded { get; set; }
-
-        public LogViewModel(Log item, INavigation navigation)
+        public LogViewModel(HuntViewModel huntVm, Log item, INavigation navigation)
         {
-            Item = item.DeepClone();
+            Item = item;
             Navigation = navigation;
+            Hunt = huntVm;
 
-            Title = string.IsNullOrEmpty(item.ID) ? "Ny loggføring" : item.Date.ToString();
+            Title = string.IsNullOrEmpty(item.ID) ? "Ny loggføring" : Date.ToString();
             CreateCommands(item);
+
+            Hunters = App.HunterDataStore.GetCachedItems();
+            Dogs = App.DogDataStore.GetCachedItems();
         }
 
         public async Task OnAppearing()
         {
-            if (string.IsNullOrEmpty(Item.ID) && !isLoaded)
+            if (string.IsNullOrEmpty(Item.ID))
             {
                 Date = DateTime.Now;
-
                 await SetPositionAsync();
-
-                isLoaded = true;
+                await SaveAsync();
             }
         }
 
@@ -117,48 +277,186 @@ namespace Jaktloggen
             try
             {
                 var locator = CrossGeolocator.Current;
-                locator.DesiredAccuracy = 5L;
+                locator.DesiredAccuracy = 10L;
                 var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null);
 
-                InfoMessage = "";
+                InfoMessage = "Posisjon";
 
-                Latitude = position.Latitude.ToString();
-                Longitude = position.Longitude.ToString();
+                Latitude = position.Latitude;
+                Longitude = position.Longitude;
 
                 OnPropertyChanged(nameof(PositionInfo));
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                InfoMessage = "Henting av posisjon feilet.";
+
                 //todo: log this
-                throw new Exception(ex.Message, ex);
+                //throw new Exception(ex.Message, ex);
             }
         }
+
 
         private void CreateCommands(Log item)
         {
             ImageCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, (InputImage obj) => {
+                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, async obj =>
+                {
                     ImageFilename = obj.ImageFilename;
+                    await SaveAsync();
                 }));
+            });
+
+            HitsCommand = new Command(async (object isMoreButton) =>
+            {
+                if (isMoreButton != null && !((bool)isMoreButton))
+                {
+                    await SaveAsync();
+                }
+                else
+                {
+                    var inputView = new InputEntry("Antall treff", Hits.ToString(), async obj =>
+                    {
+                        Hits = int.Parse(obj.Value);
+                        if (Shots < Hits) { Shots = Hits; }
+                        if (Observed < Hits) { Observed = Hits; }
+                        await SaveAsync();
+                    });
+                    inputView.Numeric = true;
+                    await Navigation.PushAsync(inputView);
+                }
+            });
+
+            ShotsCommand = new Command(async (object isMoreButton) =>
+            {
+                if (isMoreButton != null && !((bool)isMoreButton))
+                {
+                    await SaveAsync();
+                }
+                else
+                {
+                    var inputView = new InputEntry("Antall skudd", Shots.ToString(), async obj =>
+                    {
+                        Shots = int.Parse(obj.Value);
+                        await SaveAsync();
+                    });
+                    inputView.Numeric = true;
+                    await Navigation.PushAsync(inputView);
+                }
+            });
+
+            ObservedCommand = new Command(async (object isMoreButton) =>
+            {
+                if (isMoreButton != null && !((bool)isMoreButton))
+                {
+                    await SaveAsync();
+                }
+                else
+                {
+                    var inputView = new InputEntry("Antall sett", Observed.ToString(), async obj =>
+                    {
+                        Observed = int.Parse(obj.Value);
+                        await SaveAsync();
+                    });
+                    inputView.Numeric = true;
+                    await Navigation.PushAsync(inputView);
+                }
+
+            });
+
+            PositionCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new InputPosition(Latitude, Longitude, async obj => {
+                    Latitude = obj.Latitude;
+                    Longitude = obj.Longitude;
+                    await SaveAsync();
+                }));
+            });
+            HunterCommand = new Command( async () =>
+            {
+                var huntersVM = _hunters.Select(h => new HunterViewModel(h, Navigation));
+                var items = huntersVM.Select(h => new PickerItem
+                {
+                    ID = h.ID,
+                    Title = h.Name,
+                    ImageSource = h.Image,
+                    Selected = Hunter != null && h.ID == Hunter.ID
+                }).ToList();
+
+                var inputView = new InputPicker(
+                    "Velg jeger",
+                    items,
+                    async obj =>
+                    {
+                        var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
+                        Hunter = _hunters.SingleOrDefault(h => h.ID == id);
+                        await SaveAsync();
+                    });
+
+                await Navigation.PushAsync(inputView);
+            });
+
+            DogCommand = new Command(async () =>
+            {
+                var dogsVM = _dogs.Select(h => new DogViewModel(h, Navigation));
+                var items = dogsVM.Select(h => new PickerItem
+                {
+                    ID = h.ID,
+                    Title = h.Name,
+                    ImageSource = h.Image,
+                    Selected = Dog != null && Dog.ID == h.ID
+                }).ToList();
+
+
+                var inputView = new InputPicker(
+                    "Velg hund",
+                    items,
+                    async obj =>
+                    {
+                        var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
+                        Dog = _dogs.SingleOrDefault(h => h.ID == id);
+                        await SaveAsync();
+                    });
+
+                await Navigation.PushAsync(inputView);
             });
 
             DateCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputDate("Tidspunkt", Date, (InputDate obj) => {
+                await Navigation.PushAsync(new InputDate("Tidspunkt", Date, async obj => {
                     Date = obj.Value;
+                    await SaveAsync();
                 }));
             });
 
             NotesCommand = new Command(async () =>
             {
-                var inputView = new InputEntry("Notater", Notes, (InputEntry obj) =>
+                var inputView = new InputEntry("Notater", Notes, async obj =>
                 {
                     Notes = obj.Value;
+                    await SaveAsync();
                 });
                 inputView.Multiline = true;
                 await Navigation.PushAsync(inputView);
             });
+        }
+
+        private void Save()
+        {
+            Task.Run(SaveAsync);
+        }
+        public async Task SaveAsync()
+        {
+            if (!string.IsNullOrEmpty(ID))
+            {
+                await App.LogDataStore.UpdateItemAsync(Item);
+            }
+            else
+            {
+                await App.LogDataStore.AddItemAsync(Item);
+            }
         }
     }
 }

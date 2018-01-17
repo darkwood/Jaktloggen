@@ -38,11 +38,11 @@ namespace Jaktloggen
             await viewModel.OnAppearing();
         }
 
-        async void Save_Clicked(object sender, EventArgs e)
-        {
-            MessagingCenter.Send(this, "Save", viewModel);
+        //async void Save_Clicked(object sender, EventArgs e)
+        //{
+        //    MessagingCenter.Send(this, "Save", viewModel);
             
-            await Navigation.PopAsync();
-        }
+        //    await Navigation.PopAsync();
+        //}
     }
 }

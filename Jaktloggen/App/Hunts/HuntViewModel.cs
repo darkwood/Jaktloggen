@@ -46,28 +46,44 @@ namespace Jaktloggen
             set { Item.DatoTil = value; OnPropertyChanged(nameof(DateTo)); }
         }
 
-        public List<int> HunterIds
+        public List<string> HunterIds
         {
-            get { return Item.JegerIds; }
-            set { Item.JegerIds = value; OnPropertyChanged(nameof(HunterIds)); }
+            get { return Item.JegerIds ?? new List<string>(); }
+            set { Item.JegerIds = value; OnPropertyChanged(nameof(HunterIds)); OnPropertyChanged(nameof(HuntersText));}
         }
         
-        public List<int> DogIds 
+        public List<string> DogIds 
         { 
-            get{ return Item.DogIds; } 
-            set { Item.DogIds = value; OnPropertyChanged(nameof(DogIds)); } 
+            get{ return Item.DogIds ?? new List<string>(); } 
+            set { Item.DogIds = value; OnPropertyChanged(nameof(DogIds)); OnPropertyChanged(nameof(DogsText));} 
         }
 
-        public string Latitude
+        public double Latitude
         {
-            get { return Item.Latitude; }
-            set { Item.Latitude = value; OnPropertyChanged(nameof(Latitude)); }
+            get {
+                double lat = 0;
+                double.TryParse(Item.Latitude, out lat);
+                return lat; 
+            }
+            set { 
+                Item.Latitude = value.ToString(); 
+                OnPropertyChanged(nameof(Latitude)); 
+                OnPropertyChanged(nameof(PositionInfo));
+            }
         }
 
-        public string Longitude
+        public double Longitude
         {
-            get { return Item.Longitude; }
-            set { Item.Longitude = value; OnPropertyChanged(nameof(Longitude)); }
+            get { 
+                double lon = 0;
+                double.TryParse(Item.Longitude, out lon);
+                return lon;
+            }
+            set { 
+                Item.Longitude = value.ToString(); 
+                OnPropertyChanged(nameof(Longitude));
+                OnPropertyChanged(nameof(PositionInfo));
+            }
         }
         public string PositionInfo
         {
@@ -76,7 +92,7 @@ namespace Jaktloggen
                 if(!string.IsNullOrEmpty(InfoMessage)){
                     return InfoMessage;
                 }
-                return string.IsNullOrEmpty(Latitude) ? "" : $"{Latitude}, {Longitude}";
+                return Latitude <= 0 ? "" : $"{Latitude}, {Longitude}";
             }
         }
         public string ImageFilename 
@@ -97,11 +113,10 @@ namespace Jaktloggen
             }
         }
 
-        string notes;
         public string Notes
         {
-            get { return notes; }
-            set { SetProperty(ref notes, value); OnPropertyChanged(nameof(Notes)); }
+            get { return Item.Notes; }
+            set { Item.Notes = value; OnPropertyChanged(nameof(Notes)); Save();}
         }
 
         string infoMessage;
@@ -118,18 +133,46 @@ namespace Jaktloggen
             set {
                 _logs = value; 
                 OnPropertyChanged(nameof(Logs));
-                OnPropertyChanged(nameof(LogsTitle));
+                OnPropertyChanged(nameof(LogsText));
             }
         }
 
-        public string LogsTitle => $"{Logs.Count} loggføringer";
+        List<Hunter> _hunters = new List<Hunter>();
+        public List<Hunter> Hunters
+        {
+            get => _hunters;
+            set
+            {
+                _hunters = value;
+                OnPropertyChanged(nameof(Hunters));
+                OnPropertyChanged(nameof(HuntersText));
+            }
+        }
+
+        List<Dog> _dogs = new List<Dog>();
+        public List<Dog> Dogs
+        {
+            get => _dogs;
+            set
+            {
+                _dogs = value;
+                OnPropertyChanged(nameof(Dogs));
+                OnPropertyChanged(nameof(DogsText));
+            }
+        }
+
+        public string LogsText => $"{Logs.Count} loggføringer";
+        public string HuntersText => string.Join(", ", Hunters.Where(s => HunterIds.Contains(s.ID)).Select(h => h.Fornavn));
+        public string DogsText => string.Join(", ", Dogs.Where(s => DogIds.Contains(s.ID)).Select(h => h.Navn));
 
         public ICommand LocationCommand { protected set; get; }
+        public ICommand PositionCommand { protected set; get; }
         public ICommand ImageCommand { protected set; get; }
         public ICommand DateFromCommand { protected set; get; }
         public ICommand DateToCommand { protected set; get; }
         public ICommand NotesCommand { protected set; get; }
         public ICommand HuntersCommand { protected set; get; }
+        public ICommand DogsCommand { protected set; get; }
         public ICommand DeleteCommand { protected set; get; }
         public ICommand LogsCommand { protected set; get; }
         public ICommand NewLogCommand { protected set; get; }
@@ -143,21 +186,25 @@ namespace Jaktloggen
 
             Title = string.IsNullOrEmpty(item.ID) ? "Ny jakt" : Location; 
             CreateCommands(item);
+
+            Logs = App.LogDataStore.GetCachedItems().Where(l => l.JaktId == ID).ToList();
+            Hunters = App.HunterDataStore.GetCachedItems();
+            Dogs = App.DogDataStore.GetCachedItems();
         }
 
         public async Task OnAppearing()
-        {
-            Logs = await App.LogDataStore.GetItemsAsync();
-
+        {   
             if (string.IsNullOrEmpty(Item.ID) && !isLoaded)
             {
                 DateFrom = DateTime.Today;
                 DateTo = DateTime.Today;
 
                 await SetPositionAsync();
-
-                isLoaded = true;
             }
+
+
+            
+            isLoaded = true;
         }
         
         private async Task SetPositionAsync()
@@ -171,8 +218,8 @@ namespace Jaktloggen
 
                 InfoMessage = "";
 
-                Latitude = position.Latitude.ToString();
-                Longitude = position.Longitude.ToString();
+                Latitude = position.Latitude;
+                Longitude = position.Longitude;
 
                 OnPropertyChanged(nameof(PositionInfo));
 
@@ -219,64 +266,109 @@ namespace Jaktloggen
         {
             ImageCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, obj => {
+                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, async obj => {
                     ImageFilename = obj.ImageFilename;
+                    await SaveAsync();
                 }));
             });
 
             LocationCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputEntry("Sted", Location, obj => {
+                await Navigation.PushAsync(new InputEntry("Sted", Location, async obj => {
                     Location = obj.Value;
+                    await SaveAsync();
+                }));
+            });
+
+            PositionCommand = new Command(async () =>
+            {
+                await Navigation.PushAsync(new InputPosition(Latitude, Longitude, async obj => {
+                    Latitude = obj.Latitude;
+                    Longitude = obj.Longitude;
+                    await SaveAsync();
                 }));
             });
 
             DateFromCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputDate("Dato fra", DateFrom, obj => {
+                await Navigation.PushAsync(new InputDate("Dato fra", DateFrom, async obj => {
                     DateFrom = obj.Value;
                     if (DateTo < DateFrom){
                         DateTo = DateFrom;
                     }
+                    await SaveAsync();
                 }));
             });
 
             DateToCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputDate("Dato til", DateTo, obj => {
+                await Navigation.PushAsync(new InputDate("Dato til", DateTo, async obj =>
+                {
                     DateTo = obj.Value;
-                    if (DateFrom == null || DateFrom > DateTo)
+                    if (DateFrom > DateTo)
                     {
                         DateFrom = DateTo;
                     }
+
+                    await SaveAsync();
                 }));
             });
 
             HuntersCommand = new Command(async () =>
             {
-                var items = new List<PickerItem>
-                {
-                    new PickerItem{ID = "1", Title = "Jeger1", Details = "Details1", Selected = true},
-                    new PickerItem{ID = "2", Title = "Jeger2", Details = "Details2"},
-                    new PickerItem{ID = "3", Title = "Jeger3", Details = "Details3", Selected = true},
-                    new PickerItem{ID = "4", Title = "Jeger4", Details = "Details4"}
-                };
+                var huntersVM = Hunters.Select(h => new HunterViewModel(h, Navigation));
+                var items = huntersVM.Select(h => new PickerItem { 
+                    ID = h.ID,
+                    Title = h.Name,
+                    ImageSource = h.Image,
+                    Selected = HunterIds.Contains(h.ID)
+                }).ToList();
+
+
                 var inputView = new InputPicker(
                     "Velg jegere", 
                     items, 
-                    obj =>
+                    async obj =>
                     {
-                        //HunterIds = obj.SelectedItems.Select(i => int.Parse(i)).ToList();
+                        HunterIds = obj.PickerItems.Where(p => p.Selected).Select(s => s.ID).ToList();
+                        await SaveAsync();
                     });
+                inputView.CanSelectMany = true;
+
+                await Navigation.PushAsync(inputView);
+            });
+
+            DogsCommand = new Command(async () =>
+            {
+                var dogsVM = Dogs.Select(h => new DogViewModel(h, Navigation));
+                var items = dogsVM.Select(h => new PickerItem
+                {
+                    ID = h.ID,
+                    Title = h.Name,
+                    ImageSource = h.Image,
+                    Selected = DogIds.Contains(h.ID)
+                }).ToList();
+
+
+                var inputView = new InputPicker(
+                    "Velg hunder",
+                    items,
+                    async obj =>
+                    {
+                        DogIds = obj.PickerItems.Where(p => p.Selected).Select(s => s.ID).ToList();
+                        await SaveAsync();
+                    });
+                inputView.CanSelectMany = true;
 
                 await Navigation.PushAsync(inputView);
             });
 
             NotesCommand = new Command(async () =>
             {
-                var inputView = new InputEntry("Notater", Notes, obj =>
+                var inputView = new InputEntry("Notater", Notes, async obj =>
                 {
                     Notes = obj.Value;
+                    await SaveAsync();
                 });
                 inputView.Multiline = true;
                 await Navigation.PushAsync(inputView);
@@ -284,19 +376,42 @@ namespace Jaktloggen
 
             LogsCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new LogsPage(new LogsViewModel(this)));
+                await Navigation.PushAsync(new LogsPage(new LogsViewModel(this, Navigation)));
             });
 
             NewLogCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new LogPage(new LogViewModel(new Log(), Navigation)));
+                if (string.IsNullOrWhiteSpace(ID))
+                {
+                    await SaveAsync();
+                }
+
+                await Navigation.PushAsync(
+                    new LogPage(
+                        new LogViewModel(
+                            this, new Log(), Navigation)));
             });
 
             DeleteCommand = new Command( () => {
-                // TODO: Move messageincenter.subscribe() to xaml.cs... MessagingCenter.Send(this, "Delete");
-
-                //await Navigation.PopAsync();
+                MessagingCenter.Send(this, "Delete");
             });
+        }
+
+        void Save()
+        {
+            Task.Run(SaveAsync);
+        }
+
+        async Task SaveAsync()
+        {
+            if (!string.IsNullOrEmpty(ID))
+            {
+                await App.HuntDataStore.UpdateItemAsync(Item);
+            }
+            else
+            {
+                await App.HuntDataStore.AddItemAsync(Item);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using ImageCircle.Forms.Plugin.iOS;
 using UIKit;
 using Xamarin;
 
@@ -20,6 +21,7 @@ namespace Jaktloggen.iOS
 			Xamarin.Calabash.Start();
 #endif
             FormsMaps.Init();
+            ImageCircleRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

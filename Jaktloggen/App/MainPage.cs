@@ -6,32 +6,37 @@ namespace Jaktloggen
     {
         public MainPage()
         {
-            Page itemsPage, aboutPage, huntersPage = null;
+            Page itemsPage, aboutPage, huntersPage, dogsPage = null;
 
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
                     itemsPage = new NavigationPage(new HuntsPage())
                                 {
-                                    Title = "Browse"
+                                    Title = "Jakt"
                                 };
 
                     huntersPage = new NavigationPage(new HuntersPage())
                                 {
                                     Title = "Jegere"
                                 };
-
+                    dogsPage = new NavigationPage(new DogsPage())
+                                {
+                                    Title = "Hunder"
+                                };
                     aboutPage = new NavigationPage(new AboutPage())
                                 {
-                                    Title = "About"
+                                    Title = "Info"
                                 };
-                    itemsPage.Icon = "tab_feed.png";
-                    aboutPage.Icon = "tab_about.png";
+                    itemsPage.Icon = "Gevir.png";
+                    huntersPage.Icon = "Jegere.png";
+                    dogsPage.Icon = "dog-paw.png";
+                    aboutPage.Icon = "Feedback.png";
                     break;
                 default:
                     itemsPage = new HuntsPage()
                                 {
-                                    Title = "Browse"
+                                    Title = "Jakt"
                                 };
 
                     huntersPage = new HuntersPage()
@@ -39,15 +44,21 @@ namespace Jaktloggen
                                     Title = "Jegere"
                                 };
 
+                    dogsPage = new DogsPage()
+                    {
+                        Title = "Hunder"
+                    };
+
                     aboutPage = new AboutPage()
-                                {
-                                    Title = "About"
-                                };
+                    {
+                        Title = "Info"
+                    };
                     break;
             }
 
             Children.Add(itemsPage);
             Children.Add(huntersPage);
+            Children.Add(dogsPage);
             Children.Add(aboutPage);
 
             Title = Children[0].Title;

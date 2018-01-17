@@ -68,9 +68,9 @@ namespace Jaktloggen.Services
                             localObj.SaveToLocalStorage(filename); //Save to json format
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        throw new Exception(ex.Message, ex);
+                        // new Exception(ex.Message, ex);
                         //Utils.LogError(ex);
                     }
                 }

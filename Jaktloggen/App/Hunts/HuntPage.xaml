@@ -5,12 +5,10 @@
     xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
     xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
     xmlns:local="clr-namespace:Jaktloggen;assembly=Jaktloggen"
+    xmlns:controls="clr-namespace:Jaktloggen.Controls;assembly=Jaktloggen"
     x:Class="Jaktloggen.HuntPage" 
     Title="{Binding Title}">
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Lagre" Clicked="Save_Clicked" />
-    </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <local:JTableView HasUnevenRows="true" Intent="Settings">
             <TableRoot>
@@ -23,30 +21,34 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="0" Text="{Binding LogsTitle}" HorizontalOptions="Start" />
+                            <Button Grid.Column="0" Text="{Binding LogsText}" Command="{Binding LogsCommand}" HorizontalOptions="Start" StyleClass="SecondaryButton" />
 
-                            <Button Grid.Column="1" Text="Ny loggføring" WidthRequest="200" Command="{Binding NewLogCommand}" HorizontalOptions="End" BackgroundColor="{StaticResource Primary}" TextColor="White" BorderRadius="4" />
+                            <Button Grid.Column="1" Text="Ny loggføring" WidthRequest="200" Command="{Binding NewLogCommand}" StyleClass="PrimaryButton" HorizontalOptions="End" BackgroundColor="{StaticResource Primary}" TextColor="White" BorderRadius="4" />
 
                         </Grid>
                     </ViewCell>
                  </TableSection>
                 
                 <TableSection Title="">
-                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Posisjon" Detail="{Binding PositionInfo}" />
-                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Sted" Detail="{Binding Location}" Command="{Binding LocationCommand}" />
-                 </TableSection>
+                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Sted" Text2="{Binding Location}" Command="{Binding LocationCommand}" />
+                    <cells:MapCell Text="Posisjon" Latitude="{Binding Latitude}" Longitude="{Binding Longitude}" Command="{Binding PositionCommand}" />
+                      
+                </TableSection>
                 
                 <TableSection Title="">
-                    <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
-                    <cells:ExtendedTextCell Command="{Binding DateToCommand}" Text="Dato til" Detail="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
-                    <cells:ExtendedTextCell Text="Jegere" Detail="{Binding HuntIds}" Command="{Binding HuntersCommand}" />
-                    <cells:ExtendedTextCell Text="Hunder" Detail="{Binding DogIds}" Command="{Binding DogCommands}" />
+                    <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Text2="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
+                    <cells:ExtendedTextCell Command="{Binding DateToCommand}" Text="Dato til" Text2="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
+                    <cells:ExtendedTextCell Text="Jegere" Text2="{Binding HuntersText}" Command="{Binding HuntersCommand}" />
+                    <cells:ExtendedTextCell Text="Hunder" Text2="{Binding DogsText}" Command="{Binding DogsCommand}" />
                 </TableSection>
 
                 <TableSection Title="Notater">
                     <ViewCell>
                         <Editor Text="{Binding Notes}" HeightRequest="100" />
                     </ViewCell>
+                </TableSection>
+        
+                <TableSection Title="">
                     <ViewCell>
                         <Button Command="{Binding DeleteCommand}" Text="Slett jakt"  IsVisible="{Binding ID, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" />
                     </ViewCell>

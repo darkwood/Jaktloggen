@@ -15,6 +15,12 @@ namespace Jaktloggen
             InitializeComponent();
 
             BindingContext = viewModel = new HuntsViewModel(Navigation);
+
+            MessagingCenter.Subscribe<HuntViewModel>(this, "Delete", async (item) =>
+            {
+                await DeleteItem(item);
+
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -31,13 +37,7 @@ namespace Jaktloggen
         {
             var mi = ((MenuItem)sender);
             var item = mi.CommandParameter as HuntViewModel;
-            var doit = await DisplayAlert("Bekreft sletting", "Jakta blir permanent slettet", "OK", "Avbryt");
-            if(doit)
-            {
-                FileService.Delete(item.ImageFilename);
-                await viewModel.DeleteItem(item);
-            }
-
+            await DeleteItem(item);
         }
 
         async void AddItem_Clicked(object sender, EventArgs e)
@@ -48,10 +48,24 @@ namespace Jaktloggen
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
-            if(viewModel.HuntItems.Count == 0)
-                await viewModel.ExecuteLoadItemsCommand();
+            await viewModel.OnAppearing();
         }
 
+
+        public async Task DeleteItem(HuntViewModel item)
+        {
+            var doit = await DisplayAlert("Bekreft sletting", "Jakta blir permanent slettet", "OK", "Avbryt");
+            if (doit)
+            {
+                if(!string.IsNullOrWhiteSpace(item.ImageFilename))
+                {
+                    FileService.Delete(item.ImageFilename);
+                }
+                await App.HuntDataStore.DeleteItemAsync(item.ID);
+                viewModel.HuntItems.Remove(item);
+
+                await Navigation.PopToRootAsync();
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new LogViewModel(new Log(), null);
+            BindingContext = viewModel = new LogViewModel(null, new Log(), null);
         }
 
         public LogPage(LogViewModel viewModel)
@@ -23,10 +23,10 @@ namespace Jaktloggen
             BindingContext = this.viewModel = viewModel;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-
+            await viewModel.OnAppearing();
         }
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+    xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
+    xmlns:local="clr-namespace:Jaktloggen;assembly=Jaktloggen"    
+    x:Class="Jaktloggen.DogPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Lagre" Clicked="Save_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <local:JTableView HasUnevenRows="true" Intent="Settings">
+            <TableRoot>
+                <TableSection Title="">
+                    <cells:ImageHeaderCell HeightRequest="200" Source="{Binding Image}" Command="{Binding ImageCommand}" />
+                    <cells:ExtendedTextCell Command="{Binding NameCommand}" Text="Navn" Text2="{Binding Name}" />
+                    <cells:ExtendedTextCell Command="{Binding BreedCommand}" Text="Rase" Text2="{Binding Breed}" />
+                    <cells:ExtendedTextCell Command="{Binding NumberCommand}" Text="Reg.Nummer" Text2="{Binding Number}" />
+                </TableSection>
+                <TableSection Title="">
+                    <ViewCell>
+                        <Button Command="{Binding DeleteCommand}" Text="Slett" IsEnabled="{Binding ID, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" />
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </local:JTableView>
+	</ContentPage.Content>
+</ContentPage>

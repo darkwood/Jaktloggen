@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -60,14 +60,29 @@
     <EmbeddedResource Include="App\Logs\LogPage.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="InputViews\InputPosition.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\Dogs\DogPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\Dogs\DogsPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="App\Hunters\Hunter.cs" />
-    <Compile Include="App\Hunters\HunterPage.xaml.cs" />
-    <Compile Include="App\Hunters\HuntersPage.xaml.cs" />
+    
+    <Compile Include="App\Hunters\HunterPage.xaml.cs">
+        <DependentUpon>HunterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App\Hunters\HuntersPage.xaml.cs">
+        <DependentUpon>HuntersPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App\Hunters\HuntersViewModel.cs" />
     <Compile Include="App\Hunters\HunterViewModel.cs" />
     <Compile Include="Base\BaseViewModel.cs" />
@@ -95,24 +110,24 @@
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Interfaces\IFileUtility.cs" />
     <Compile Include="App\About\AboutPage.xaml.cs">
-      <DependentUpon>..\..\About\About\AboutPage.xaml</DependentUpon>
+      <DependentUpon>AboutPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="App\About\AboutViewModel.cs" />
     <Compile Include="App\Hunts\Hunt.cs" />
     <Compile Include="App\Hunts\HuntPage.xaml.cs">
-      <DependentUpon>..\..\Hunts\Hunts\HuntPage.xaml</DependentUpon>
+      <DependentUpon>HuntPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="App\Hunts\HuntsPage.xaml.cs">
-      <DependentUpon>..\..\Hunts\Hunts\HuntsPage.xaml</DependentUpon>
+      <DependentUpon>HuntsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="App\Hunts\HuntsViewModel.cs" />
     <Compile Include="App\Hunts\HuntViewModel.cs" />
     <Compile Include="App\Logs\Log.cs" />
     <Compile Include="App\Logs\LogsPage.xaml.cs">
-      <DependentUpon>..\..\Logs\Logs\LogsPage.xaml</DependentUpon>
+      <DependentUpon>LogsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="App\Logs\LogsViewModel.cs" />
@@ -130,10 +145,26 @@
     <Compile Include="Utils\Converters\InvertedEmptyStringToBooleanConverter.cs" />
     <Compile Include="Utils\Utility.cs" />
     <Compile Include="App\Logs\LogPage.xaml.cs">
-      <DependentUpon>..\..\Logs\Logs\LogsPage.xaml</DependentUpon>
+      <DependentUpon>LogPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="App\Logs\LogViewModel.cs" />
+    <Compile Include="InputViews\InputPosition.xaml.cs">
+      <DependentUpon>InputPosition.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExtendedMap.cs" />
+    <Compile Include="Cells\MapCell.cs" />
+    <Compile Include="App\Dogs\Dog.cs" />
+    <Compile Include="App\Dogs\DogPage.xaml.cs">
+        <DependentUpon>DogPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App\Dogs\DogsPage.xaml.cs">
+        <DependentUpon>DogsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App\Dogs\DogsViewModel.cs" />
+    <Compile Include="App\Dogs\DogViewModel.cs" />
+    <Compile Include="DataStores\File\DogDataStore.cs" />
+    <Compile Include="Cells\CountCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -154,35 +185,38 @@
     <Reference Include="Plugin.Connectivity">
       <HintPath>..\packages\Xam.Plugin.Connectivity.4.0.0.171-beta\lib\netstandard1.0\Plugin.Connectivity.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Geolocator.Abstractions">
-      <HintPath>..\packages\Xam.Plugin.Geolocator.4.1.3\lib\netstandard1.0\Plugin.Geolocator.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Plugin.Geolocator">
-      <HintPath>..\packages\Xam.Plugin.Geolocator.4.1.3\lib\netstandard1.0\Plugin.Geolocator.dll</HintPath>
-    </Reference>
-    <Reference Include="Plugin.Media, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xam.Plugin.Media.3.1.1\lib\netstandard1.0\Plugin.Media.dll</HintPath>
-    </Reference>
-    <Reference Include="Plugin.Media.Abstractions, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xam.Plugin.Media.3.1.1\lib\netstandard1.0\Plugin.Media.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="Plugin.Permissions.Abstractions">
-      <HintPath>..\packages\Plugin.Permissions.2.1.0\lib\netstandard1.0\Plugin.Permissions.Abstractions.dll</HintPath>
+      <HintPath>..\packages\Plugin.Permissions.2.2.1\lib\netstandard1.0\Plugin.Permissions.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.Permissions">
-      <HintPath>..\packages\Plugin.Permissions.2.1.0\lib\netstandard1.0\Plugin.Permissions.dll</HintPath>
+      <HintPath>..\packages\Plugin.Permissions.2.2.1\lib\netstandard1.0\Plugin.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Geolocator.Abstractions">
+      <HintPath>..\packages\Xam.Plugin.Geolocator.4.2.0\lib\netstandard1.0\Plugin.Geolocator.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Geolocator">
+      <HintPath>..\packages\Xam.Plugin.Geolocator.4.2.0\lib\netstandard1.0\Plugin.Geolocator.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media.Abstractions">
+      <HintPath>..\packages\Xam.Plugin.Media.3.1.2\lib\netstandard1.0\Plugin.Media.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media">
+      <HintPath>..\packages\Xam.Plugin.Media.3.1.2\lib\netstandard1.0\Plugin.Media.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Core">
-      <HintPath>..\packages\Xamarin.Forms.2.5.0.121934\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.2.5.0.122203\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform">
-      <HintPath>..\packages\Xamarin.Forms.2.5.0.121934\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.2.5.0.122203\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml">
-      <HintPath>..\packages\Xamarin.Forms.2.5.0.121934\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.2.5.0.122203\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageCircle.Forms.Plugin.Abstractions">
+      <HintPath>..\packages\Xam.Plugins.Forms.ImageCircle.2.0.1\lib\netstandard1.0\ImageCircle.Forms.Plugin.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Maps">
-      <HintPath>..\packages\Xamarin.Forms.Maps.2.5.0.121934\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Maps.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.Maps.2.5.0.122203\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Maps.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +233,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\" />
+    <Folder Include="App\Dogs\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\packages\Xamarin.Forms.2.5.0.121934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.0.121934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />
+  <Import Project="..\packages\Xamarin.Forms.2.5.0.122203\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.0.122203\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />
 </Project>

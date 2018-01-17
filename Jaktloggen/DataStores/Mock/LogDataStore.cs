@@ -21,8 +21,8 @@ namespace Jaktloggen.DataStores.Mock
         private Log CreateLog(int id){
             return new Log { 
                 ID = id.ToString(),
-                HuntId = new Random().Next(1, 10).ToString(),
-                Date = DateTime.Now.AddHours(new Random().Next(-5, 5)).AddMinutes(new Random().Next(0, 59)),
+                JaktId = new Random().Next(1, 10).ToString(),
+                Dato = DateTime.Now.AddHours(new Random().Next(-5, 5)).AddMinutes(new Random().Next(0, 59)),
                 Latitude = "63." + new Random().Next(3800, 4300),
                 Longitude = "10." + new Random().Next(2000, 3000),
                 Notes ="This is a note of some length. It can be short, but it can also be of, well, some length." };
@@ -60,6 +60,11 @@ namespace Jaktloggen.DataStores.Mock
         public async Task<List<Log>> GetItemsAsync(bool forceRefresh = false)
         {
             return await Task.FromResult(items);
+        }
+
+        public List<Log> GetCachedItems()
+        {
+            return items;
         }
     }
 }

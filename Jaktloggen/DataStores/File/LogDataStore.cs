@@ -11,9 +11,13 @@ namespace Jaktloggen.DataStores.File
     {
         List<Log> items = new List<Log>();
         private static string FILENAME = "logger.json";
+        private bool firstLoad = true;
 
         public async Task<bool> AddItemAsync(Log item)
         {
+            if(string.IsNullOrEmpty(item.JaktId)){
+                throw new ArgumentNullException("Missing required parameter: HuntId");
+            }
             item.Changed = DateTime.Now;
             item.Created = DateTime.Now;
             item.ID = Guid.NewGuid().ToString();
@@ -41,6 +45,7 @@ namespace Jaktloggen.DataStores.File
             items.Remove(_item);
 
             items.SaveToLocalStorage(FILENAME);
+
             return await Task.FromResult(true);
         }
 
@@ -51,8 +56,17 @@ namespace Jaktloggen.DataStores.File
 
         public async Task<List<Log>> GetItemsAsync(bool forceRefresh = false)
         {
-            items = FileService.LoadFromLocalStorage<List<Log>>(FILENAME);
+            if (firstLoad || forceRefresh)
+            {
+                items = FileService.LoadFromLocalStorage<List<Log>>(FILENAME);
+                firstLoad = false;
+            }
             return await Task.FromResult(items);
+        }
+
+        public List<Log> GetCachedItems()
+        {
+            return items;
         }
     }
 }

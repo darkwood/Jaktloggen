@@ -76,7 +76,7 @@ namespace Jaktloggen
             Title = string.IsNullOrEmpty(Name) ? "Ny jeger" : Name;
             CreateCommands(item);
         }
-        
+
         private void CreateCommands(Hunter item)
         {
             ImageCommand = new Command(async () =>

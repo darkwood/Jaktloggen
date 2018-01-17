@@ -79,5 +79,10 @@ namespace Jaktloggen.DataStores.Cloud
 
             return response.IsSuccessStatusCode;
         }
+
+        public List<Hunt> GetCachedItems()
+        {
+            return items;
+        }
     }
 }

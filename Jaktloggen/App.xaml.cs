@@ -15,6 +15,7 @@ namespace Jaktloggen
         public static IDataStore<Hunt> HuntDataStore => DependencyService.Get<IDataStore<Hunt>>();
         public static IDataStore<Log> LogDataStore => DependencyService.Get<IDataStore<Log>>();
         public static IDataStore<Hunter> HunterDataStore => DependencyService.Get<IDataStore<Hunter>>();
+        public static IDataStore<Dog> DogDataStore => DependencyService.Get<IDataStore<Dog>>();
         public App()
         {
             InitializeComponent();
@@ -39,6 +40,7 @@ namespace Jaktloggen
                 DependencyService.Register<DataStores.File.HuntDataStore>();
                 DependencyService.Register<DataStores.File.LogDataStore>();
                 DependencyService.Register<DataStores.File.HunterDataStore>();
+                DependencyService.Register<DataStores.File.DogDataStore>();
             }
         }
 

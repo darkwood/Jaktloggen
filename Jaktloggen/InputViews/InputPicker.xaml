@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.InputViews.InputPicker">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Jaktloggen.InputViews.InputPicker">
 	<ContentPage.ToolbarItems>
         <ToolbarItem Text="Ferdig" Clicked="Done_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Items}" ItemSelected="Handle_ItemSelected"  />
+        <ListView x:Name="PickerListView" RowHeight="70" ItemsSource="{Binding PickerItems}" ItemSelected="OnItemSelected">
+            <ListView.ItemTemplate>
+                    <DataTemplate>
+                    <cells:ExtendedTextCell 
+                            Detail="{Binding Details}" 
+                            ImageSource="{Binding ImageSource}" 
+                            Text="{Binding Title}"
+                            Selected="{Binding Selected}"
+                    />
+                        <!--
+                        <ImageCell 
+                            TextColor="{Binding Color}"
+                            Text="{Binding Title}"
+                            Detail="{Binding Details}"
+                            ImageSource="{Binding ImageSource}"
+                            />-->
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+        </ListView>
 	</ContentPage.Content>
 </ContentPage>

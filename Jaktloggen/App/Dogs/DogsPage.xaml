@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+             xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
+             x:Class="Jaktloggen.DogsPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Ny hund" Clicked="AddItem_Clicked" />
+    </ContentPage.ToolbarItems>
+   <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="ItemsListView" 
+                ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand" HasUnevenRows="false" RowHeight="70"
+                      RefreshCommand="{Binding LoadItemsCommand}" 
+                IsPullToRefreshEnabled="true" 
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
+                      CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <cells:ExtendedTextCell Text="{Binding Name}" ImageSource="{Binding Image}" ImageSize="50">
+                            <cells:ExtendedTextCell.ContextActions>
+                                <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
+                                   Text="Slett" IsDestructive="True" />
+                            </cells:ExtendedTextCell.ContextActions>
+                        </cells:ExtendedTextCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

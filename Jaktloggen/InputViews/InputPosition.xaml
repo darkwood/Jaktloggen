@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:controls="clr-namespace:Jaktloggen.Controls;assembly=Jaktloggen"
+    x:Class="Jaktloggen.InputViews.InputPosition">
+    
+	<ContentPage.ToolbarItems>
+        <ToolbarItem Text="Lagre" Clicked="Done_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid> 
+            <StackLayout VerticalOptions="FillAndExpand">
+                <controls:ExtendedMap 
+                    x:Name="MyMap"
+                    IsShowingUser="true" 
+                    MapType="Hybrid"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                />
+            </StackLayout>
+            <StackLayout VerticalOptions="End">
+
+                <Grid Margin="10">
+                   
+                    <Button 
+                        Grid.Column="0" 
+                        Text="Min posisjon" 
+                        Clicked="OnGetPositionClicked"
+                        StyleClass="PrimaryButton"
+                    />
+                      <ActivityIndicator 
+                        Grid.Column="1"
+                        HorizontalOptions="Center" 
+                        IsRunning="{Binding Loading}" 
+                        IsVisible="{Binding Loading}" 
+                    />
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding PositionText}" 
+                        VerticalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        TextColor="Black"
+                        FontSize="11"
+                        BackgroundColor="White"
+                        HorizontalOptions="Center"
+                    />
+                    <Button 
+                        Grid.Column="2"
+                        Text="Slett" 
+                        IsVisible="{Binding PositionText, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" 
+                        Clicked="OnDeletePositionClicked" 
+                        StyleClass="PrimaryButton"
+                    />
+                </Grid>
+            </StackLayout>
+            
+       </Grid>
+       
+	</ContentPage.Content>
+</ContentPage>

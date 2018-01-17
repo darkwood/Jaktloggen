@@ -10,5 +10,6 @@ namespace Jaktloggen
         Task<bool> DeleteItemAsync(string id);
         Task<T> GetItemAsync(string id);
         Task<List<T>> GetItemsAsync(bool forceRefresh = false);
+        List<T> GetCachedItems();
     }
 }

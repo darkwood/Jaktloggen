@@ -32,7 +32,7 @@ namespace Jaktloggen.InputViews
                 OnPropertyChanged(nameof(Source));
                 OnPropertyChanged(nameof(ImageExists));
             }
-        }
+        }   
 
         private string m_filepath;
         public string ImageFilename
@@ -62,6 +62,7 @@ namespace Jaktloggen.InputViews
 
         public InputImage()
         {
+            Source = ImageSource.FromUri(new Uri("https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-401840.jpg"));
             InitializeComponent();
         }
         async void Camera_Clicked(object sender, System.EventArgs e)

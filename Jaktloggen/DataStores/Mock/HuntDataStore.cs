@@ -61,5 +61,10 @@ namespace Jaktloggen.DataStores.Mock
         {
             return await Task.FromResult(items);
         }
+
+        public List<Hunt> GetCachedItems()
+        {
+            return items;
+        }
     }
 }

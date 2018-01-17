@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.InputViews.InputImage">
-	<ContentPage.ToolbarItems>
-        <ToolbarItem Text="Ferdig" Clicked="Done_Clicked" />
+	
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Lagre" Clicked="Done_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -19,14 +20,14 @@
                 HorizontalOptions="FillAndExpand"
             />
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Padding="10" VerticalOptions="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 
-                <Button Grid.Column="0" Text="Kamera" Clicked="Camera_Clicked" />
-                <Button Grid.Column="1" Text="Bilder" Clicked="Library_Clicked"/>
+                <Button StyleClass="PrimaryButton" Grid.Column="0" Image="Statistics" Text="Kamera" Clicked="Camera_Clicked" />
+                <Button StyleClass="PrimaryButton" Grid.Column="1" Image="Jaktloggen" Text="Bilder" Clicked="Library_Clicked"/>
                 <!--<Button Grid.Column="2" Text="Slett" IsVisible="{Binding ImageExists}" Clicked="Delete_Clicked" />-->
             </Grid>
         </Grid>

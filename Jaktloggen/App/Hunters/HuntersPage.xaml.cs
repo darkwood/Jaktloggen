@@ -15,23 +15,16 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new HuntersViewModel();
-        }
-
-        public HuntersPage(HuntersViewModel viewModel)
-        {
-            InitializeComponent();
-
-            BindingContext = this.viewModel = viewModel;
+            BindingContext = viewModel = new HuntersViewModel(Navigation);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as Hunter;
+            var item = args.SelectedItem as HunterViewModel;
             if (item == null)
                 return;
             
-            await Navigation.PushAsync(new HunterPage(new HunterViewModel(item, Navigation)));
+            await Navigation.PushAsync(new HunterPage(item));
 
             // Manually deselect item
             ItemsListView.SelectedItem = null;
@@ -58,9 +51,7 @@ namespace Jaktloggen
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
-            if (viewModel.Items.Count == 0)
-                await viewModel.ExecuteLoadItemsCommand();
+            await viewModel.OnAppearing();
         }
     }
 }

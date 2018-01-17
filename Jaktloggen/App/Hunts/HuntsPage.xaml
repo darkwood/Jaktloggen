@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+             xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
              x:Class="Jaktloggen.HuntsPage" 
     Title="{Binding Title}" x:Name="BrowseHuntsPage">
 	<ContentPage.ToolbarItems>
@@ -9,21 +10,33 @@
 	<ContentPage.Content>
 		<StackLayout>
 			<ListView x:Name="ItemsListView" ItemsSource="{Binding HuntItems}" VerticalOptions="FillAndExpand" HasUnevenRows="false" 
-                      RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
-                      CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
+                      RefreshCommand="{Binding LoadHuntItemsCommand}" IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
+                      CachingStrategy="RecycleElement" ItemSelected="OnItemSelected" RowHeight="70">
 				<ListView.ItemTemplate>
 					<DataTemplate>
+
+                        <cells:ExtendedTextCell 
+                            Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" 
+                            ImageSource="{Binding Image}" 
+                            Text="{Binding Location}">
+                            <cells:ExtendedTextCell.ContextActions>
+                                <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
+                                   Text="Slett" IsDestructive="True" />
+                            </cells:ExtendedTextCell.ContextActions>
+                        </cells:ExtendedTextCell>
+                        <!--
 						<ImageCell 
                             Text="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}"
                             Detail="{Binding Location}"
                             ImageSource="{Binding Image}"
-                            Height="40"
+                            Height="50"
+
                             >
                             <ImageCell.ContextActions>
                                 <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
                                    Text="Slett" IsDestructive="True" />
                              </ImageCell.ContextActions>
-						</ImageCell>
+						</ImageCell>-->
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>

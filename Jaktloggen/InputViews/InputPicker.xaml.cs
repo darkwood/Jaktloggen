@@ -17,7 +17,7 @@ namespace Jaktloggen.InputViews
         public InputPicker(string title, List<PickerItem> pickerItems, Action<InputPicker> callback)
         {
             PickerItems = new ObservableCollection<PickerItem>();
-            pickerItems?.ForEach(p => PickerItems.Add(p));
+            pickerItems.ForEach(p => PickerItems.Add(p));
             Title = title;
             _callback = callback;
 
@@ -25,15 +25,24 @@ namespace Jaktloggen.InputViews
             InitializeComponent();
         }
 
-        async void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
+            if (e == null || e.SelectedItem == null) return;
+
             var item = ((PickerItem)e.SelectedItem);
-            item.Selected = !item.Selected;
 
             if(!CanSelectMany)
             {
+                PickerItems.ForEach(p => p.Selected = false);
+                item.Selected = true;
                 await Done();
+            } 
+            else
+            {
+                item.Selected = !item.Selected;
             }
+
+            ((ListView)sender).SelectedItem = null;
         }
 
         async void Done_Clicked(object sender, EventArgs e)
@@ -48,12 +57,17 @@ namespace Jaktloggen.InputViews
         }
     }
 
-    public class PickerItem
+    public class PickerItem : BaseViewModel
     {
-        public string ID { get; set; }
-        public string Title { get; set; }
         public string Details { get; set; }
         public ImageSource ImageSource { get; set; }
-        public bool Selected { get; set; }
+
+        private bool _selected;
+        public bool Selected {
+            get { return _selected; }
+            set { _selected = value; OnPropertyChanged(nameof(Selected)); OnPropertyChanged(nameof(Color)); }
+        }
+
+        public Color Color => Selected ? Color.Green : Color.Black;
     }
 }

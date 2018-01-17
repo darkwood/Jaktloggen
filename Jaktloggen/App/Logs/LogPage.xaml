@@ -5,28 +5,25 @@
     xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
     xmlns:local="clr-namespace:Jaktloggen;assembly=Jaktloggen"    
     x:Class="Jaktloggen.LogPage">
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Lagre auto?" />
-    </ContentPage.ToolbarItems>
-    
+
     <ContentPage.Content>
        <local:JTableView HasUnevenRows="true" Intent="Settings">
             <TableRoot>
+
                 <TableSection Title="">
                     <cells:ImageHeaderCell HeightRequest="200" Source="{Binding Image}" Command="{Binding ImageCommand}" />
-                 </TableSection>
-                
-                <TableSection Title="">
-                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Posisjon" Detail="{Binding PositionInfo}" />
-                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Sted" Detail="{Binding Location}" Command="{Binding LocationCommand}" />
-                 </TableSection>
-                
-                <TableSection Title="">
-                    <cells:ExtendedTextCell Command="{Binding DateCommand}" Text="Tidspunkt" Detail="{Binding Date, Converter={Converters:DateTimeToShortDateConverter}}" />
+                    
+                    <cells:CountCell Text="Treff" Count="{Binding Hits, Mode=TwoWay}" Command="{Binding HitsCommand}" />
+                    <cells:CountCell Text="Skudd" Count="{Binding Shots, Mode=TwoWay}" Command="{Binding ShotsCommand}" />
+                    <cells:CountCell Text="Sett" Count="{Binding Observed, Mode=TwoWay}" Command="{Binding ObservedCommand}" />
 
+                    <cells:ExtendedTextCell Text="Art" Text2="{Binding SpeciesText}" Command="{Binding SpeciesCommand}" />
+                    <cells:ExtendedTextCell Text="Jeger" Text2="{Binding HunterText}" Command="{Binding HunterCommand}" />
+                    <cells:ExtendedTextCell Text="Hund" Text2="{Binding DogText}" Command="{Binding DogCommand}" />
+                    <cells:MapCell Text="{Binding InfoMessage}" Latitude="{Binding Latitude}" Longitude="{Binding Longitude}" Command="{Binding PositionCommand}" />
+                    <cells:ExtendedTextCell Command="{Binding DateCommand}" Text="Tidspunkt" Text2="{Binding Date, Converter={Converters:DateTimeToShortDateConverter}}" />
                 </TableSection>
-
+                
                 <TableSection Title="Notater">
                     <ViewCell>
                         <Editor Text="{Binding Notes}" HeightRequest="100" />

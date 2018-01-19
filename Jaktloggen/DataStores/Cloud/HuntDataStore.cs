@@ -9,10 +9,10 @@ using Plugin.Connectivity;
 
 namespace Jaktloggen.DataStores.Cloud
 {
-    public class HuntDataStore : IDataStore<Hunt>
+    public class HuntDataStore : IDataStore<Jakt>
     {
         HttpClient client;
-        List<Hunt> items;
+        List<Jakt> items;
 
         public HuntDataStore()
         {
@@ -20,31 +20,31 @@ namespace Jaktloggen.DataStores.Cloud
             //TODO: Authenticate user
             client.BaseAddress = new Uri($"{App.BackendUrl}/");
 
-            items = new List<Hunt>();
+            items = new List<Jakt>();
         }
 
-        public async Task<List<Hunt>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<List<Jakt>> GetItemsAsync(bool forceRefresh = false)
         {
             if (forceRefresh) // && CrossConnectivity.Current.IsConnected)
             {
                 var json = await client.GetStringAsync($"api/hunts/");
-                items = await Task.Run(() => JsonConvert.DeserializeObject<List<Hunt>>(json));
+                items = await Task.Run(() => JsonConvert.DeserializeObject<List<Jakt>>(json));
             }
 
             return items;
         }
 
-        public async Task<Hunt> GetItemAsync(string id)
+        public async Task<Jakt> GetItemAsync(string id)
         {
             if (id != null && CrossConnectivity.Current.IsConnected)
             {
                 var json = await client.GetStringAsync($"api/hunt/{id}");
-                return await Task.Run(() => JsonConvert.DeserializeObject<Hunt>(json));
+                return await Task.Run(() => JsonConvert.DeserializeObject<Jakt>(json));
             }
-            return default(Hunt);
+            return default(Jakt);
         }
 
-        public async Task<bool> AddItemAsync(Hunt item)
+        public async Task<bool> AddItemAsync(Jakt item)
         {
             if (item == null || !CrossConnectivity.Current.IsConnected)
                 return false;
@@ -56,7 +56,7 @@ namespace Jaktloggen.DataStores.Cloud
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateItemAsync(Hunt item)
+        public async Task<bool> UpdateItemAsync(Jakt item)
         {
             if (item == null || item.ID == null || !CrossConnectivity.Current.IsConnected)
                 return false;
@@ -80,7 +80,7 @@ namespace Jaktloggen.DataStores.Cloud
             return response.IsSuccessStatusCode;
         }
 
-        public List<Hunt> GetCachedItems()
+        public List<Jakt> GetCachedItems()
         {
             return items;
         }

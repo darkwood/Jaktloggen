@@ -5,6 +5,8 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 
 using Device = Xamarin.Forms.Device;
+using System;
+using Jaktloggen.Services;
 
 namespace Jaktloggen
 {
@@ -12,13 +14,23 @@ namespace Jaktloggen
     {
         public static bool UseMockDataStore = false;
         public static string BackendUrl = "http://localhost:8607";
-        public static IDataStore<Hunt> HuntDataStore => DependencyService.Get<IDataStore<Hunt>>();
-        public static IDataStore<Log> LogDataStore => DependencyService.Get<IDataStore<Log>>();
-        public static IDataStore<Hunter> HunterDataStore => DependencyService.Get<IDataStore<Hunter>>();
+        public static IDataStore<Jakt> HuntDataStore => DependencyService.Get<IDataStore<Jakt>>();
+        public static IDataStore<Logg> LogDataStore => DependencyService.Get<IDataStore<Logg>>();
+        public static IDataStore<Jeger> HunterDataStore => DependencyService.Get<IDataStore<Jeger>>();
         public static IDataStore<Dog> DogDataStore => DependencyService.Get<IDataStore<Dog>>();
+        public static IDataStore<Art> SpecieDataStore => DependencyService.Get<IDataStore<Art>>();
+
+        private static string FILE_ART = "arter.xml";
+        private static string FILE_LOGGTYPE_GROUP = "loggtypegroup.xml";
+        private static string FILE_LOGGTYPER = "loggtyper.xml";
+        private static string FILE_ARTGROUP = "artgroup.xml";
+
         public App()
         {
             InitializeComponent();
+            //TODO Kopiere faste data: Arter, Artgrupper osv
+
+            LoadXmlData();
 
             RegisterDataStores();
 
@@ -26,6 +38,29 @@ namespace Jaktloggen
                 MainPage = new MainPage();
             else
                 MainPage = new NavigationPage(new MainPage());
+        }
+
+        private void LoadXmlData()
+        {
+            if (!FileService.Exists(FILE_ARTGROUP))
+            {
+                FileService.CopyToAppFolder(FILE_ARTGROUP);
+            }
+
+            if (!FileService.Exists(FILE_ART))
+            {
+                FileService.CopyToAppFolder(FILE_ART);
+            }
+
+            if (!FileService.Exists(FILE_LOGGTYPE_GROUP))
+            {
+                FileService.CopyToAppFolder(FILE_LOGGTYPE_GROUP);
+            }
+
+            if (!FileService.Exists(FILE_LOGGTYPER))
+            {
+                FileService.CopyToAppFolder(FILE_LOGGTYPER);
+            }
         }
 
         private void RegisterDataStores()
@@ -37,10 +72,11 @@ namespace Jaktloggen
             }
             else
             {
-                DependencyService.Register<DataStores.File.HuntDataStore>();
-                DependencyService.Register<DataStores.File.LogDataStore>();
-                DependencyService.Register<DataStores.File.HunterDataStore>();
-                DependencyService.Register<DataStores.File.DogDataStore>();
+                DependencyService.Register<DataStores.File.DataStore<Jakt>>();
+                DependencyService.Register<DataStores.File.DataStore<Logg>>();
+                DependencyService.Register<DataStores.File.DataStore<Jeger>>();
+                DependencyService.Register<DataStores.File.DataStore<Dog>>();
+                DependencyService.Register<DataStores.File.DataStore<Art>>();
             }
         }
 

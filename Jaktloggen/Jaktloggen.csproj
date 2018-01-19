@@ -70,12 +70,22 @@
     <EmbeddedResource Include="App\Dogs\DogsPage.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="App\Species\SpeciePage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\Species\SpeciesPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\arter.xml" />
+    <EmbeddedResource Include="Xml\artgroup.xml" />
+    <EmbeddedResource Include="Xml\loggtypegroup.xml" />
+    <EmbeddedResource Include="Xml\loggtyper.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="App\Hunters\Hunter.cs" />
+    <Compile Include="App\Hunters\Jeger.cs" />
     
     <Compile Include="App\Hunters\HunterPage.xaml.cs">
         <DependentUpon>HunterPage.xaml</DependentUpon>
@@ -86,7 +96,6 @@
     <Compile Include="App\Hunters\HuntersViewModel.cs" />
     <Compile Include="App\Hunters\HunterViewModel.cs" />
     <Compile Include="Base\BaseViewModel.cs" />
-    <Compile Include="DataStores\File\HunterDataStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataStores\Cloud\LogDataStore.cs" />
     <Compile Include="DataStores\Cloud\HuntDataStore.cs" />
@@ -105,8 +114,6 @@
     <Compile Include="Utils\PositionUtil.cs" />
     <Compile Include="Cells\JTextCell.cs" />
     <Compile Include="Base\JTableView.cs" />
-    <Compile Include="DataStores\File\HuntDataStore.cs" />
-    <Compile Include="DataStores\File\LogDataStore.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Interfaces\IFileUtility.cs" />
     <Compile Include="App\About\AboutPage.xaml.cs">
@@ -114,7 +121,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="App\About\AboutViewModel.cs" />
-    <Compile Include="App\Hunts\Hunt.cs" />
+    <Compile Include="App\Hunts\Jakt.cs" />
     <Compile Include="App\Hunts\HuntPage.xaml.cs">
       <DependentUpon>HuntPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -125,7 +132,7 @@
     </Compile>
     <Compile Include="App\Hunts\HuntsViewModel.cs" />
     <Compile Include="App\Hunts\HuntViewModel.cs" />
-    <Compile Include="App\Logs\Log.cs" />
+    <Compile Include="App\Logs\Logg.cs" />
     <Compile Include="App\Logs\LogsPage.xaml.cs">
       <DependentUpon>LogsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -163,8 +170,19 @@
     </Compile>
     <Compile Include="App\Dogs\DogsViewModel.cs" />
     <Compile Include="App\Dogs\DogViewModel.cs" />
-    <Compile Include="DataStores\File\DogDataStore.cs" />
     <Compile Include="Cells\CountCell.cs" />
+    <Compile Include="App\Species\Art.cs" />
+    <Compile Include="App\Species\SpeciePage.xaml.cs">
+      <DependentUpon>SpeciePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App\Species\SpeciesPage.xaml.cs">
+      <DependentUpon>SpeciesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App\Species\SpeciesViewModel.cs" />
+    <Compile Include="App\Species\SpecieViewModel.cs" />
+    <Compile Include="Utils\Converters\DateTimeToTimeConverter.cs" />
+    <Compile Include="App\Species\ArtGroup.cs" />
+    <Compile Include="DataStores\File\DataStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -222,6 +240,10 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Devplan.txt" />
+    <None Include="Xml\English\arter.xml" />
+    <None Include="Xml\English\artgroup.xml" />
+    <None Include="Xml\English\loggtypegroup.xml" />
+    <None Include="Xml\English\loggtyper.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App\Hunters\HunterPage.xaml">
@@ -236,6 +258,8 @@
   <ItemGroup>
     <Folder Include="Controls\" />
     <Folder Include="App\Dogs\" />
+    <Folder Include="App\Species\" />
+    <Folder Include="Xml\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.5.0.122203\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.0.122203\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />

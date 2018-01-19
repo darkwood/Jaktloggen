@@ -16,7 +16,7 @@ namespace Jaktloggen
 {
     public class HuntViewModel : BaseViewModel
     {
-        public Hunt Item 
+        public Jakt Item 
         { 
             get; 
             set; 
@@ -126,8 +126,8 @@ namespace Jaktloggen
             set { SetProperty(ref infoMessage, value); OnPropertyChanged(nameof(PositionInfo)); }
         }
 
-        List<Log> _logs = new List<Log>();
-        public List<Log> Logs
+        List<Logg> _logs = new List<Logg>();
+        public List<Logg> Logs
         {
             get => _logs;
             set {
@@ -137,8 +137,8 @@ namespace Jaktloggen
             }
         }
 
-        List<Hunter> _hunters = new List<Hunter>();
-        public List<Hunter> Hunters
+        List<Jeger> _hunters = new List<Jeger>();
+        public List<Jeger> Hunters
         {
             get => _hunters;
             set
@@ -179,7 +179,7 @@ namespace Jaktloggen
 
         private bool isLoaded { get; set; }
 
-        public HuntViewModel(Hunt item, INavigation navigation)
+        public HuntViewModel(Jakt item, INavigation navigation)
         {
             Item = item.DeepClone();
             Navigation = navigation;
@@ -262,7 +262,7 @@ namespace Jaktloggen
             return sted;
         }
 
-        private void CreateCommands(Hunt item)
+        private void CreateCommands(Jakt item)
         {
             ImageCommand = new Command(async () =>
             {
@@ -389,7 +389,7 @@ namespace Jaktloggen
                 await Navigation.PushAsync(
                     new LogPage(
                         new LogViewModel(
-                            this, new Log(), Navigation)));
+                            this, new Logg(), Navigation)));
             });
 
             DeleteCommand = new Command( () => {

@@ -11,7 +11,7 @@ namespace Jaktloggen
 {
     public class HunterViewModel : BaseViewModel
     {
-        public Hunter Item { get; set; }
+        public Jeger Item { get; set; }
         public Command LoadItemsCommand { get; set; }
 
         public override string ID
@@ -68,7 +68,7 @@ namespace Jaktloggen
 
         private bool isLoaded { get; set; }
 
-        public HunterViewModel(Hunter item, INavigation navigation)
+        public HunterViewModel(Jeger item, INavigation navigation)
         {
             Item = item.DeepClone();
             Navigation = navigation;
@@ -77,7 +77,7 @@ namespace Jaktloggen
             CreateCommands(item);
         }
 
-        private void CreateCommands(Hunter item)
+        private void CreateCommands(Jeger item)
         {
             ImageCommand = new Command(async () =>
             {

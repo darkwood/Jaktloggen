@@ -5,23 +5,24 @@ using Xamarin.Forms;
 
 namespace Jaktloggen
 {
-    public partial class HunterPage : ContentPage
+    public partial class SpeciePage : ContentPage
     {
-        HunterViewModel viewModel;
+        SpecieViewModel viewModel;
 
-        public HunterPage()
+        public SpeciePage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new HunterViewModel(new Jeger(), null);
+            BindingContext = viewModel = new SpecieViewModel(new Art(), null);
         }
 
-        public HunterPage(HunterViewModel viewModel)
+        public SpeciePage(SpecieViewModel viewModel)
         {
             InitializeComponent();
 
             BindingContext = this.viewModel = viewModel;
         }
+
 
         async void Save_Clicked(object sender, EventArgs e)
         {

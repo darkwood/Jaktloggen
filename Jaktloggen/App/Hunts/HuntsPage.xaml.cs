@@ -42,7 +42,7 @@ namespace Jaktloggen
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new HuntPage(new HuntViewModel(new Hunt(), Navigation)));
+            await Navigation.PushAsync(new HuntPage(new HuntViewModel(new Jakt(), Navigation)));
         }
 
         protected override async void OnAppearing()

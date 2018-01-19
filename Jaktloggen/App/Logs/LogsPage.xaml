@@ -18,9 +18,9 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                          <cells:ExtendedTextCell 
-                            Detail="{Binding Date}" 
+                            Text="{Binding Date, Converter={Converters:DateTimeToTimeConverter}}" 
                             ImageSource="{Binding Image}" 
-                            Text="{Binding LogTitle}">
+                            Detail="{Binding LogTitle}">
                             <cells:ExtendedTextCell.ContextActions>
                                 <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
                                    Text="Slett" IsDestructive="True" />

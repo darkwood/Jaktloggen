@@ -21,7 +21,7 @@ namespace Jaktloggen
             set { hunt = value; Item.JaktId = value.ID; }
         }
 
-        public Log Item { get; set; }
+        public Logg Item { get; set; }
 
         public override string ID
         {
@@ -153,8 +153,8 @@ namespace Jaktloggen
             set { SetProperty(ref infoMessage, value); OnPropertyChanged(nameof(PositionInfo)); }
         }
 
-        List<Hunter> _hunters = new List<Hunter>();
-        public List<Hunter> Hunters
+        List<Jeger> _hunters = new List<Jeger>();
+        public List<Jeger> Hunters
         {
             get { return _hunters; }
             set {
@@ -163,7 +163,7 @@ namespace Jaktloggen
                 OnPropertyChanged(nameof(HunterText));
             }
         }
-        public Hunter Hunter
+        public Jeger Hunter
         {
             get => Hunters?.SingleOrDefault(h => h.ID == Item.JegerId);
             set
@@ -198,6 +198,29 @@ namespace Jaktloggen
             }
         }
 
+        List<Art> _species = new List<Art>();
+        public List<Art> Species
+        {
+            get { return _species; }
+            set
+            {
+                _species = value;
+                OnPropertyChanged(nameof(Species));
+                OnPropertyChanged(nameof(SpecieText));
+            }
+        }
+        public Art Specie
+        {
+            get => Species?.SingleOrDefault(d => d.ID == Item.ArtId);
+            set
+            {
+                Item.ArtId = value?.ID;
+                OnPropertyChanged(nameof(Specie));
+                OnPropertyChanged(nameof(SpecieText));
+                OnPropertyChanged(nameof(LogTitle));
+            }
+        }
+
         public string PositionInfo
         {
             get
@@ -212,16 +235,16 @@ namespace Jaktloggen
 
         public string HunterText => Hunter?.Fornavn;
         public string DogText => Dog?.Navn;
+        public string SpecieText => Specie?.Navn;
         public string LogTitle 
         { 
             get
             {
                 var lbl = "";
-                //string art = null;
-                //if (art != null)
-                //    lbl = Hits + " " + art.Navn + " / " + Shots + " skudd";
-                //else
-                lbl = $"{Shots} skudd, {Hits} treff";
+                if (Specie != null)
+                    lbl = Specie.Navn + ". ";
+                
+                lbl += $"{Shots} skudd, {Hits} treff";
 
                 if (Observed > 0)
                 {
@@ -248,7 +271,7 @@ namespace Jaktloggen
         public ICommand HitsCommand { protected set; get; }
         public ICommand ShotsCommand { protected set; get; }
 
-        public LogViewModel(HuntViewModel huntVm, Log item, INavigation navigation)
+        public LogViewModel(HuntViewModel huntVm, Logg item, INavigation navigation)
         {
             Item = item;
             Navigation = navigation;
@@ -259,6 +282,7 @@ namespace Jaktloggen
 
             Hunters = App.HunterDataStore.GetCachedItems();
             Dogs = App.DogDataStore.GetCachedItems();
+            Species = App.SpecieDataStore.GetCachedItems();
         }
 
         public async Task OnAppearing()
@@ -298,7 +322,7 @@ namespace Jaktloggen
         }
 
 
-        private void CreateCommands(Log item)
+        private void CreateCommands(Logg item)
         {
             ImageCommand = new Command(async () =>
             {
@@ -416,7 +440,31 @@ namespace Jaktloggen
                     async obj =>
                     {
                         var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
-                        Dog = _dogs.SingleOrDefault(h => h.ID == id);
+                    Dog = _dogs.SingleOrDefault(h => h.ID == id);
+                        await SaveAsync();
+                    });
+
+                await Navigation.PushAsync(inputView);
+            });
+
+            SpeciesCommand = new Command(async () =>
+            {
+                var speciesVM = _species.Select(h => new SpecieViewModel(h, Navigation));
+                var items = speciesVM.Select(h => new PickerItem
+                {
+                    ID = h.ID,
+                    Title = h.Name,
+                    Selected = Specie != null && Specie.ID == h.ID
+                }).ToList();
+
+
+                var inputView = new InputPicker(
+                    "Velg art",
+                    items,
+                    async obj =>
+                    {
+                        var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
+                        Specie = _species.SingleOrDefault(h => h.ID == id);
                         await SaveAsync();
                     });
 

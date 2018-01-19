@@ -9,9 +9,9 @@ namespace Jaktloggen
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public INavigation Navigation { get; set; }
-
         public virtual string ID { get; set; }
+
+        public INavigation Navigation { get; set; }
 
         bool isBusy = false;
         public bool IsBusy

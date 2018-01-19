@@ -32,7 +32,7 @@ namespace Jaktloggen
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new HunterPage(new HunterViewModel(new Hunter(), Navigation)));
+            await Navigation.PushAsync(new HunterPage(new HunterViewModel(new Jeger(), Navigation)));
         }
 
         async void OnDelete(object sender, EventArgs e)

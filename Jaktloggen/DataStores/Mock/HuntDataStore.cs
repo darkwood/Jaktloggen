@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 
 namespace Jaktloggen.DataStores.Mock
 {
-    public class HuntDataStore : IDataStore<Hunt>
+    public class HuntDataStore : IDataStore<Jakt>
     {
-        List<Hunt> items;
+        List<Jakt> items;
 
         public HuntDataStore()
         {
-            items = new List<Hunt>();
+            items = new List<Jakt>();
             for (var i = 1; i <= 10; i++)
             {
                 items.Add(CreateHunt(i));
             }
         }
 
-        private Hunt CreateHunt(int id){
-            var hunt = new Hunt { 
+        private Jakt CreateHunt(int id){
+            var hunt = new Jakt { 
                 ID = id.ToString(), 
                 Sted = "Høylandet",
                 DatoFra = DateTime.Today.AddDays(new Random(id).Next(-2000, 0)),
@@ -28,16 +28,16 @@ namespace Jaktloggen.DataStores.Mock
             hunt.DatoTil = hunt.DatoFra.AddDays(new Random(id).Next(0, 10));
             return hunt;
         }
-        public async Task<bool> AddItemAsync(Hunt item)
+        public async Task<bool> AddItemAsync(Jakt item)
         {
             items.Add(item);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateItemAsync(Hunt item)
+        public async Task<bool> UpdateItemAsync(Jakt item)
         {
-            var _item = items.Where((Hunt arg) => arg.ID == item.ID).FirstOrDefault();
+            var _item = items.Where((Jakt arg) => arg.ID == item.ID).FirstOrDefault();
             items.Remove(_item);
             items.Add(item);
 
@@ -46,23 +46,23 @@ namespace Jaktloggen.DataStores.Mock
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var _item = items.Where((Hunt arg) => arg.ID == id).FirstOrDefault();
+            var _item = items.Where((Jakt arg) => arg.ID == id).FirstOrDefault();
             items.Remove(_item);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<Hunt> GetItemAsync(string id)
+        public async Task<Jakt> GetItemAsync(string id)
         {
             return await Task.FromResult(items.FirstOrDefault(s => s.ID == id));
         }
 
-        public async Task<List<Hunt>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<List<Jakt>> GetItemsAsync(bool forceRefresh = false)
         {
             return await Task.FromResult(items);
         }
 
-        public List<Hunt> GetCachedItems()
+        public List<Jakt> GetCachedItems()
         {
             return items;
         }

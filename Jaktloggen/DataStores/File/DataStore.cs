@@ -6,25 +6,50 @@ using Jaktloggen.Services;
 
 namespace Jaktloggen.DataStores.File
 {
-    public class DogDataStore : IDataStore<Dog>
+    public class DataStore<T> : IDataStore<T> where T : BaseEntity
     {
-        List<Dog> items = new List<Dog>();
-        private static string FILENAME = "dogs.json";
+        List<T> items = new List<T>();
+        public string Filename { get; set; }
         private bool firstLoad = true;
 
-        public async Task<bool> AddItemAsync(Dog item)
+        public DataStore()
+        {
+            object p = typeof(T);
+            if (p == typeof(Art))
+            {
+                Filename = "arter.xml";
+            } 
+            else if (p == typeof(Jakt))
+            {
+                Filename = "jakt.json";
+            } 
+            else if (p == typeof(Logg))
+            {
+                Filename = "logger.json";
+            } 
+            else if (p == typeof(Jeger))
+            {
+                Filename = "jegere.json";
+            } 
+            else if (p == typeof(Dog))
+            {
+                Filename = "dogs.json";
+            }
+
+        }
+        public async Task<bool> AddItemAsync(T item)
         {
             item.Changed = DateTime.Now;
             item.Created = DateTime.Now;
             item.ID = Guid.NewGuid().ToString();
             items.Add(item);
 
-            items.SaveToLocalStorage(FILENAME);
+            items.SaveToLocalStorage(Filename);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateItemAsync(Dog item)
+        public async Task<bool> UpdateItemAsync(T item)
         {
             var _item = items.FirstOrDefault(i => i.ID == item.ID);
             items.Remove(_item);
@@ -40,27 +65,27 @@ namespace Jaktloggen.DataStores.File
             var _item = items.FirstOrDefault(i => i.ID == id);
             items.Remove(_item);
 
-            items.SaveToLocalStorage(FILENAME);
+            items.SaveToLocalStorage(Filename);
             return await Task.FromResult(true);
         }
 
-        public async Task<Dog> GetItemAsync(string id)
+        public async Task<T> GetItemAsync(string id)
         {
             return await Task.FromResult(items.FirstOrDefault(s => s.ID == id));
         }
 
-        public async Task<List<Dog>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<List<T>> GetItemsAsync(bool forceRefresh = false)
         {
             if(firstLoad || forceRefresh)
             {
-                items = FileService.LoadFromLocalStorage<List<Dog>>(FILENAME);
+                items = FileService.LoadFromLocalStorage<List<T>>(Filename);
                 firstLoad = false;
             }
 
             return await Task.FromResult(items);
         }
 
-        public List<Dog> GetCachedItems()
+        public List<T> GetCachedItems()
         {
             return items;
         }

@@ -13,7 +13,7 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            var item = new Hunt
+            var item = new Jakt
             {
                 ID = "1",
                 Sted = "Høylandet",

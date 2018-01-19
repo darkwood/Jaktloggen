@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Jaktloggen
 {
-    public class Log : BaseEntity
+    public class Logg : BaseEntity
     {
         public int Treff { get; set; }
         public int Skudd { get; set; }

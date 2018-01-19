@@ -9,41 +9,41 @@ using Plugin.Connectivity;
 
 namespace Jaktloggen.DataStores.Cloud
 {
-    public class LogDataStore : IDataStore<Log>
+    public class LogDataStore : IDataStore<Logg>
     {
         HttpClient client;
-        List<Log> items;
+        List<Logg> items;
 
         public LogDataStore()
         {
             client = new HttpClient();
             client.BaseAddress = new Uri($"{App.BackendUrl}/");
 
-            items = new List<Log>();
+            items = new List<Logg>();
         }
 
-        public async Task<List<Log>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<List<Logg>> GetItemsAsync(bool forceRefresh = false)
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
                 var json = await client.GetStringAsync($"api/Logs/");
-                items = await Task.Run(() => JsonConvert.DeserializeObject<List<Log>>(json));
+                items = await Task.Run(() => JsonConvert.DeserializeObject<List<Logg>>(json));
             }
 
             return items;
         }
 
-        public async Task<Log> GetItemAsync(string id)
+        public async Task<Logg> GetItemAsync(string id)
         {
             if (id != null && CrossConnectivity.Current.IsConnected)
             {
                 var json = await client.GetStringAsync($"api/Log/{id}");
-                return await Task.Run(() => JsonConvert.DeserializeObject<Log>(json));
+                return await Task.Run(() => JsonConvert.DeserializeObject<Logg>(json));
             }
-            return default(Log);
+            return default(Logg);
         }
 
-        public async Task<bool> AddItemAsync(Log item)
+        public async Task<bool> AddItemAsync(Logg item)
         {
             if (item == null || !CrossConnectivity.Current.IsConnected)
                 return false;
@@ -55,7 +55,7 @@ namespace Jaktloggen.DataStores.Cloud
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateItemAsync(Log item)
+        public async Task<bool> UpdateItemAsync(Logg item)
         {
             if (item == null || item.ID == null || !CrossConnectivity.Current.IsConnected)
                 return false;
@@ -79,7 +79,7 @@ namespace Jaktloggen.DataStores.Cloud
             return response.IsSuccessStatusCode;
         }
 
-        public List<Log> GetCachedItems()
+        public List<Logg> GetCachedItems()
         {
             return items;
         }

@@ -17,7 +17,7 @@
                     <cells:CountCell Text="Skudd" Count="{Binding Shots, Mode=TwoWay}" Command="{Binding ShotsCommand}" />
                     <cells:CountCell Text="Sett" Count="{Binding Observed, Mode=TwoWay}" Command="{Binding ObservedCommand}" />
 
-                    <cells:ExtendedTextCell Text="Art" Text2="{Binding SpeciesText}" Command="{Binding SpeciesCommand}" />
+                    <cells:ExtendedTextCell Text="Art" Text2="{Binding SpecieText}" Command="{Binding SpeciesCommand}" />
                     <cells:ExtendedTextCell Text="Jeger" Text2="{Binding HunterText}" Command="{Binding HunterCommand}" />
                     <cells:ExtendedTextCell Text="Hund" Text2="{Binding DogText}" Command="{Binding DogCommand}" />
                     <cells:MapCell Text="{Binding InfoMessage}" Latitude="{Binding Latitude}" Longitude="{Binding Longitude}" Command="{Binding PositionCommand}" />

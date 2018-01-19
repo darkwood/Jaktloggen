@@ -15,7 +15,7 @@ namespace Jaktloggen
             InitializeComponent();
 
             BindingContext = viewModel = new LogsViewModel(null, Navigation);
-            viewModel.Items.Add(new LogViewModel(null, new Log{
+            viewModel.Items.Add(new LogViewModel(null, new Logg{
                 Dato = DateTime.Now,
                 Notes = "Lorem ipsum"
             }, null));
@@ -57,7 +57,7 @@ namespace Jaktloggen
                 new LogPage(
                     new LogViewModel(
                         viewModel.Hunt,
-                        new Log(), 
+                        new Logg(), 
                         Navigation)));
         }
 
@@ -80,7 +80,7 @@ namespace Jaktloggen
                 await App.LogDataStore.DeleteItemAsync(item.ID);
                 viewModel.Items.Remove(item);
 
-                await Navigation.PopAsync();
+                //await Navigation.PopAsync();
             }
         }
     }

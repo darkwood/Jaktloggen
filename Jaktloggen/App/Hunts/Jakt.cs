@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Jaktloggen
 {
-    public class Hunt : BaseEntity
+    public class Jakt : BaseEntity
     {
         public string Sted { get; set; }
         public DateTime DatoFra { get; set; }

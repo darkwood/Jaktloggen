@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Jaktloggen
 {
-    public class Hunter : BaseEntity
+    public class Jeger : BaseEntity
     {
         public string Fornavn { get; set; }
         public string Etternavn { get; set; }

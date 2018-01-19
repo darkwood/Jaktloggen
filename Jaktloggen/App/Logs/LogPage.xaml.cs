@@ -13,7 +13,7 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new LogViewModel(null, new Log(), null);
+            BindingContext = viewModel = new LogViewModel(null, new Logg(), null);
         }
 
         public LogPage(LogViewModel viewModel)

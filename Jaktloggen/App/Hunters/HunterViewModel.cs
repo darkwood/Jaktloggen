@@ -109,6 +109,10 @@ namespace Jaktloggen
                     Email    = obj.Value;
                 }));
             });
+            DeleteCommand = new Command(async () => {
+                MessagingCenter.Send(this, "Delete");
+                await Navigation.PopAsync();
+            });
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using Jaktloggen.Services;
 
 using Xamarin.Forms;
@@ -16,6 +16,12 @@ namespace Jaktloggen
             InitializeComponent();
 
             BindingContext = viewModel = new HuntersViewModel(Navigation);
+
+            MessagingCenter.Subscribe<HunterViewModel>(this, "Delete", async (item) =>
+            {
+                await DeleteItem(item);
+
+            });
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -39,13 +45,21 @@ namespace Jaktloggen
         {
             var mi = ((MenuItem)sender);
             var item = mi.CommandParameter as HunterViewModel;
+            await DeleteItem(item);
+        }
+        public async Task DeleteItem(HunterViewModel item)
+        {
             var doit = await DisplayAlert("Bekreft sletting", "Jeger blir permanent slettet", "OK", "Avbryt");
             if (doit)
             {
-                FileService.Delete(item.ImageFilename);
-                await viewModel.DeleteItem(item);
+                if (!string.IsNullOrWhiteSpace(item.ImageFilename))
+                {
+                    FileService.Delete(item.ImageFilename);
+                }
+                //Todo: Remove from all logs and hunts
+                await App.HunterDataStore.DeleteItemAsync(item.ID);
+                viewModel.Items.Remove(item);
             }
-
         }
 
         protected override async void OnAppearing()

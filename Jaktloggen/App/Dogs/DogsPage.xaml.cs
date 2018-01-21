@@ -45,13 +45,7 @@ namespace Jaktloggen
         {
             var mi = ((MenuItem)sender);
             var item = mi.CommandParameter as DogViewModel;
-            var doit = await DisplayAlert("Bekreft sletting", "Jeger blir permanent slettet", "OK", "Avbryt");
-            if (doit)
-            {
-                FileService.Delete(item.ImageFilename);
-                await viewModel.DeleteItem(item);
-            }
-
+            await DeleteItem(item);
         }
 
         protected override async void OnAppearing()
@@ -72,8 +66,6 @@ namespace Jaktloggen
                 //Todo: Remove from all logs and hunts
                 await App.DogDataStore.DeleteItemAsync(item.ID);
                 viewModel.Items.Remove(item);
-
-                await Navigation.PopToRootAsync();
             }
         }
     }

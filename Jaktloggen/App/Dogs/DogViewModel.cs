@@ -55,6 +55,7 @@ namespace Jaktloggen
         public ICommand NameCommand { protected set; get; }
         public ICommand BreedCommand { protected set; get; }
         public ICommand NumberCommand { protected set; get; }
+        public ICommand DeleteCommand { protected set; get; }
 
         private bool isLoaded { get; set; }
 
@@ -92,6 +93,10 @@ namespace Jaktloggen
                 await Navigation.PushAsync(new InputEntry("Reg.nummer", Number, obj => {
                     Number = obj.Value;
                 }));
+            });
+            DeleteCommand = new Command(async () => {
+                MessagingCenter.Send(this, "Delete");
+                await Navigation.PopAsync();
             });
         }
     }

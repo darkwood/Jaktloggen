@@ -7,13 +7,19 @@
         <ToolbarItem Text="Ny art" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding GroupedItems}" 
+        <ListView x:Name="ItemsListView"
+                      ItemsSource="{Binding GroupedItems}" 
                       GroupDisplayBinding="{Binding Name}"
                       GroupShortNameBinding="{Binding ShortName}"
-                      IsGroupingEnabled="true">
+                      IsGroupingEnabled="true"
+                      ItemSelected="OnItemSelected"
+                    RowHeight="50"
+            >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Name}" />
+                        <cells:ExtendedTextCell 
+                            Text="{Binding Name}"
+                            Selected="{Binding Selected}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

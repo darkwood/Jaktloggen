@@ -35,6 +35,14 @@ namespace Jaktloggen.DataStores.File
             {
                 Filename = "dogs.json";
             }
+            else if (p == typeof(ArtGroup))
+            {
+                Filename = "artgroup.xml";
+            }
+            else
+            {
+                throw new NotImplementedException(typeof(T).ToString() + " sitt filnavn er ikke implementert.");
+            }
 
         }
         public async Task<bool> AddItemAsync(T item)

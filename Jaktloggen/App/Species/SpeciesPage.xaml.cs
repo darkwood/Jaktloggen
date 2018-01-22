@@ -29,9 +29,10 @@ namespace Jaktloggen
             var item = args.SelectedItem as SpecieViewModel;
             if (item == null)
                 return;
-            
-            await Navigation.PushAsync(new SpeciePage(item));
 
+            //await Navigation.PushAsync(new SpeciePage(item));
+            item.Selected = !item.Selected;
+            await viewModel.UpdateSelectedSpecie(item);
             // Manually deselect item
             ItemsListView.SelectedItem = null;
         }

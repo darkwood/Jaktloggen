@@ -25,6 +25,21 @@ namespace Jaktloggen
             get { return Item.Navn; }
             set { Item.Navn = value; OnPropertyChanged(nameof(Name)); }
         }
+        bool selected;
+
+        public bool Selected
+        {
+            get
+            {
+                return selected;
+            }
+
+            set
+            {
+                selected = value;
+                OnPropertyChanged(nameof(Selected));
+            }
+        }
 
         public ICommand NameCommand { protected set; get; }
 

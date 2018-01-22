@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Jaktloggen.Services;
 using Xamarin.Forms;
 
 namespace Jaktloggen
@@ -21,14 +22,19 @@ namespace Jaktloggen
     }
     public class SpeciesViewModel : BaseViewModel
     {
+        private const string FILE_SELECTED_SPECIE_IDS = "selectedartids.json";
+
         public ObservableCollection<SpecieGrouping> GroupedItems { get; set; }
         public Command LoadItemsCommand { get; set; }
         private bool isLoaded { get; set; }
+        private List<string> _selectedIds { get; set; }
 
         public SpeciesViewModel(INavigation navigation)
         {
             Navigation = navigation;
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            GroupedItems = new ObservableCollection<SpecieGrouping>();
+            _selectedIds = new List<string>();
 
             MessagingCenter.Subscribe<SpeciePage, SpecieViewModel>(this, "Save", async (obj, item) =>
             {
@@ -44,7 +50,24 @@ namespace Jaktloggen
                 await PopulateItems();
             });
         }
-        
+
+        public async Task UpdateSelectedSpecie(SpecieViewModel specie)
+        {
+            if(specie.Selected)
+            {
+                if(!_selectedIds.Any(s => s == specie.ID)){
+                    _selectedIds.Add(specie.ID);
+                    _selectedIds.SaveToLocalStorage(FILE_SELECTED_SPECIE_IDS);
+                }
+            } else{
+                var i = _selectedIds.IndexOf(specie.ID);
+                if(i > -1){
+                    _selectedIds.RemoveAt(i);
+                    _selectedIds.SaveToLocalStorage(FILE_SELECTED_SPECIE_IDS);
+                }
+            }
+        }
+
         public async Task OnAppearing()
         {
             if (!isLoaded)
@@ -69,9 +92,10 @@ namespace Jaktloggen
 
             try
             {
-                GroupedItems = new ObservableCollection<SpecieGrouping>();
-                var speciesGroups = await App.SpecieGroupDataStore.GetItemsAsync();
+                GroupedItems.Clear();
+                var speciesGroups = await App.SpecieGroupDataStore.GetItemsAsync(true);
                 var species = await App.SpecieDataStore.GetItemsAsync(true);
+                _selectedIds = FileService.LoadFromLocalStorage<List<string>>(FILE_SELECTED_SPECIE_IDS);
                 foreach (var g in speciesGroups)
                 {
                     var speciesInGroup = species.Where(a => a.GroupId == g.ID).ToList();
@@ -82,8 +106,9 @@ namespace Jaktloggen
 
                         foreach (var specie in speciesInGroup)
                         {
-                            //specie.Selected = selectedArtIds.Any(s => s == specie.ID);
-                            ag.Add(new SpecieViewModel(specie, Navigation));
+                            SpecieViewModel specieVm = new SpecieViewModel(specie, Navigation);
+                            specieVm.Selected = _selectedIds.Any(s => s == specie.ID);
+                            ag.Add(specieVm);
                         }
 
                         GroupedItems.Add(ag);

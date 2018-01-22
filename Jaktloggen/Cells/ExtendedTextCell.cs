@@ -186,7 +186,9 @@ namespace Jaktloggen.Cells
             ViewLayout = new StackLayout
             {
                 Orientation=StackOrientation.Horizontal,
+                VerticalOptions = LayoutOptions.FillAndExpand,
                 Padding = 10,
+                MinimumHeightRequest=50
             };
 
             CellImage = new CircleImage
@@ -227,10 +229,9 @@ namespace Jaktloggen.Cells
                 IsVisible = false,
                 Source = ImageSource.FromUri(new Uri("http://bubbl.tech/wp-content/uploads/2017/05/accept-tick-icon-12.png")),
                 Aspect = Aspect.AspectFit,
-                WidthRequest = 30,
-                HeightRequest = 30,
-                Margin = 10,
-                VerticalOptions = LayoutOptions.Center
+                WidthRequest = 40,
+                HeightRequest = 40,
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
             ViewLayout.Children.Add(SelectedImage);
 

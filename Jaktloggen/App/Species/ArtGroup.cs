@@ -4,9 +4,8 @@ using System.Collections.Generic;
 
 namespace Jaktloggen
 {
-    public class ArtGroup
+    public class ArtGroup : BaseEntity
     {
         public string Navn { get; set; }
-        public string ID { get; set; }
     }
 }

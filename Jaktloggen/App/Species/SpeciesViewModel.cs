@@ -1,22 +1,33 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
 namespace Jaktloggen
 {
+    public class SpecieGrouping : ObservableCollection<SpecieViewModel>
+    {
+        public String Name { get; private set; }
+        public String ShortName { get; private set; }
+
+        public SpecieGrouping(String Name, String ShortName)
+        {
+            this.Name = Name;
+            this.ShortName = ShortName;
+        }
+    }
     public class SpeciesViewModel : BaseViewModel
     {
-        public ObservableCollection<SpecieViewModel> Items { get; set; }
+        public ObservableCollection<SpecieGrouping> GroupedItems { get; set; }
         public Command LoadItemsCommand { get; set; }
         private bool isLoaded { get; set; }
 
         public SpeciesViewModel(INavigation navigation)
         {
             Navigation = navigation;
-            Items = new ObservableCollection<SpecieViewModel>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
             MessagingCenter.Subscribe<SpeciePage, SpecieViewModel>(this, "Save", async (obj, item) =>
@@ -33,7 +44,7 @@ namespace Jaktloggen
                 await PopulateItems();
             });
         }
-
+        
         public async Task OnAppearing()
         {
             if (!isLoaded)
@@ -46,7 +57,7 @@ namespace Jaktloggen
         public async Task DeleteItem(SpecieViewModel item)
         {
             await App.SpecieDataStore.DeleteItemAsync(item.ID);
-            Items.Remove(item);
+            await PopulateItems();
         }
 
         private async Task PopulateItems()
@@ -58,12 +69,25 @@ namespace Jaktloggen
 
             try
             {
-
-                Items.Clear();
-                var items = await App.SpecieDataStore.GetItemsAsync(true);
-                foreach (var item in items)
+                GroupedItems = new ObservableCollection<SpecieGrouping>();
+                var speciesGroups = await App.SpecieGroupDataStore.GetItemsAsync();
+                var species = await App.SpecieDataStore.GetItemsAsync(true);
+                foreach (var g in speciesGroups)
                 {
-                    Items.Add(new SpecieViewModel(item, Navigation));
+                    var speciesInGroup = species.Where(a => a.GroupId == g.ID).ToList();
+
+                    if (speciesInGroup.Any())
+                    {
+                        var ag = new SpecieGrouping(g.Navn, string.Empty);
+
+                        foreach (var specie in speciesInGroup)
+                        {
+                            //specie.Selected = selectedArtIds.Any(s => s == specie.ID);
+                            ag.Add(new SpecieViewModel(specie, Navigation));
+                        }
+
+                        GroupedItems.Add(ag);
+                    }
                 }
             }
             catch (Exception ex)

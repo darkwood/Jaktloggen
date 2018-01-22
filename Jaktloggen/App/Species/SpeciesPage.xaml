@@ -6,25 +6,16 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Ny art" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
-   <ContentPage.Content>
-        <StackLayout>
-            <ListView x:Name="ItemsListView" 
-                ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand" HasUnevenRows="false" RowHeight="70"
-                      RefreshCommand="{Binding LoadItemsCommand}" 
-                IsPullToRefreshEnabled="true" 
-                IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
-                      CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding GroupedItems}" 
+                      GroupDisplayBinding="{Binding Name}"
+                      GroupShortNameBinding="{Binding ShortName}"
+                      IsGroupingEnabled="true">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <cells:ExtendedTextCell Text="{Binding Name}">
-                            <!--<cells:ExtendedTextCell.ContextActions>
-                                <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
-                                   Text="Slett" IsDestructive="True" />
-                            </cells:ExtendedTextCell.ContextActions>-->
-                        </cells:ExtendedTextCell>
+                        <TextCell Text="{Binding Name}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

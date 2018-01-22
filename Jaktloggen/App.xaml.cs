@@ -19,6 +19,7 @@ namespace Jaktloggen
         public static IDataStore<Jeger> HunterDataStore => DependencyService.Get<IDataStore<Jeger>>();
         public static IDataStore<Dog> DogDataStore => DependencyService.Get<IDataStore<Dog>>();
         public static IDataStore<Art> SpecieDataStore => DependencyService.Get<IDataStore<Art>>();
+        public static IDataStore<ArtGroup> SpecieGroupDataStore => DependencyService.Get<IDataStore<ArtGroup>>();
 
         private static string FILE_ART = "arter.xml";
         private static string FILE_LOGGTYPE_GROUP = "loggtypegroup.xml";
@@ -77,6 +78,7 @@ namespace Jaktloggen
                 DependencyService.Register<DataStores.File.DataStore<Jeger>>();
                 DependencyService.Register<DataStores.File.DataStore<Dog>>();
                 DependencyService.Register<DataStores.File.DataStore<Art>>();
+                DependencyService.Register<DataStores.File.DataStore<ArtGroup>>();
             }
         }
 

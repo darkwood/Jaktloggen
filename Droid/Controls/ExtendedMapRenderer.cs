@@ -18,7 +18,7 @@ namespace Jaktloggen.Droid.Controls
         public ExtendedMapRenderer(Context context) : base(context)
         {
         }
-
+        
         protected override void OnMapReady(GoogleMap googleMap)
         {
             _map = googleMap;

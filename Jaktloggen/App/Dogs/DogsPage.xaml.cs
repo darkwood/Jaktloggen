@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Jaktloggen.Services;
 
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace Jaktloggen
 {
@@ -59,13 +62,35 @@ namespace Jaktloggen
             var doit = await DisplayAlert("Bekreft sletting", "Hund blir permanent slettet", "OK", "Avbryt");
             if (doit)
             {
-                if (!string.IsNullOrWhiteSpace(item.ImageFilename))
+                IsBusy = true;
+                try
                 {
-                    FileService.Delete(item.ImageFilename);
+                    if (!string.IsNullOrWhiteSpace(item.ImageFilename))
+                    {
+                        FileService.Delete(item.ImageFilename);
+                    }
+                    
+                    foreach (var log in App.LogDataStore.GetCachedItems().Where(x => x.DogId == item.ID).ToList())
+                    {
+                        log.DogId = string.Empty;
+                        await App.LogDataStore.UpdateItemAsync(log);
+                    }
+
+                    foreach (var hunt in App.HuntDataStore.GetCachedItems().Where(x => x.DogIds.Contains(item.ID)).ToList())
+                    {
+                        hunt.DogIds.Remove(item.ID);
+                        await App.HuntDataStore.UpdateItemAsync(hunt);
+                    }
+
+                    await App.DogDataStore.DeleteItemAsync(item.ID);
+                    viewModel.Items.Remove(item);
                 }
-                //Todo: Remove from all logs and hunts
-                await App.DogDataStore.DeleteItemAsync(item.ID);
-                viewModel.Items.Remove(item);
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    await DisplayAlert("Feil ved sletting", ex.Message, "OK da");
+                }
+                IsBusy = false;
             }
         }
     }

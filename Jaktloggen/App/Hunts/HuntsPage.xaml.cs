@@ -48,7 +48,7 @@ namespace Jaktloggen
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await viewModel.OnAppearing();
+            viewModel.OnAppearing();
         }
 
 

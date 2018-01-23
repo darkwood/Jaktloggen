@@ -4,17 +4,17 @@
              xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
              x:Class="Jaktloggen.HuntersPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Ny jeger" Clicked="AddItem_Clicked" />
+        <ToolbarItem Text="+" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
    <ContentPage.Content>
         <StackLayout>
             <ListView x:Name="ItemsListView" 
                 ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand" 
                 HasUnevenRows="false" RowHeight="70"
-                      RefreshCommand="{Binding LoadItemsCommand}" 
+                RefreshCommand="{Binding LoadItemsCommand}" 
                 IsPullToRefreshEnabled="true" 
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
-                      CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
+                CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <cells:ExtendedTextCell Text="{Binding Name}" ImageSource="{Binding Image}">

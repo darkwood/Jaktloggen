@@ -4,7 +4,7 @@
              xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
              x:Class="Jaktloggen.DogsPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Ny hund" Clicked="AddItem_Clicked" />
+        <ToolbarItem Text="+" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
    <ContentPage.Content>
         <StackLayout>

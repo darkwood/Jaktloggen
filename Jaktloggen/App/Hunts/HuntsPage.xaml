@@ -5,13 +5,20 @@
              x:Class="Jaktloggen.HuntsPage" 
     Title="{Binding Title}" x:Name="BrowseHuntsPage">
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="Ny jakt" Clicked="AddItem_Clicked" />
+		<ToolbarItem Text="+" Clicked="AddItem_Clicked" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
 		<StackLayout>
-			<ListView x:Name="ItemsListView" ItemsSource="{Binding HuntItems}" VerticalOptions="FillAndExpand" HasUnevenRows="false" 
-                      RefreshCommand="{Binding LoadHuntItemsCommand}" IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
-                      CachingStrategy="RecycleElement" ItemSelected="OnItemSelected" RowHeight="70">
+			<ListView x:Name="ItemsListView" 
+                      ItemsSource="{Binding HuntItems}" 
+                      VerticalOptions="FillAndExpand" 
+			          RefreshCommand="{Binding LoadItemsCommand}" 
+                      IsPullToRefreshEnabled="true" 
+                      IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
+                      CachingStrategy="RecycleElement" 
+                      ItemSelected="OnItemSelected" 
+			          HasUnevenRows="false" 
+                      RowHeight="70">
 				<ListView.ItemTemplate>
 					<DataTemplate>
 
@@ -24,19 +31,6 @@
                                    Text="Slett" IsDestructive="True" />
                             </cells:ExtendedTextCell.ContextActions>
                         </cells:ExtendedTextCell>
-                        <!--
-						<ImageCell 
-                            Text="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}"
-                            Detail="{Binding Location}"
-                            ImageSource="{Binding Image}"
-                            Height="50"
-
-                            >
-                            <ImageCell.ContextActions>
-                                <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
-                                   Text="Slett" IsDestructive="True" />
-                             </ImageCell.ContextActions>
-						</ImageCell>-->
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 using Xamarin.Forms;
 
@@ -11,15 +12,15 @@ namespace Jaktloggen
     public class HuntsViewModel : BaseViewModel
     {
         public ObservableCollection<HuntViewModel> HuntItems { get; set; }
-        private Command LoadHuntItemsCommand { get; set; }
+        private Command LoadItemsCommand { get; }
         private bool isLoaded { get; set; }
 
         public HuntsViewModel(INavigation navigation)
         {
             Navigation = navigation;
             Title = "Jaktloggen";
+            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand(), () => !IsBusy);
             HuntItems = new ObservableCollection<HuntViewModel>();
-            LoadHuntItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
         }
 
         private async Task PopulateItems()
@@ -38,34 +39,21 @@ namespace Jaktloggen
             }
         }
 
-        public async Task OnAppearing()
+        public async void OnAppearing()
         {
             if (!isLoaded)
             {
-                await ExecuteLoadItemsCommand();
+                LoadItemsCommand.Execute(null);
             }
             isLoaded = true;
         }
 
-        public async Task ExecuteLoadItemsCommand()
+        private async Task ExecuteLoadItemsCommand()
         {
-            if (IsBusy)
-                return;
-
             IsBusy = true;
-
-            try
-            {
-                await PopulateItems();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            try { await PopulateItems(); }
+            catch (Exception ex) { Debug.WriteLine(ex); }
+            IsBusy = false;
         }
     }
 }

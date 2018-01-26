@@ -69,18 +69,24 @@ namespace Jaktloggen
                     {
                         FileService.Delete(item.ImageFilename);
                     }
-                    
-                    foreach (var log in App.LogDataStore.GetCachedItems().Where(x => x.DogId == item.ID).ToList())
+
+                    var logs = await App.LogDataStore.GetItemsAsync();
+                    foreach (var log in logs.Where(x => x.DogId == item.ID).ToList())
                     {
                         log.DogId = string.Empty;
-                        await App.LogDataStore.UpdateItemAsync(log);
                     }
+                    await App.LogDataStore.UpdateItemsAsync(logs);
 
-                    foreach (var hunt in App.HuntDataStore.GetCachedItems().Where(x => x.DogIds.Contains(item.ID)).ToList())
+                    var hunts = await App.HuntDataStore.GetItemsAsync();
+                    foreach (var hunt in hunts)
                     {
-                        hunt.DogIds.Remove(item.ID);
-                        await App.HuntDataStore.UpdateItemAsync(hunt);
+                        var index = hunt.DogIds?.IndexOf(item.ID);
+                        if(index > -1)
+                        {
+                            hunt.DogIds.Remove(item.ID);
+                        }
                     }
+                    await App.HuntDataStore.UpdateItemsAsync(hunts);
 
                     await App.DogDataStore.DeleteItemAsync(item.ID);
                     viewModel.Items.Remove(item);

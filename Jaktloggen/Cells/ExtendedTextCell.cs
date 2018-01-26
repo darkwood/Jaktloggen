@@ -164,7 +164,7 @@ namespace Jaktloggen.Cells
             false,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                ((ExtendedTextCell)bindable).SelectedImage.IsVisible = (bool)newValue;
+                ((ExtendedTextCell)bindable).SelectedImage.Source = ImageSource.FromFile((bool)newValue ? "checked.png" : "checked_off.png");
             });
 
         public bool Selected
@@ -173,6 +173,27 @@ namespace Jaktloggen.Cells
             set
             {
                 SetValue(SelectedProperty, value);
+            }
+        }
+
+        /***************************************************************************/
+
+        public static readonly BindableProperty ShowCheckBoxProperty = BindableProperty.Create(
+            nameof(ShowCheckBox),
+            typeof(bool),
+            typeof(ExtendedTextCell),
+            false,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+            ((ExtendedTextCell)bindable).SelectedImage.IsVisible = (bool)newValue;
+            });
+
+        public bool ShowCheckBox
+        {
+            get { return (bool)GetValue(ShowCheckBoxProperty); }
+            set
+            {
+                SetValue(ShowCheckBoxProperty, value);
             }
         }
 
@@ -226,8 +247,8 @@ namespace Jaktloggen.Cells
 
             SelectedImage = new Image
             {
-                IsVisible = false,
-                Source = ImageSource.FromUri(new Uri("http://bubbl.tech/wp-content/uploads/2017/05/accept-tick-icon-12.png")),
+                IsVisible = ShowCheckBox,
+                Source = ImageSource.FromFile("checked_off.png"),
                 Aspect = Aspect.AspectFit,
                 WidthRequest = 40,
                 HeightRequest = 40,

@@ -9,17 +9,12 @@
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
 		<StackLayout>
-			<ListView x:Name="ItemsListView" 
-                      ItemsSource="{Binding HuntItems}" 
-                      VerticalOptions="FillAndExpand" 
-			          RefreshCommand="{Binding LoadItemsCommand}" 
-                      IsPullToRefreshEnabled="true" 
-                      IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
-                      CachingStrategy="RecycleElement" 
-                      ItemSelected="OnItemSelected" 
-			          HasUnevenRows="false" 
-                      RowHeight="70">
-				<ListView.ItemTemplate>
+			<ListView x:Name="ItemsListView" ItemsSource="{Binding Items}" 
+                VerticalOptions="FillAndExpand" HasUnevenRows="true" 
+                RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" 
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}" RowHeight="70"
+                CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
+                <ListView.ItemTemplate>
 					<DataTemplate>
 
                         <cells:ExtendedTextCell 

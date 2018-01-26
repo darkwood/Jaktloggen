@@ -316,23 +316,26 @@ namespace Jaktloggen
 
             HuntersCommand = new Command(async () =>
             {
-                var huntersVM = Hunters.Select(h => new HunterViewModel(h, Navigation));
-                var items = huntersVM.Select(h => new PickerItem { 
-                    ID = h.ID,
-                    Title = h.Name,
-                    ImageSource = h.Image,
-                    Selected = HunterIds.Contains(h.ID)
-                }).ToList();
-
-
                 var inputView = new InputPicker(
                     "Velg jegere", 
-                    items, 
                     async obj =>
                     {
                         HunterIds = obj.PickerItems.Where(p => p.Selected).Select(s => s.ID).ToList();
                         await SaveAsync();
-                    });
+                    }, async () => {
+
+                        Hunters = await App.HunterDataStore.GetItemsAsync();
+                        var huntersVM = Hunters.Select(h => new HunterViewModel(h, Navigation));
+                        var items = huntersVM.Select(h => new PickerItem
+                        {
+                            ID = h.ID,
+                            Title = h.Name,
+                            ImageSource = h.Image,
+                            Selected = HunterIds.Contains(h.ID)
+                        }).ToList();
+                        return items;
+                        }
+                    );
                 inputView.CanSelectMany = true;
 
                 await Navigation.PushAsync(inputView);
@@ -340,24 +343,26 @@ namespace Jaktloggen
 
             DogsCommand = new Command(async () =>
             {
-                var dogsVM = Dogs.Select(h => new DogViewModel(h, Navigation));
-                var items = dogsVM.Select(h => new PickerItem
-                {
-                    ID = h.ID,
-                    Title = h.Name,
-                    ImageSource = h.Image,
-                    Selected = DogIds.Contains(h.ID)
-                }).ToList();
-
-
                 var inputView = new InputPicker(
                     "Velg hunder",
-                    items,
                     async obj =>
                     {
                         DogIds = obj.PickerItems.Where(p => p.Selected).Select(s => s.ID).ToList();
                         await SaveAsync();
-                    });
+                }, async () => {
+
+                        Dogs = await App.DogDataStore.GetItemsAsync();
+                        var dogsVM = Dogs.Select(h => new DogViewModel(h, Navigation));
+                        var items = dogsVM.Select(h => new PickerItem
+                        {
+                            ID = h.ID,
+                            Title = h.Name,
+                            ImageSource = h.Image,
+                            Selected = DogIds.Contains(h.ID)
+                        }).ToList();
+                        return items;
+                    }
+                    );
                 inputView.CanSelectMany = true;
 
                 await Navigation.PushAsync(inputView);

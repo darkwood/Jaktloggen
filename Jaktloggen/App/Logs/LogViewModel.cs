@@ -400,72 +400,80 @@ namespace Jaktloggen
             });
             HunterCommand = new Command( async () =>
             {
-                var huntersVM = _hunters.Select(h => new HunterViewModel(h, Navigation));
-                var items = huntersVM.Select(h => new PickerItem
-                {
-                    ID = h.ID,
-                    Title = h.Name,
-                    ImageSource = h.Image,
-                    Selected = Hunter != null && h.ID == Hunter.ID
-                }).ToList();
-
                 var inputView = new InputPicker(
                     "Velg jeger",
-                    items,
                     async obj =>
                     {
                         var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
                         Hunter = _hunters.SingleOrDefault(h => h.ID == id);
                         await SaveAsync();
+                    }, async () => 
+                    {
+                        Hunters = await App.HunterDataStore.GetItemsAsync();
+                        var huntersVM = Hunters.Select(h => new HunterViewModel(h, Navigation));
+                        var items = huntersVM.Select(h => new PickerItem
+                        {
+                            ID = h.ID,
+                            Title = h.Name,
+                            ImageSource = h.Image,
+                            Selected = Hunter != null && h.ID == Hunter.ID
+                        }).ToList();
+
+                    return items;
                     });
 
                 await Navigation.PushAsync(inputView);
             });
 
             DogCommand = new Command(async () =>
-            {
-                var dogsVM = _dogs.Select(h => new DogViewModel(h, Navigation));
-                var items = dogsVM.Select(h => new PickerItem
-                {
-                    ID = h.ID,
-                    Title = h.Name,
-                    ImageSource = h.Image,
-                    Selected = Dog != null && Dog.ID == h.ID
-                }).ToList();
-
-
+            {   
                 var inputView = new InputPicker(
                     "Velg hund",
-                    items,
                     async obj =>
                     {
                         var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
                     Dog = _dogs.SingleOrDefault(h => h.ID == id);
                         await SaveAsync();
+                    }, async () => 
+                    {
+                        Dogs = await App.DogDataStore.GetItemsAsync();
+                        var dogsVM = Dogs.Select(h => new DogViewModel(h, Navigation));
+                        var items = dogsVM.Select(h => new PickerItem
+                        {
+                            ID = h.ID,
+                            Title = h.Name,
+                            ImageSource = h.Image,
+                            Selected = Dog != null && Dog.ID == h.ID
+                        }).ToList();
+
+                        return items;
                     });
 
                 await Navigation.PushAsync(inputView);
             });
-
+            
             SpeciesCommand = new Command(async () =>
             {
-                var speciesVM = _species.Select(h => new SpecieViewModel(h, Navigation));
-                var items = speciesVM.Select(h => new PickerItem
-                {
-                    ID = h.ID,
-                    Title = h.Name,
-                    Selected = Specie != null && Specie.ID == h.ID
-                }).ToList();
-
-
                 var inputView = new InputPicker(
                     "Velg art",
-                    items,
                     async obj =>
                     {
                         var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
                         Specie = _species.SingleOrDefault(h => h.ID == id);
                         await SaveAsync();
+                    },
+                    async () => 
+                    {
+                        Species = await App.SpecieDataStore.GetItemsAsync();
+                    
+                        var speciesVM = _species.Select(h => new SpecieViewModel(h, Navigation));
+                        var items = speciesVM.Select(h => new PickerItem
+                        {
+                            ID = h.ID,
+                            Title = h.Name,
+                            Selected = Specie != null && Specie.ID == h.ID
+                        }).ToList();
+                        return items;
                     });
 
                 await Navigation.PushAsync(inputView);

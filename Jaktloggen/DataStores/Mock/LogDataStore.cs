@@ -66,5 +66,10 @@ namespace Jaktloggen.DataStores.Mock
         {
             return items;
         }
+
+        public Task<bool> UpdateItemsAsync(List<Logg> items)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

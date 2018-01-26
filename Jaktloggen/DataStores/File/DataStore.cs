@@ -8,7 +8,7 @@ namespace Jaktloggen.DataStores.File
 {
     public class DataStore<T> : IDataStore<T> where T : BaseEntity
     {
-        List<T> items = new List<T>();
+        List<T> _items = new List<T>();
         public string Filename { get; set; }
         private bool firstLoad = true;
 
@@ -50,52 +50,60 @@ namespace Jaktloggen.DataStores.File
             item.Changed = DateTime.Now;
             item.Created = DateTime.Now;
             item.ID = Guid.NewGuid().ToString();
-            items.Add(item);
+            _items.Add(item);
 
-            items.SaveToLocalStorage(Filename);
+            _items.SaveToLocalStorage(Filename);
 
             return await Task.FromResult(true);
         }
 
         public async Task<bool> UpdateItemAsync(T item)
         {
-            var _item = items.FirstOrDefault(i => i.ID == item.ID);
-            items.Remove(_item);
-            items.Add(item);
+            var _item = _items.FirstOrDefault(i => i.ID == item.ID);
+            _items.Remove(_item);
+            _items.Add(item);
 
-            items = await GetItemsAsync(true);
+            _items.SaveToLocalStorage(Filename);
 
             return await Task.FromResult(true);
         }
 
+        public async Task<bool> UpdateItemsAsync(List<T> items)
+        {
+            _items = items;
+            _items.SaveToLocalStorage(Filename);
+
+            return await Task.FromResult(true);  
+        }
+
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var _item = items.FirstOrDefault(i => i.ID == id);
-            items.Remove(_item);
+            var _item = _items.FirstOrDefault(i => i.ID == id);
+            _items.Remove(_item);
 
-            items.SaveToLocalStorage(Filename);
+            _items.SaveToLocalStorage(Filename);
             return await Task.FromResult(true);
         }
 
         public async Task<T> GetItemAsync(string id)
         {
-            return await Task.FromResult(items.FirstOrDefault(s => s.ID == id));
+            return await Task.FromResult(_items.FirstOrDefault(s => s.ID == id));
         }
 
         public async Task<List<T>> GetItemsAsync(bool forceRefresh = false)
         {
             if(firstLoad || forceRefresh)
             {
-                items = FileService.LoadFromLocalStorage<List<T>>(Filename);
+                _items = FileService.LoadFromLocalStorage<List<T>>(Filename);
                 firstLoad = false;
             }
 
-            return await Task.FromResult(items);
+            return await Task.FromResult(_items);
         }
 
         public List<T> GetCachedItems()
         {
-            return items;
+            return _items;
         }
     }
 }

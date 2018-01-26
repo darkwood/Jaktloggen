@@ -16,6 +16,7 @@
                             ImageSource="{Binding ImageSource}" 
                             Text="{Binding Title}"
                             Selected="{Binding Selected}"
+                            ShowCheckBox="true"
                     />
                         <!--
                         <ImageCell 

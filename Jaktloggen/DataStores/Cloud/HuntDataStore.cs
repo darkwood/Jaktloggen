@@ -84,5 +84,10 @@ namespace Jaktloggen.DataStores.Cloud
         {
             return items;
         }
+
+        public Task<bool> UpdateItemsAsync(List<Jakt> items)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

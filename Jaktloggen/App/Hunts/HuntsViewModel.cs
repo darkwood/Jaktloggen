@@ -11,8 +11,8 @@ namespace Jaktloggen
 {
     public class HuntsViewModel : BaseViewModel
     {
-        public ObservableCollection<HuntViewModel> HuntItems { get; set; }
-        private Command LoadItemsCommand { get; }
+        public ObservableCollection<HuntViewModel> Items { get; set; }
+        public Command LoadItemsCommand { get; set; }
         private bool isLoaded { get; set; }
 
         public HuntsViewModel(INavigation navigation)
@@ -20,12 +20,12 @@ namespace Jaktloggen
             Navigation = navigation;
             Title = "Jaktloggen";
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand(), () => !IsBusy);
-            HuntItems = new ObservableCollection<HuntViewModel>();
+            Items = new ObservableCollection<HuntViewModel>();
         }
 
         private async Task PopulateItems()
         {
-            HuntItems.Clear();
+            Items.Clear();
 
             await App.HunterDataStore.GetItemsAsync(true);
             await App.DogDataStore.GetItemsAsync(true);
@@ -35,25 +35,23 @@ namespace Jaktloggen
             var items = await App.HuntDataStore.GetItemsAsync(true);
             foreach (var item in items.OrderByDescending(o => o.DatoFra))
             {
-                HuntItems.Add(new HuntViewModel(item, Navigation));
+                Items.Add(new HuntViewModel(item, Navigation));
             }
         }
 
-        public async void OnAppearing()
+        public async Task OnAppearing()
         {
-            if (!isLoaded)
-            {
-                LoadItemsCommand.Execute(null);
-            }
-            isLoaded = true;
+            await ExecuteLoadItemsCommand();
         }
 
-        private async Task ExecuteLoadItemsCommand()
+        public async Task ExecuteLoadItemsCommand()
         {
+            if (IsBusy) { return; }
+
             IsBusy = true;
             try { await PopulateItems(); }
             catch (Exception ex) { Debug.WriteLine(ex); }
-            IsBusy = false;
+            finally { IsBusy = false; }
         }
     }
 }

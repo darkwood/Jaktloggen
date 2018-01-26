@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Jaktloggen.Interfaces;
 using Xamarin.Forms;
 
@@ -23,6 +24,10 @@ namespace Jaktloggen
                 filePath = filePath.Substring(filePath.LastIndexOf("/", StringComparison.CurrentCulture) + 1);
             }
             return filePath;
+        }
+        public static void LogError(Exception ex)
+        {
+            Debug.WriteLine(ex.Message, ex.InnerException, ex.StackTrace);
         }
     }
 }

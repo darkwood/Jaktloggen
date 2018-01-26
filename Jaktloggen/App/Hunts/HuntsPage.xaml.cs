@@ -48,7 +48,7 @@ namespace Jaktloggen
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            viewModel.OnAppearing();
+            await viewModel.OnAppearing();
         }
 
 
@@ -62,7 +62,7 @@ namespace Jaktloggen
                     FileService.Delete(item.ImageFilename);
                 }
                 await App.HuntDataStore.DeleteItemAsync(item.ID);
-                viewModel.HuntItems.Remove(item);
+                viewModel.Items.Remove(item);
 
                 await Navigation.PopToRootAsync();
             }

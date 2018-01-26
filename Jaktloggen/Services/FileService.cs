@@ -70,8 +70,7 @@ namespace Jaktloggen.Services
                     }
                     catch (Exception ex)
                     {
-                        // new Exception(ex.Message, ex);
-                        //Utils.LogError(ex);
+                        Utility.LogError(ex);
                     }
                 }
             }

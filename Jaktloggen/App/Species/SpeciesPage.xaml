@@ -19,7 +19,9 @@
                     <DataTemplate>
                         <cells:ExtendedTextCell 
                             Text="{Binding Name}"
-                            Selected="{Binding Selected}" />
+                            Selected="{Binding Selected}"
+                            ShowCheckBox="true"
+                        />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

@@ -55,8 +55,7 @@ namespace Jaktloggen
 
         private async Task PopulateItems()
         {
-            if (IsBusy)
-                return;
+            if (IsBusy) { return; }
 
             IsBusy = true;
 

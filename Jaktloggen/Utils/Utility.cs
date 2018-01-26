@@ -11,10 +11,17 @@ namespace Jaktloggen
         {
             if (String.IsNullOrEmpty(imageFilename))
             {
-                return ImageSource.FromUri(new Uri("http://imaginations.csj.ualberta.ca/wp-content/themes/15zine/library/images/placeholders/placeholder-759x500.png"));
+                return ImageSource.FromFile("placeholder_photo.png");
             }
-            var filepath = DependencyService.Get<IFileUtility>().GetFilePath(imageFilename);
-            return ImageSource.FromFile(filepath);
+            else if (imageFilename.StartsWith("/"))
+            {
+                return ImageSource.FromFile(imageFilename);
+            }
+            else
+            {
+                var filepath = DependencyService.Get<IFileUtility>().GetFilePath(imageFilename);
+                return ImageSource.FromFile(filepath);
+            }
         }
 
         public static string GetImageFileName(string filePath)

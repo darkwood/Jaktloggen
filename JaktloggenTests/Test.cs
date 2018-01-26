@@ -8,6 +8,7 @@ namespace JaktloggenTests
         [Test()]
         public void TestCase()
         {
+            Assert.IsTrue(true);
         }
     }
 }

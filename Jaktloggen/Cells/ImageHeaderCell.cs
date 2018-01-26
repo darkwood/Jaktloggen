@@ -51,11 +51,22 @@ namespace Jaktloggen.Cells
 
         public ImageHeaderCell()
         {
-            var viewLayout = new StackLayout();
+            var viewLayout = new Grid();
 
             CellImage = new Image();
             CellImage.Aspect = Aspect.AspectFill;
             viewLayout.Children.Add(CellImage);
+
+            Label label = new Label
+                          {
+                              Margin = 10,
+                              VerticalOptions = LayoutOptions.End,
+                              HorizontalOptions = LayoutOptions.Center,
+                              Text = "Velg bilde",
+                              FontSize = 16,
+                              TextColor = Color.White,
+                          };
+            viewLayout.Children.Add(label);
 
             var gestureRecognizer = new TapGestureRecognizer();
 

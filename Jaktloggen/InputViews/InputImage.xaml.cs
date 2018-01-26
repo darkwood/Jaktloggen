@@ -62,7 +62,7 @@ namespace Jaktloggen.InputViews
 
         public InputImage()
         {
-            Source = ImageSource.FromUri(new Uri("https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-401840.jpg"));
+            //Source = ImageSource.FromFile("placeholder_photo.png");
             InitializeComponent();
         }
         async void Camera_Clicked(object sender, System.EventArgs e)
@@ -86,8 +86,8 @@ namespace Jaktloggen.InputViews
                 return;
             
             _source = null;
-            string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture)+1);
-
+            //string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture)+1);
+            string filename = file.Path;
             ImageFilename = filename;
         }
 

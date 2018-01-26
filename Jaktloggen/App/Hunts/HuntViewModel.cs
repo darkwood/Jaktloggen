@@ -97,7 +97,8 @@ namespace Jaktloggen
         }
         public string ImageFilename 
         {
-            get => Utility.GetImageFileName(Item.ImagePath);
+            //get => Utility.GetImageFileName(Item.ImagePath);
+            get => Item.ImagePath;
             set { 
                 Item.ImagePath = value; 
                 OnPropertyChanged(nameof(ImageFilename)); 

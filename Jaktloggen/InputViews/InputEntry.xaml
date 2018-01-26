@@ -11,8 +11,6 @@
             <Entry 
                 x:Name="entry"
                 Text="{Binding Value}" 
-                FontSize="18" 
-                HeightRequest="35"
                 Placeholder="{Binding Title}"
                 IsVisible="{Binding Multiline, Converter={Converters:InvertedBooleanConverter}}"
                 Completed="Handle_Completed"
@@ -20,7 +18,7 @@
             <Editor 
                 x:Name="editor"
                 Text="{Binding Value}" 
-                FontSize="18" 
+                FontSize="16" 
                 IsVisible="{Binding Multiline}"
                 />
         </StackLayout>

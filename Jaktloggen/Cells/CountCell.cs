@@ -120,39 +120,53 @@ namespace Jaktloggen.Cells
             _buttons.Children.Add(CreateRoundButton(1));
             _buttons.Children.Add(CreateRoundButton(2));
             _buttons.Children.Add(CreateRoundButton(3));
-            Button moreButton = CreateRoundButton(Count, true);
-            moreButton.BorderColor = green;
-            moreButton.BackgroundColor = Color.White;
-            moreButton.TextColor = green;
-            moreButton.BorderRadius = 0;
-            _buttons.Children.Add(moreButton);
+            _buttons.Children.Add(new BoxView{WidthRequest = 2, Color = green});
+            _buttons.Children.Add(CreateRoundButton(Count, true));
         }
 
         private Button CreateRoundButton(int i, bool isMoreButton = false)
         {
-            
+
             var b = new Button
             {
-                Text = i.ToString(),
+                Text = isMoreButton && i <= 3 ? "..." : i.ToString(),
                 BorderRadius = 23,
                 HeightRequest = 46,
                 WidthRequest = 46,
-                TextColor = i == Count ? Color.White : green,
-                BackgroundColor = i == Count ? green : Color.White,
-                BorderColor = green,
+                TextColor = IsSelected(i, isMoreButton) ? Color.White : green,
+                BackgroundColor = IsSelected(i, isMoreButton) ? green : Color.White,
+                BorderColor = IsSelected(i, isMoreButton) ? Color.DarkOrange : green,
                 BorderWidth = 2
             };
+            if (isMoreButton)
+            {
+                b.BorderRadius = 0;
+            }
+            b.Clicked += (sender, e) =>
+            {
+                Count = i;
+                if (Command != null && Command.CanExecute(null))
+                {
+                    Command.Execute(isMoreButton);
+                }
 
-                b.Clicked += (sender, e) => {
-                    Count = i;
-                    if (Command != null && Command.CanExecute(null))
-                    {
-                        Command.Execute(isMoreButton);
-                    }
-
-                };
+            };
             return b;
         }
+
+        private bool IsSelected(int i, bool isMoreButton)
+        {
+            if (isMoreButton)
+            {
+                return i == Count && i > 3;
+            }
+            else
+            {
+                return i == Count && i <= 3;
+            }
+            
+        }
+
         private void SetSelectedButton(int selectedValue)
         {
             CreateButtons();

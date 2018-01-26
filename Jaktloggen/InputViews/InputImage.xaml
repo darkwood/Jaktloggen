@@ -11,13 +11,11 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-
+            
             <Image 
                 Grid.Row="0"
                 Source="{Binding Source}"
-                Aspect="AspectFill"
-                VerticalOptions="FillAndExpand"
-                HorizontalOptions="FillAndExpand"
+                Aspect="AspectFit"
             />
 
             <Grid Grid.Row="1" Padding="10" VerticalOptions="Center">

@@ -10,7 +10,10 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <ListView x:Name="ItemsListView" ItemsSource="{Binding Items}" 
+            <ListView 
+                x:Name="ItemsListView" 
+                IsVisible="{Binding HasItems}"
+                ItemsSource="{Binding Items}" 
                 VerticalOptions="FillAndExpand" HasUnevenRows="true" 
                 RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" 
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}" RowHeight="70"
@@ -29,6 +32,13 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <Button 
+                Text="Ny loggføring" 
+                IsVisible="{Binding HasItems, Converters:InvertedBooleanConverter}"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+            />
         </StackLayout>
 	</ContentPage.Content>
 </ContentPage>

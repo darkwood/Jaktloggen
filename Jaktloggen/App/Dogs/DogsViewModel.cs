@@ -18,6 +18,7 @@ namespace Jaktloggen
             Navigation = navigation;
             Items = new ObservableCollection<DogViewModel>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            Title = "hunder";
 
             MessagingCenter.Subscribe<DogPage, DogViewModel>(this, "Save", async (obj, item) =>
             {

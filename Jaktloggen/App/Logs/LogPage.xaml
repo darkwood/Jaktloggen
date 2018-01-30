@@ -21,13 +21,11 @@
                     <cells:ExtendedTextCell Text="Jeger" Text2="{Binding HunterText}" Command="{Binding HunterCommand}" />
                     <cells:ExtendedTextCell Text="Hund" Text2="{Binding DogText}" Command="{Binding DogCommand}" />
                     <cells:MapCell Text="{Binding InfoMessage}" Latitude="{Binding Latitude}" Longitude="{Binding Longitude}" Command="{Binding PositionCommand}" />
-                    <cells:ExtendedTextCell Command="{Binding DateCommand}" Text="Tidspunkt" Text2="{Binding Date, Converter={Converters:DateTimeToShortDateConverter}}" />
-                </TableSection>
-                
-                <TableSection Title="Notater">
-                    <ViewCell>
-                        <Editor Text="{Binding Notes}" HeightRequest="100" />
-                    </ViewCell>
+                    <cells:ExtendedTextCell Command="{Binding DateCommand}" Text="Tidspunkt" Text2="{Binding Date, Converter={Converters:DateTimeToDateAndTimeConverter}}" />
+                    <cells:DateTimeCell Command="{Binding DateCommand}" Text="Tidspunkt" Date="{Binding Date, Mode=TwoWay}" />
+
+                    <cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />
+
                 </TableSection>
             </TableRoot>
         </local:JTableView>

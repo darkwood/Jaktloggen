@@ -15,6 +15,13 @@ namespace Jaktloggen
         public Command LoadItemsCommand { get; set; }
         private bool isLoaded { get; set; }
 
+        bool _hasItems;
+        public bool HasItems
+        {
+            get => _hasItems;
+            set { _hasItems = value; OnPropertyChanged(nameof(HasItems)); }
+        }
+
         public LogsViewModel(HuntViewModel hunt, INavigation navigation)
         {
             Hunt = hunt;
@@ -54,6 +61,7 @@ namespace Jaktloggen
             {
                 Items.Add(new LogViewModel(Hunt, item, Navigation));
             }
+            HasItems = items.Count > 0;
         }
     }
 }

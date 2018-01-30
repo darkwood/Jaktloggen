@@ -3,7 +3,8 @@
              xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
              xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
              x:Class="Jaktloggen.HuntsPage" 
-    Title="{Binding Title}" x:Name="BrowseHuntsPage">
+             Title="{Binding Title}" 
+            >
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="+" Clicked="AddItem_Clicked" />
 	</ContentPage.ToolbarItems>

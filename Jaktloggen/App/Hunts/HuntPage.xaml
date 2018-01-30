@@ -40,13 +40,9 @@
                     <cells:ExtendedTextCell Command="{Binding DateToCommand}" Text="Dato til" Text2="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:ExtendedTextCell Text="Jegere" Text2="{Binding HuntersText}" Command="{Binding HuntersCommand}" />
                     <cells:ExtendedTextCell Text="Hunder" Text2="{Binding DogsText}" Command="{Binding DogsCommand}" />
+                    <cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />
                 </TableSection>
 
-                <TableSection Title="Notater">
-                    <ViewCell>
-                        <Editor Text="{Binding Notes}" HeightRequest="100" />
-                    </ViewCell>
-                </TableSection>
         
                 <TableSection Title="">
                     <ViewCell>

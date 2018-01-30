@@ -17,6 +17,7 @@ namespace Jaktloggen
             Navigation = navigation;
             Items = new ObservableCollection<HunterViewModel>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            Title = "Jegere";
 
             MessagingCenter.Subscribe<HunterPage, HunterViewModel>(this, "Save", async (obj, item) =>
             {

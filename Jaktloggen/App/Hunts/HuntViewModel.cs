@@ -185,7 +185,7 @@ namespace Jaktloggen
             Item = item.DeepClone();
             Navigation = navigation;
 
-            Title = string.IsNullOrEmpty(item.ID) ? "Ny jakt" : Location; 
+            //Title = string.IsNullOrEmpty(item.ID) ? "Ny jakt" : Location; 
             CreateCommands(item);
 
             Logs = App.LogDataStore.GetCachedItems().Where(l => l.JaktId == ID).ToList();

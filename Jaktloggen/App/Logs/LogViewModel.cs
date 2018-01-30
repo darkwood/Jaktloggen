@@ -481,10 +481,13 @@ namespace Jaktloggen
 
             DateCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputDate("Tidspunkt", Date, async obj => {
+                InputDate inputDate = new InputDate("Tidspunkt", Date, async obj =>
+                {
                     Date = obj.Value;
                     await SaveAsync();
-                }));
+                }, 
+                true);
+                await Navigation.PushAsync(inputDate);
             });
 
             NotesCommand = new Command(async () =>

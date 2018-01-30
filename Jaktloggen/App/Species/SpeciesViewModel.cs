@@ -32,6 +32,7 @@ namespace Jaktloggen
         public SpeciesViewModel(INavigation navigation)
         {
             Navigation = navigation;
+            Title = "Arter";
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             GroupedItems = new ObservableCollection<SpecieGrouping>();
             _selectedIds = new List<string>();

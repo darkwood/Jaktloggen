@@ -8,20 +8,33 @@
         <ToolbarItem Text="Ferdig" Clicked="Done_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" Padding="10">
+        <StackLayout Orientation="Vertical" Padding="20">
             <DatePicker 
                 x:Name="date"
                 Date="{Binding Value}" 
                 IsVisible="false"
                 />
+            <TimePicker 
+                x:Name="time"
+                Time="{Binding Value}"
+                IsVisible="false" />
             <Label 
-                VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
                 FontSize="24" 
-                Text="{Binding Value, Converter={Converters:DateTimeToShortDateConverter}}"
+                Text="{Binding Value}"
                 >
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Handle_Tapped" />
+                    <TapGestureRecognizer Tapped="Date_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label 
+                HorizontalOptions="CenterAndExpand"
+                FontSize="20" 
+                IsVisible="{Binding TimeVisible}"
+                Text="{Binding Value}"
+                >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Time_Tapped" />
                 </Label.GestureRecognizers>
             </Label>
         </StackLayout>  

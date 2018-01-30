@@ -13,7 +13,7 @@ namespace Jaktloggen
                 case Device.iOS:
                     itemsPage = new NavigationPage(new HuntsPage())
                                 {
-                                    Title = "Jakt"
+                                    Title = "Jaktloggen"
                                 };
 
                     huntersPage = new NavigationPage(new HuntersPage())
@@ -73,8 +73,6 @@ namespace Jaktloggen
             Children.Add(dogsPage);
             Children.Add(speciesPage);
             Children.Add(aboutPage);
-
-            Title = Children[0].Title;
         }
 
         protected override void OnCurrentPageChanged()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Jaktloggen.InputViews;
-
+using Jaktloggen.Models;
 using Plugin.Geolocator;
 
 using Xamarin.Forms;
@@ -187,10 +187,6 @@ namespace Jaktloggen
 
             //Title = string.IsNullOrEmpty(item.ID) ? "Ny jakt" : Location; 
             CreateCommands(item);
-
-            Logs = App.LogDataStore.GetCachedItems().Where(l => l.JaktId == ID).ToList();
-            Hunters = App.HunterDataStore.GetCachedItems();
-            Dogs = App.DogDataStore.GetCachedItems();
         }
 
         public async Task OnAppearing()
@@ -203,7 +199,10 @@ namespace Jaktloggen
                 await SetPositionAsync();
             }
 
-
+            var allLogs = await App.LogDataStore.GetItemsAsync();
+            Logs = allLogs.Where(l => l.JaktId == ID).ToList();
+            Hunters = await App.HunterDataStore.GetItemsAsync();
+            Dogs = await App.DogDataStore.GetItemsAsync();
             
             isLoaded = true;
         }

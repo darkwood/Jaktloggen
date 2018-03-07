@@ -79,11 +79,6 @@ namespace Jaktloggen.DataStores.Cloud
             return response.IsSuccessStatusCode;
         }
 
-        public List<Logg> GetCachedItems()
-        {
-            return items;
-        }
-
         public Task<bool> UpdateItemsAsync(List<Logg> items)
         {
             throw new NotImplementedException();

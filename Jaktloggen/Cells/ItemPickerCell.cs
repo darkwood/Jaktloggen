@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using ImageCircle.Forms.Plugin.Abstractions;
 using Xamarin.Forms;
+using System.Linq;
+
+using Jaktloggen.Models;
 
 namespace Jaktloggen.Cells
 {
-    public class CountCell : ViewCell
+    public class ItemPickerCell : ViewCell
     {
         private Color green => Color.FromHex("#597a59");
 
         private const int SIZE = 52;
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(Command), typeof(CountCell), null);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(Command), typeof(ItemPickerCell), null);
 
         public ICommand Command
         {
@@ -24,10 +28,10 @@ namespace Jaktloggen.Cells
             BindableProperty.Create(
                 nameof(Text), 
                 typeof(string), 
-                typeof(CountCell), 
+                typeof(ItemPickerCell), 
                 null,
                 propertyChanged: (bindable, oldValue, newValue) => {
-                ((CountCell)bindable).TextLabel.Text = newValue as string;
+                ((ItemPickerCell)bindable).TextLabel.Text = newValue as string;
                 }
             );
         
@@ -44,12 +48,12 @@ namespace Jaktloggen.Cells
         public static readonly BindableProperty DetailProperty = BindableProperty.Create(
             nameof(Detail), 
             typeof(string), 
-            typeof(CountCell), 
+            typeof(ItemPickerCell), 
             "",
             propertyChanged: (bindable, oldValue, newValue) => 
             {
-                ((CountCell)bindable).DetailLabel.IsVisible = true;
-                ((CountCell)bindable).DetailLabel.Text = newValue as string;
+                ((ItemPickerCell)bindable).DetailLabel.IsVisible = true;
+                ((ItemPickerCell)bindable).DetailLabel.Text = newValue as string;
             });
 
         public string Detail
@@ -63,33 +67,56 @@ namespace Jaktloggen.Cells
 
         /***************************************************************************/
 
-        public static readonly BindableProperty CountProperty = BindableProperty.Create(
-            nameof(Count),
-            typeof(int),
-            typeof(CountCell),
-            0,
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(
+            nameof(SelectedItem),
+            typeof(PickerItem),
+            typeof(ItemPickerCell),
+            null,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                ((CountCell)bindable).SetSelectedButton((int)newValue);
+                ((ItemPickerCell)bindable).SelectItem((PickerItem)newValue);
+            });
+
+
+        public PickerItem SelectedItem
+        {
+            get { return (PickerItem)GetValue(SelectedItemProperty); }
+            set
+            {
+                SetValue(SelectedItemProperty, value);
+            }
+        }
+
+        /***************************************************************************/
+
+        public static readonly BindableProperty ItemsProperty = BindableProperty.Create(
+            nameof(Items),
+            typeof(List<PickerItem>),
+            typeof(ItemPickerCell),
+            null,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                ((ItemPickerCell)bindable).CreateButtons();
             });
 
 
 
-        public int Count
+        public List<PickerItem> Items
         {
-            get { return (int)GetValue(CountProperty); }
+            get { return (List<PickerItem>)GetValue(ItemsProperty); }
             set
             {
-                SetValue(CountProperty, value);
+                SetValue(ItemsProperty, value);
             }
         }
 
         public StackLayout ViewLayout { get; private set; }
         public TapGestureRecognizer GestureRecognizer { get; private set; }
         public Image SelectedImage { get; private set; }
-        private StackLayout _buttons { get; set; }
+        private StackLayout _buttonsLayout { get; set; }
+        public List<Button> _buttons { get; private set; }
 
-        public CountCell()
+        public ItemPickerCell()
         {
             ViewLayout = new StackLayout
             {
@@ -107,9 +134,8 @@ namespace Jaktloggen.Cells
 
             ViewLayout.Children.Add(sublayout);
 
-            _buttons = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.EndAndExpand };
-            CreateButtons();
-            ViewLayout.Children.Add(_buttons);
+            _buttonsLayout = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.EndAndExpand };
+            ViewLayout.Children.Add(_buttonsLayout);
 
             View = ViewLayout;
         }
@@ -117,61 +143,57 @@ namespace Jaktloggen.Cells
 
         private void CreateButtons()
         {
-            _buttons.Children.Clear();
-            _buttons.Children.Add(CreateRoundButton(0));
-            _buttons.Children.Add(CreateRoundButton(1));
-            _buttons.Children.Add(CreateRoundButton(2));
-            _buttons.Children.Add(CreateRoundButton(3));
-            //_buttons.Children.Add(new BoxView{WidthRequest = 2, Color = green});
-            _buttons.Children.Add(CreateRoundButton(Count, true));
+            _buttonsLayout.Children.Clear();
+            _buttons = Items.Select(i => CreateRoundButton(i)).ToList();
+            foreach(var b in _buttons){
+                _buttonsLayout.Children.Add(b);
+            }
+            _buttonsLayout.Children.Add(CreateRoundButton(null));
         }
 
-        private Button CreateRoundButton(int i, bool isMoreButton = false)
+        private Button CreateRoundButton(PickerItem i)
         {
 
             var b = new Button
             {
-                Text = isMoreButton && i <= 3 ? "..." : i.ToString(),
+                Text = i == null ? "..." : i.Title,
+                FontSize = 10,
                 BorderRadius = SIZE/2,
                 HeightRequest = SIZE,
                 WidthRequest = SIZE,
-                TextColor = IsSelected(i, isMoreButton) ? Color.White : green,
-                BackgroundColor = IsSelected(i, isMoreButton) ? green : Color.White,
-                BorderColor = IsSelected(i, isMoreButton) ? Color.DarkOrange : green,
                 BorderWidth = 2
             };
-            if (isMoreButton)
+
+            SetSelectionStyle(b, i?.Selected ?? false);
+
+            if (i == null)
             {
                 b.BorderRadius = 0;
             }
             b.Clicked += (sender, e) =>
             {
-                Count = i;
                 if (Command != null && Command.CanExecute(null))
                 {
-                    Command.Execute(isMoreButton);
+                    Command.Execute(i);
                 }
 
             };
             return b;
         }
 
-        private bool IsSelected(int i, bool isMoreButton)
+        private void SelectItem(PickerItem item)
         {
-            if (isMoreButton)
+            foreach (var btn in _buttons)
             {
-                return i == Count && i > 3;
+                SetSelectionStyle(btn, btn.Text == item.Title);
             }
-            else
-            {
-                return i == Count && i <= 3;
-            }
-            
         }
 
-        private void SetSelectedButton(int selectedValue)
+        private void SetSelectionStyle(Button b, bool selected)
         {
-            CreateButtons();
+            b.TextColor = selected ? Color.White : green;
+            b.BackgroundColor = selected ? green : Color.White;
+            b.BorderColor = selected ? Color.DarkOrange : green;
         }
     }
 }

@@ -80,11 +80,6 @@ namespace Jaktloggen.DataStores.Cloud
             return response.IsSuccessStatusCode;
         }
 
-        public List<Jakt> GetCachedItems()
-        {
-            return items;
-        }
-
         public Task<bool> UpdateItemsAsync(List<Jakt> items)
         {
             throw new NotImplementedException();

@@ -100,10 +100,5 @@ namespace Jaktloggen.DataStores.File
 
             return await Task.FromResult(_items);
         }
-
-        public List<T> GetCachedItems()
-        {
-            return _items;
-        }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
+using Jaktloggen.Models;
 namespace Jaktloggen.InputViews
 {
     public partial class InputPicker : ContentPage
@@ -68,19 +69,5 @@ namespace Jaktloggen.InputViews
             _finished(this);
             await Navigation.PopAsync();
         }
-    }
-
-    public class PickerItem : BaseViewModel
-    {
-        public string Details { get; set; }
-        public ImageSource ImageSource { get; set; }
-
-        private bool _selected;
-        public bool Selected {
-            get { return _selected; }
-            set { _selected = value; OnPropertyChanged(nameof(Selected)); OnPropertyChanged(nameof(Color)); }
-        }
-
-        public Color Color => Selected ? Color.Green : Color.Black;
     }
 }

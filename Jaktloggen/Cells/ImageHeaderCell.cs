@@ -22,6 +22,8 @@ namespace Jaktloggen.Cells
                 null,
                 propertyChanged: (bindable, oldValue, newValue) => {
                     ((ImageHeaderCell)bindable).CellImage.Source = newValue as ImageSource;
+                    ((ImageHeaderCell)bindable).CellImage.IsVisible = newValue != null;
+                    ((ImageHeaderCell)bindable).ChooseImageLabel.IsVisible = newValue == null;
                 }
             );
         
@@ -47,7 +49,7 @@ namespace Jaktloggen.Cells
         }
 
         public Image CellImage { get; private set; }
-
+        public Label ChooseImageLabel { get; private set; }
 
         public ImageHeaderCell()
         {
@@ -55,18 +57,19 @@ namespace Jaktloggen.Cells
 
             CellImage = new Image();
             CellImage.Aspect = Aspect.AspectFill;
+
             viewLayout.Children.Add(CellImage);
 
-            Label label = new Label
+            ChooseImageLabel = new Label
                           {
-                              Margin = 10,
-                              VerticalOptions = LayoutOptions.End,
-                              HorizontalOptions = LayoutOptions.Center,
+                              VerticalOptions = LayoutOptions.CenterAndExpand,
+                              HorizontalOptions = LayoutOptions.CenterAndExpand,
                               Text = "Velg bilde",
-                              FontSize = 16,
+                              FontSize = 20,
                               TextColor = Color.White,
+                              BackgroundColor = Color.LightGray
                           };
-            viewLayout.Children.Add(label);
+            viewLayout.Children.Add(ChooseImageLabel);
 
             var gestureRecognizer = new TapGestureRecognizer();
 

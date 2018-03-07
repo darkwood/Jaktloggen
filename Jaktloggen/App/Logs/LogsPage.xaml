@@ -9,7 +9,7 @@
         <ToolbarItem Text="+" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
+        <Grid>
             <ListView 
                 x:Name="ItemsListView" 
                 IsVisible="{Binding HasItems}"
@@ -21,7 +21,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                          <cells:ExtendedTextCell 
-                            Text="{Binding Date, Converter={Converters:DateTimeToTimeConverter}}" 
+                            Text="{Binding DateFormatted}" 
                             ImageSource="{Binding Image}" 
                             Detail="{Binding LogTitle}">
                             <cells:ExtendedTextCell.ContextActions>
@@ -33,12 +33,15 @@
                 </ListView.ItemTemplate>
             </ListView>
 
+            <Grid BackgroundColor="Aqua" IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="true" IsVisible="true"/>
+            </Grid>
             <Button 
-                Text="Ny loggføring" 
-                IsVisible="{Binding HasItems, Converters:InvertedBooleanConverter}"
+                Text="Ny loggføring"
+                IsVisible="{Binding HasItems, Converter={Converters:InvertedBooleanConverter}}" 
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
             />
-        </StackLayout>
+        </Grid>
 	</ContentPage.Content>
 </ContentPage>

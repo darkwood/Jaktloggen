@@ -25,6 +25,8 @@ namespace Jaktloggen
         private static string FILE_LOGGTYPE_GROUP = "loggtypegroup.xml";
         private static string FILE_LOGGTYPER = "loggtyper.xml";
         private static string FILE_ARTGROUP = "artgroup.xml";
+        public static string FILE_SELECTED_SPECIE_IDS = "selectedartids.json";
+
         //private static string FILE_SELECTED_ARTIDS = "selectedartids.json";
         //private static string FILE_SELECTED_LOGGTYPEIDS = "selectedloggtypeids.json";
         //private static string FILE_MY_ART = "myspecies.json";

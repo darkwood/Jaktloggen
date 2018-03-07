@@ -62,11 +62,6 @@ namespace Jaktloggen.DataStores.Mock
             return await Task.FromResult(items);
         }
 
-        public List<Jakt> GetCachedItems()
-        {
-            return items;
-        }
-
         public Task<bool> UpdateItemsAsync(List<Jakt> items)
         {
             throw new NotImplementedException();

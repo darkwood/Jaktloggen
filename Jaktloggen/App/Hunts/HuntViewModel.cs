@@ -178,7 +178,12 @@ namespace Jaktloggen
         public ICommand LogsCommand { protected set; get; }
         public ICommand NewLogCommand { protected set; get; }
 
-        private bool isLoaded { get; set; }
+        bool isLoaded;
+        public bool IsLoaded
+        {
+            get { return isLoaded; }
+            set { isLoaded = value; OnPropertyChanged(nameof(IsLoaded)); }
+        }
 
         public HuntViewModel(Jakt item, INavigation navigation)
         {
@@ -191,7 +196,7 @@ namespace Jaktloggen
 
         public async Task OnAppearing()
         {   
-            if (string.IsNullOrEmpty(Item.ID) && !isLoaded)
+            if (string.IsNullOrEmpty(Item.ID) && !IsLoaded)
             {
                 DateFrom = DateTime.Today;
                 DateTo = DateTime.Today;
@@ -204,7 +209,7 @@ namespace Jaktloggen
             Hunters = await App.HunterDataStore.GetItemsAsync();
             Dogs = await App.DogDataStore.GetItemsAsync();
             
-            isLoaded = true;
+            IsLoaded = true;
         }
         
         private async Task SetPositionAsync()

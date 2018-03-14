@@ -94,7 +94,7 @@ namespace Jaktloggen
                 GroupedItems.Clear();
                 var speciesGroups = await App.SpecieGroupDataStore.GetItemsAsync(true);
                 var species = await App.SpecieDataStore.GetItemsAsync(true);
-                _selectedIds = FileService.LoadFromLocalStorage<List<string>>(App.FILE_SELECTED_SPECIE_IDS);
+                _selectedIds = await FileService.LoadFromLocalStorage<List<string>>(App.FILE_SELECTED_SPECIE_IDS);
                 foreach (var g in speciesGroups)
                 {
                     var speciesInGroup = species.Where(a => a.GroupId == g.ID).ToList();

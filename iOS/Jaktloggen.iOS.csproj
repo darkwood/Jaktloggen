@@ -261,9 +261,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <InterfaceDefinition Include="LaunchScreen.storyboard" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
@@ -279,22 +276,38 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Arter.png" />
-    <BundleResource Include="Resources\Feedback.png" />
     <BundleResource Include="Resources\Felter.png" />
-    <BundleResource Include="Resources\Gevir.png" />
-    <BundleResource Include="Resources\Gevir%402x.png" />
     <BundleResource Include="Resources\Info.png" />
-    <BundleResource Include="Resources\Jaktloggen.png" />
-    <BundleResource Include="Resources\Jegere.png" />
     <BundleResource Include="Resources\Statistics.png" />
-    <BundleResource Include="Resources\dog-paw.png" />
     <BundleResource Include="Resources\checked.png" />
     <BundleResource Include="Resources\checked_off.png" />
     <BundleResource Include="Resources\calendar.png" />
     <BundleResource Include="Resources\clock.png" />
+    <BundleResource Include="Resources\Toolbar\add%402x.png" />
+    <BundleResource Include="Resources\Toolbar\add%403x.png" />
+    <BundleResource Include="Resources\Tabbar\gevir%403x.png" />
+    <BundleResource Include="Resources\Tabbar\gevir%402x.png" />
+    <BundleResource Include="Resources\Tabbar\hunters%402x.png" />
+    <BundleResource Include="Resources\Tabbar\hunters%403x.png" />
+    <BundleResource Include="Resources\Tabbar\info%402x.png" />
+    <BundleResource Include="Resources\Tabbar\info%403x.png" />
+    <BundleResource Include="Resources\Tabbar\dog%402x.png" />
+    <BundleResource Include="Resources\Tabbar\dog%403x.png" />
+    <BundleResource Include="Resources\Launch\gevir_black.png" />
+    <BundleResource Include="Resources\Launch\gevir_black%402x.png" />
+    <BundleResource Include="Resources\Launch\gevir_black%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\placeholder_photo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Toolbar\" />
+    <Folder Include="Resources\Tabbar\" />
+    <Folder Include="Assets.xcassets\Launch_Icon.imageset\" />
+    <Folder Include="Resources\Launch\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="LaunchScreen.storyboard" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.5.0.280555\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.0.280555\build\netstandard1.0\Xamarin.Forms.targets')" />

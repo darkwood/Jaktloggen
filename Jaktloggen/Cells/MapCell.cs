@@ -34,7 +34,6 @@ namespace Jaktloggen.Cells
         }
 
         public Label TextLabel { get; private set; }
-        public Label PositionLabel { get; private set; }
 
         /***************************************************************************/
 
@@ -42,10 +41,10 @@ namespace Jaktloggen.Cells
             nameof(Latitude), 
             typeof(double), 
             typeof(MapCell), 
-            (double)0,
+            (double)-1,
             propertyChanged: (bindable, oldValue, newValue) => 
             {
-                ((MapCell)bindable).PositionLabel.Text = ((double)newValue).ToString();
+                ((MapCell)bindable).SetMapPosition();
             });
 
         public double Latitude
@@ -63,10 +62,9 @@ namespace Jaktloggen.Cells
             nameof(Longitude),
             typeof(double),
             typeof(MapCell),
-            (double)0,
+            (double)-1,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                ((MapCell)bindable).PositionLabel.Text += ", " + ((double)newValue).ToString();
                 ((MapCell)bindable).SetMapPosition();
             });
 
@@ -83,15 +81,22 @@ namespace Jaktloggen.Cells
         public ActivityIndicator ActivityIndicator { get; private set; }
         public ExtendedMap MyMap { get; private set; }
         public Position Position => new Position(Latitude, Longitude);
+        public Label InfoText { get; set; }
 
         private void SetMapPosition()
         {
+            var hasPosition = Longitude > 0 || Latitude > 0;
+            MyMap.IsVisible = hasPosition;
+            InfoText.IsVisible = !hasPosition;
             ActivityIndicator.IsVisible = false;
-            MyMap.IsVisible = true;
+
+            if(!hasPosition){
+                return;
+            }
 
             MyMap.MoveToRegion(
                 MapSpan.FromCenterAndRadius(
-                    Position, Distance.FromMeters(50)));
+                    Position, Distance.FromMeters(10)));
 
             var pin = new Pin()
             {
@@ -116,11 +121,6 @@ namespace Jaktloggen.Cells
             };
             viewLayout.Children.Add(TextLabel);
 
-            PositionLabel = new Label
-            {
-                VerticalOptions = LayoutOptions.Center
-            };
-            //viewLayout.Children.Add(PositionLabel);
 
             MyMap = new ExtendedMap
             {
@@ -133,12 +133,21 @@ namespace Jaktloggen.Cells
             };
             viewLayout.Children.Add(MyMap);
 
+            InfoText = new Label { 
+                IsVisible = true, 
+                Text = "Velg posisjon", 
+                HorizontalOptions = LayoutOptions.EndAndExpand,
+                VerticalOptions = LayoutOptions.Center,
+                TextColor = App.PRIMARY_COLOR
+            };
+            viewLayout.Children.Add(InfoText);
+
             ActivityIndicator = new ActivityIndicator
             {
                 HorizontalOptions = LayoutOptions.EndAndExpand,
                 VerticalOptions = LayoutOptions.Center,
                 IsRunning = true,
-                IsVisible = true
+                IsVisible = false
             };
             viewLayout.Children.Add(ActivityIndicator);
 

@@ -183,11 +183,11 @@
     <Compile Include="App\Species\ArtGroup.cs" />
     <Compile Include="DataStores\File\DataStore.cs" />
     <Compile Include="Utils\Converters\DateTimeToDateAndTimeConverter.cs" />
-    <Compile Include="App\Logs\DateTimeCell.cs" />
     <Compile Include="Cells\ItemPickerCell.cs" />
     <Compile Include="Models\PickerItem.cs" />
     <Compile Include="Utils\LogFactory.cs" />
     <Compile Include="Services\LocationService.cs" />
+    <Compile Include="Cells\DateTimeCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Plugin.Permissions.Abstractions">

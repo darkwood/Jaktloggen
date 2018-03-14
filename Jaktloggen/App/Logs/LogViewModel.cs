@@ -62,7 +62,15 @@ namespace Jaktloggen
                 OnPropertyChanged(nameof(Date)); }
         }
 
-        public string DateFormatted => Date.ToString("dd.MM kl. hh:mm", new CultureInfo("nb-NO"));
+        public string DateFormatted
+        {
+            get
+            {
+                return string.Format("{0} kl. {1}",
+                            Date.ToString(@"dd.MM", new CultureInfo("nb-NO")),
+                            Time.ToString(@"hh\:mm", new CultureInfo("nb-NO")));
+            }
+        }
 
         public TimeSpan Time
         {
@@ -235,8 +243,20 @@ namespace Jaktloggen
                 OnPropertyChanged(nameof(Dog));
                 OnPropertyChanged(nameof(DogText));
                 OnPropertyChanged(nameof(LogTitle));
+                OnPropertyChanged(nameof(SelectedPickerDog));
             }
         }
+
+        private List<PickerItem> _pickerDogs;
+        public List<PickerItem> PickerDogs
+        {
+            get { return _pickerDogs; }
+            set { _pickerDogs = value; OnPropertyChanged(nameof(PickerDogs)); }
+        }
+
+        public PickerItem SelectedPickerDog => PickerDogs?.SingleOrDefault(p => p.ID == Dog?.ID);
+
+
 
         List<Art> _species = new List<Art>();
         public List<Art> Species
@@ -340,7 +360,7 @@ namespace Jaktloggen
 
             PickerSpecies = await LogFactory.CreatePickerSpecies(Item.ArtId);
             PickerHunters = await LogFactory.CreatePickerHunters(Item.JegerId);
-
+            PickerDogs = await LogFactory.CreatePickerDogs(Item.DogId);
             if (string.IsNullOrEmpty(Item.ID))
             {
                 Date = DateTime.Now;
@@ -521,31 +541,41 @@ namespace Jaktloggen
                 }
             });
 
-            DogCommand = new Command(async () =>
+            DogCommand = new Command(async (object selectedPickerItem) =>
             {
-                var inputView = new InputPicker(
-                    "Velg hund",
-                    async obj =>
-                    {
-                        var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
-                        Dog = _dogs.SingleOrDefault(h => h.ID == id);
-                        await SaveAsync();
-                    }, async () =>
-                    {
-                        Dogs = await App.DogDataStore.GetItemsAsync();
-                        var dogsVM = Dogs.Select(h => new DogViewModel(h, Navigation));
-                        var items = dogsVM.Select(h => new PickerItem
+                if (selectedPickerItem != null && selectedPickerItem as PickerItem != null)
+                {
+                    var id = (selectedPickerItem as PickerItem).ID;
+                    Dog = _dogs.SingleOrDefault(h => h.ID == id);
+                    await SaveAsync();
+                }
+                else
+                {
+                    var inputView = new InputPicker(
+                        "Velg hund",
+                        async obj =>
                         {
-                            ID = h.ID,
-                            Title = h.Name,
-                            ImageSource = h.Image,
-                            Selected = Dog != null && Dog.ID == h.ID
-                        }).ToList();
+                            var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
+                            Dog = _dogs.SingleOrDefault(h => h.ID == id);
+                            PickerDogs = await LogFactory.CreatePickerDogs(id);
+                            await SaveAsync();
+                        }, async () =>
+                        {
+                            Dogs = await App.DogDataStore.GetItemsAsync();
+                            var dogsVM = Dogs.Select(h => new DogViewModel(h, Navigation));
+                            var items = dogsVM.Select(h => new PickerItem
+                            {
+                                ID = h.ID,
+                                Title = h.Name,
+                                ImageSource = h.Image,
+                                Selected = Dog != null && Dog.ID == h.ID
+                            }).ToList();
 
-                        return items;
-                    });
+                            return items;
+                        });
 
-                await Navigation.PushAsync(inputView);
+                    await Navigation.PushAsync(inputView);
+                }
             });
 
             DateCommand = new Command(async () =>

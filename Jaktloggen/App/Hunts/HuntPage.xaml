@@ -21,8 +21,8 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="0" Text="{Binding LogsText}" Command="{Binding LogsCommand}" HorizontalOptions="Start" StyleClass="SecondaryButton" />
-
+                            <Button Grid.Column="0" Text="{Binding LogsText}" IsVisible="{Binding IsLoaded}" Command="{Binding LogsCommand}" HorizontalOptions="Center" StyleClass="SecondaryButton" />
+                            <ActivityIndicator Grid.Column="0" IsVisible="{Binding IsLoaded, Converter={Converters:InvertedBooleanConverter}}" IsRunning="true" IsEnabled="true" />
                             <Button Grid.Column="1" Text="Ny loggføring" WidthRequest="200" Command="{Binding NewLogCommand}" StyleClass="PrimaryButton" HorizontalOptions="End" BackgroundColor="{StaticResource Primary}" TextColor="White" BorderRadius="4" />
 
                         </Grid>
@@ -30,7 +30,10 @@
                  </TableSection>
                 
                 <TableSection Title="">
-                      <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Sted" Text2="{Binding Location}" Command="{Binding LocationCommand}" />
+
+                    <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Sted" Text2="{Binding Location}" Command="{Binding LocationCommand}" />
+                    <cells:ExtendedTextCell Text="Jegere" Text2="{Binding HuntersText}" Command="{Binding HuntersCommand}" />
+                    <cells:ExtendedTextCell Text="Hunder" Text2="{Binding DogsText}" Command="{Binding DogsCommand}" />
                     <cells:MapCell Text="Posisjon" Latitude="{Binding Latitude}" Longitude="{Binding Longitude}" Command="{Binding PositionCommand}" />
                       
                 </TableSection>
@@ -38,8 +41,6 @@
                 <TableSection Title="">
                     <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Text2="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:ExtendedTextCell Command="{Binding DateToCommand}" Text="Dato til" Text2="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
-                    <cells:ExtendedTextCell Text="Jegere" Text2="{Binding HuntersText}" Command="{Binding HuntersCommand}" />
-                    <cells:ExtendedTextCell Text="Hunder" Text2="{Binding DogsText}" Command="{Binding DogsCommand}" />
                     <cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />
                 </TableSection>
 

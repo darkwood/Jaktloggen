@@ -33,11 +33,11 @@ namespace Jaktloggen
                                     Title = "Info"
                                 };
 
-                    itemsPage.Icon = "Gevir.png";
-                    huntersPage.Icon = "Jegere.png";
-                    dogsPage.Icon = "dog-paw.png";
+                    itemsPage.Icon = "Tabbar/gevir.png";
+                    huntersPage.Icon = "Tabbar/hunters.png";
+                    dogsPage.Icon = "Tabbar/dog.png";
                     speciesPage.Icon = "Arter.png";
-                    aboutPage.Icon = "Feedback.png";
+                    aboutPage.Icon = "Tabbar/info.png";
                     break;
                 default:
                     itemsPage = new HuntsPage()

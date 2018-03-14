@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ImageCircle.Forms.Plugin.Abstractions;
 using Xamarin.Forms;
@@ -7,7 +8,7 @@ namespace Jaktloggen.Cells
 {
     public class CountCell : ViewCell
     {
-        private Color green => Color.FromHex("#597a59");
+        
 
         private const int SIZE = 52;
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(Command), typeof(CountCell), null);
@@ -122,7 +123,7 @@ namespace Jaktloggen.Cells
             _buttons.Children.Add(CreateRoundButton(1));
             _buttons.Children.Add(CreateRoundButton(2));
             _buttons.Children.Add(CreateRoundButton(3));
-            //_buttons.Children.Add(new BoxView{WidthRequest = 2, Color = green});
+            //_buttons.Children.Add(new BoxView{WidthRequest = 2, Color = App.PRIMARY_COLOR});
             _buttons.Children.Add(CreateRoundButton(Count, true));
         }
 
@@ -132,26 +133,28 @@ namespace Jaktloggen.Cells
             var b = new Button
             {
                 Text = isMoreButton && i <= 3 ? "..." : i.ToString(),
-                BorderRadius = SIZE/2,
+                CornerRadius = SIZE/2,
                 HeightRequest = SIZE,
                 WidthRequest = SIZE,
-                TextColor = IsSelected(i, isMoreButton) ? Color.White : green,
-                BackgroundColor = IsSelected(i, isMoreButton) ? green : Color.White,
-                BorderColor = IsSelected(i, isMoreButton) ? Color.DarkOrange : green,
+                TextColor = IsSelected(i, isMoreButton) ? Color.White : App.PRIMARY_COLOR,
+                BackgroundColor = IsSelected(i, isMoreButton) ? App.PRIMARY_COLOR : Color.White,
+                BorderColor = IsSelected(i, isMoreButton) ? Color.DarkOrange : App.PRIMARY_COLOR,
                 BorderWidth = 2
             };
             if (isMoreButton)
             {
-                b.BorderRadius = 0;
+                b.CornerRadius = 0;
             }
-            b.Clicked += (sender, e) =>
+            b.Clicked += async (sender, e) =>
             {
+                await b.ScaleTo(0.9, 50, Easing.Linear);
                 Count = i;
                 if (Command != null && Command.CanExecute(null))
                 {
                     Command.Execute(isMoreButton);
                 }
-
+                await Task.Delay(100);
+                await b.ScaleTo(1, 50, Easing.Linear);
             };
             return b;
         }

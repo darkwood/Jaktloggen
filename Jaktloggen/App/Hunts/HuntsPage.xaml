@@ -6,7 +6,7 @@
              Title="{Binding Title}" 
             >
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="+" Clicked="AddItem_Clicked" />
+		<ToolbarItem Icon="Toolbar/add.png" Clicked="AddItem_Clicked" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
 		<StackLayout>

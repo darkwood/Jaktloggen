@@ -14,7 +14,7 @@ namespace Jaktloggen.Utils
             var items = new List<PickerItem>();
 
             var species = await App.SpecieDataStore.GetItemsAsync();
-            var favouriteSpecies = FileService.LoadFromLocalStorage<List<string>>(App.FILE_SELECTED_SPECIE_IDS);
+            var favouriteSpecies = await FileService.LoadFromLocalStorage<List<string>>(App.FILE_SELECTED_SPECIE_IDS);
             var selectedItem = species.SingleOrDefault(i => i.ID == selectedSpecieId);
             if (selectedItem != null)
             {
@@ -64,6 +64,41 @@ namespace Jaktloggen.Utils
 
             return items;
 		}
+
+        public static PickerItem CreatePickerItem(string selectedId, Dog item)
+        {
+            var dogVM = new DogViewModel(item, null);
+            return new PickerItem
+            {
+                ID = dogVM.ID,
+                Title = dogVM.Name,
+                ImageSource = dogVM.Image,
+                Selected = dogVM.ID == selectedId
+            };
+        }
+
+        public static async Task<List<PickerItem>> CreatePickerDogs(string selectedDogId)
+        {
+            var items = new List<PickerItem>();
+
+            var dogs = await App.DogDataStore.GetItemsAsync();
+
+            var selectedItem = dogs.SingleOrDefault(i => i.ID == selectedDogId);
+            if (selectedItem != null)
+            {
+                items.Add(LogFactory.CreatePickerItem(selectedDogId, selectedItem));
+            }
+
+            var remainingSpots = 4 - items.Count;
+            foreach (var i in dogs
+                     .Where(j => j.ID != selectedDogId)
+                    .Take(remainingSpots))
+            {
+                items.Add(LogFactory.CreatePickerItem(selectedDogId, i));
+            }
+
+            return items;
+        }
 
         public static PickerItem CreatePickerItem(string selectedId, Jeger jeger)
         {

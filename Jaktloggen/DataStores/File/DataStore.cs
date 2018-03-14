@@ -94,7 +94,7 @@ namespace Jaktloggen.DataStores.File
         {
             if(firstLoad || forceRefresh)
             {
-                _items = FileService.LoadFromLocalStorage<List<T>>(Filename);
+                _items = await FileService.LoadFromLocalStorage<List<T>>(Filename);
                 firstLoad = false;
             }
 

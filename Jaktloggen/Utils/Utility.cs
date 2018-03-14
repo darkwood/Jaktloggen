@@ -11,7 +11,7 @@ namespace Jaktloggen
         {
             if (String.IsNullOrEmpty(imageFilename))
             {
-                return ImageSource.FromFile("placeholder_photo.png");
+                return ImageSource.FromFile("Launch/gevir_black.png");
             }
             else if (imageFilename.StartsWith("/"))
             {

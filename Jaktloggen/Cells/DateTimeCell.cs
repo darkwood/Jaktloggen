@@ -68,7 +68,7 @@ namespace Jaktloggen.Cells
                 DateTime.Now.TimeOfDay,
                 propertyChanged: (bindable, oldValue, newValue) => {
                     TimeSpan t = ((TimeSpan)newValue);
-                    ((DateTimeCell)bindable).TimeButton.Text = $"{t.Hours}:{t.Minutes}";
+                ((DateTimeCell)bindable).TimeButton.Text = ((TimeSpan) newValue).ToString(@"hh\:mm", new CultureInfo("nb-no"));
                     ((DateTimeCell)bindable).TimePicker.Time = t;
                 }
             );
@@ -142,7 +142,8 @@ namespace Jaktloggen.Cells
             TimePicker = new TimePicker
             {
                 IsVisible = false,
-                Format = "HH:mm"
+                Format = "HH:mm",
+
             };
             TimePicker.SetBinding(TimePicker.TimeProperty, nameof(Time));
         }

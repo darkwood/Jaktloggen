@@ -74,7 +74,7 @@ namespace Jaktloggen.InputViews
 
         private void SetMapPosition()
         {
-            var distance = MyMap.VisibleRegion == null ? Distance.FromMiles(1) : MyMap.VisibleRegion.Radius;
+            var distance = MyMap.VisibleRegion == null ? Distance.FromMeters(100) : MyMap.VisibleRegion.Radius;
 
             MyMap.MoveToRegion(
                 MapSpan.FromCenterAndRadius(
@@ -124,6 +124,7 @@ namespace Jaktloggen.InputViews
         void OnDeletePositionClicked(object sender, EventArgs e)
         {
             Latitude = Longitude = 0;
+            MyMap.Pins.Clear();
         }
 
         async void Done_Clicked(object sender, EventArgs e)

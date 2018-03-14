@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using System.Linq;
 
 using Jaktloggen.Models;
+using System.Threading.Tasks;
 
 namespace Jaktloggen.Cells
 {
@@ -114,7 +115,7 @@ namespace Jaktloggen.Cells
         public TapGestureRecognizer GestureRecognizer { get; private set; }
         public Image SelectedImage { get; private set; }
         private StackLayout _buttonsLayout { get; set; }
-        public List<Button> _buttons { get; private set; }
+        public List<CircleImage> _circleImages { get; private set; }
 
         public ItemPickerCell()
         {
@@ -122,7 +123,8 @@ namespace Jaktloggen.Cells
             {
                 Orientation = StackOrientation.Horizontal,
                 Padding = 10,
-                HeightRequest = SIZE
+                HeightRequest = SIZE + 15,
+                WidthRequest = SIZE
             };
 
             var sublayout = new StackLayout { VerticalOptions = LayoutOptions.CenterAndExpand };
@@ -144,56 +146,98 @@ namespace Jaktloggen.Cells
         private void CreateButtons()
         {
             _buttonsLayout.Children.Clear();
-            _buttons = Items.Select(i => CreateRoundButton(i)).ToList();
-            foreach(var b in _buttons){
-                _buttonsLayout.Children.Add(b);
+            _circleImages = new List<CircleImage>();
+            foreach(var item in Items)
+            {
+                var layout = new StackLayout();
+                layout.GestureRecognizers.Add(CreateTapGestureRecognizer(item, layout));
+
+                var img = CreateCircleImage(item);
+                SetSelectionStyle(img, item.Selected);
+                _circleImages.Add(img);
+                layout.Children.Add(img);
+
+                layout.Children.Add(new Label
+                {
+                    Text = GetTitle(item),
+                    FontSize = 10,
+                    HorizontalOptions = LayoutOptions.Center,
+                });
+                _buttonsLayout.Children.Add(layout);
             }
-            _buttonsLayout.Children.Add(CreateRoundButton(null));
+            _buttonsLayout.Children.Add(CreateMoreButton());
         }
 
-        private Button CreateRoundButton(PickerItem i)
+        private static string GetTitle(PickerItem item)
         {
+            return item.Title.Length >= 10 ? item.Title.Substring(0, 7) + "..." : item.Title;
+        }
 
-            var b = new Button
+        private CircleImage CreateCircleImage(PickerItem i)
+        {
+            return new CircleImage
             {
-                Text = i == null ? "..." : i.Title,
-                FontSize = 10,
-                BorderRadius = SIZE/2,
+                Source = i.ImageSource,
                 HeightRequest = SIZE,
                 WidthRequest = SIZE,
-                BorderWidth = 2
+                BorderThickness = 4,
+                Aspect = Aspect.AspectFill,
+                StyleId = i.ID
             };
+        }
 
-            SetSelectionStyle(b, i?.Selected ?? false);
+        private StackLayout CreateMoreButton()
+        {
+            var layout = new StackLayout();
+            layout.GestureRecognizers.Add(CreateTapGestureRecognizer(null, layout));
 
-            if (i == null)
+            layout.Children.Add(new Frame
             {
-                b.BorderRadius = 0;
-            }
-            b.Clicked += (sender, e) =>
-            {
-                if (Command != null && Command.CanExecute(null))
+                CornerRadius = 0,
+                HeightRequest = SIZE,
+                WidthRequest = SIZE,
+                OutlineColor = green,
+                HasShadow = false,
+                Padding = 0,
+                Content = new Label
                 {
-                    Command.Execute(i);
+                    Text = "...",
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    TextColor = green,
                 }
-
-            };
-            return b;
+            });
+            return layout;
         }
 
         private void SelectItem(PickerItem item)
         {
-            foreach (var btn in _buttons)
+            foreach (var img in _circleImages)
             {
-                SetSelectionStyle(btn, btn.Text == item.Title);
+                SetSelectionStyle(img, item.ID == img.StyleId);
             }
         }
 
-        private void SetSelectionStyle(Button b, bool selected)
+        private void SetSelectionStyle(CircleImage b, bool selected)
         {
-            b.TextColor = selected ? Color.White : green;
-            b.BackgroundColor = selected ? green : Color.White;
+            b.BackgroundColor = selected ? green : Color.Transparent;
             b.BorderColor = selected ? Color.DarkOrange : green;
+        }
+
+        private TapGestureRecognizer CreateTapGestureRecognizer(PickerItem i, View btnImage)
+        {
+            var gestureRecognizer = new TapGestureRecognizer();
+            gestureRecognizer.Tapped += async (s, e) =>
+            {
+                await btnImage.ScaleTo(1.3, 70, Easing.Linear);
+                await btnImage.ScaleTo(1, 70, Easing.Linear);
+
+                if (Command != null && Command.CanExecute(null))
+                {
+                    Command.Execute(i);
+                }
+            };
+            return gestureRecognizer;
         }
     }
 }

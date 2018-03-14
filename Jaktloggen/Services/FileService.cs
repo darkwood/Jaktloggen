@@ -32,7 +32,7 @@ namespace Jaktloggen.Services
             }
         }
 
-        public static T LoadFromLocalStorage<T>(string filename, bool loadFromserver = false)
+        public static async Task<T> LoadFromLocalStorage<T>(string filename, bool loadFromserver = false)
         {
             var localObj = (T)Activator.CreateInstance(typeof(T));
             // 1 read json
@@ -74,7 +74,7 @@ namespace Jaktloggen.Services
                     }
                 }
             }
-            return localObj;
+            return await Task.FromResult<T>(localObj);
         }
 
         public static bool Exists(string filename)

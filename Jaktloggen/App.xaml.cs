@@ -31,6 +31,8 @@ namespace Jaktloggen
         //private static string FILE_SELECTED_LOGGTYPEIDS = "selectedloggtypeids.json";
         //private static string FILE_MY_ART = "myspecies.json";
 
+        public static Color PRIMARY_COLOR => Color.FromHex("#597a59");
+
         public App()
         {
             InitializeComponent();

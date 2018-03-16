@@ -7,6 +7,7 @@ using Jaktloggen.Interfaces;
 
 using Plugin.Media;
 using Jaktloggen.Services;
+using ImageCircle.Forms.Plugin.Abstractions;
 
 namespace Jaktloggen.InputViews
 {
@@ -48,6 +49,20 @@ namespace Jaktloggen.InputViews
         }
 
         public bool ImageExists => !string.IsNullOrEmpty(ImageFilename);
+        bool isLoading;
+        public bool IsLoading
+        {
+            get
+            {
+                return isLoading;
+            }
+
+            set
+            {
+                isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
 
         private Action<InputImage> _callback { get; set; }
         public InputImage(string title, string filepath, Action<InputImage> callback)
@@ -67,57 +82,79 @@ namespace Jaktloggen.InputViews
         }
         async void Camera_Clicked(object sender, System.EventArgs e)
         {
+            IsLoading = true;
+            await AnimateButton(sender);
+
             await CrossMedia.Current.Initialize();
 
             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
             {
                 await DisplayAlert("No Camera", ":( No camera available.", "OK");
-                return;
             }
-
-            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            else 
             {
-                Directory = "",
-                CompressionQuality = 92,
-                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large
-            });
+                var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                {
+                    Directory = "",
+                    CompressionQuality = 92,
+                    PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large
+                });
 
-            if (file == null)
-                return;
-            
-            _source = null;
-            //string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture)+1);
-            string filename = file.Path;
-            ImageFilename = filename;
+                if (file != null)
+                {
+                    _source = null;
+                    string filename = file.Path;
+                    ImageFilename = filename;
+                }
+            }
+            IsLoading = false;
         }
 
         async void Library_Clicked(object sender, System.EventArgs e)
         {
+            IsLoading = true;
+            await AnimateButton(sender);
+
             if (!CrossMedia.Current.IsPickPhotoSupported)
             {
                 await DisplayAlert("Bilder støttes ikke", "Tilgang er ikke gitt til bildebiblioteket. Kan endres i innstillinger på telefonen.", "OK");
-                return;
+                
             }
-            var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+            else
             {
-                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large,
-                CompressionQuality = 92
-            });
+                var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+                 {
+                     PhotoSize = Plugin.Media.Abstractions.PhotoSize.Large,
+                     CompressionQuality = 92
+                 });
 
 
-            if (file == null)
-                return;
+                if (file != null)
+                {
+                    string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture) + 1);
+                    FileService.Copy("temp/" + filename, filename);
 
-            string filename = file.Path.Substring(file.Path.LastIndexOf("/", StringComparison.CurrentCulture)+1);
-            FileService.Copy("temp/"+filename, filename);
-
-            _source = null;
-            ImageFilename = filename;
+                    _source = null;
+                    ImageFilename = filename;
+                }
+            }
+            
+            IsLoading = false;
         }
 
-        void Delete_Clicked(object sender, EventArgs e)
+        private static async Task AnimateButton(object sender)
         {
+            var btn = (CircleImage)sender;
+            await btn.ScaleTo(0.75, 50, Easing.Linear);
+            await btn.ScaleTo(1, 50, Easing.Linear);
+        }
 
+        async void Delete_Clicked(object sender, EventArgs e)
+        {
+            await AnimateButton(sender);
+
+            ImageFilename = null;
+            _source = null;
         }
 
         async void Done_Clicked(object sender, EventArgs e)

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.InputViews.InputImage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             x:Class="Jaktloggen.InputViews.InputImage">
 	
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Lagre" Clicked="Done_Clicked" />
@@ -7,25 +11,74 @@
 
     <ContentPage.Content>
         <Grid VerticalOptions="FillAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            
             <Image 
-                Grid.Row="0"
                 Source="{Binding Source}"
-                Aspect="AspectFit"
-            />
+                Aspect="AspectFit" />
 
-            <Grid Grid.Row="1" Padding="10" VerticalOptions="Center">
+            <Grid IsVisible="{Binding IsLoading}" Padding="80" VerticalOptions="End" HorizontalOptions="Center">
+                <ActivityIndicator  IsRunning="true" IsEnabled="true"/>
+            </Grid>
+            
+            <Grid IsVisible="{Binding IsLoading, Converter={Converters:InvertedBooleanConverter}}" Padding="40" VerticalOptions="End">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+
+                <controls:CircleImage 
+                    HorizontalOptions="Center" 
+                    BorderThickness="2" 
+                    BorderColor="Black"
+                    FillColor="#66FFFFFF"
+                    Source="Buttons/camera.png" 
+                    Aspect="AspectFit" 
+                    Opacity="0.8" 
+                    HeightRequest="80" 
+                    WidthRequest="80" 
+                    Grid.Column="0" >
+                    <controls:CircleImage.GestureRecognizers>
+                        <TapGestureRecognizer
+                                Tapped="Camera_Clicked"  />
+                    </controls:CircleImage.GestureRecognizers>
+                </controls:CircleImage>
+
+                <controls:CircleImage 
+                    HorizontalOptions="Center" 
+                    BorderThickness="2" 
+                    BorderColor="Black"
+                    FillColor="#66FFFFFF"
+                    Source="Buttons/photos.png" 
+                    Aspect="AspectFit" 
+                    Opacity="0.8" 
+                    HeightRequest="80" 
+                    WidthRequest="80" 
+                    Grid.Column="1">
+                    <controls:CircleImage.GestureRecognizers>
+                        <TapGestureRecognizer
+                                Tapped="Library_Clicked"  />
+                    </controls:CircleImage.GestureRecognizers>
+                </controls:CircleImage>
+
+                <controls:CircleImage 
+                    HorizontalOptions="Center" 
+                    BorderThickness="2" 
+                    BorderColor="Black"
+                    FillColor="#66FFFFFF"
+                    Source="Buttons/trash.png" 
+                    Aspect="AspectFit" 
+                    Opacity="0.8" 
+                    HeightRequest="80" 
+                    WidthRequest="80" 
+                    Grid.Column="2">
+                    <controls:CircleImage.GestureRecognizers>
+                        <TapGestureRecognizer
+                                Tapped="Delete_Clicked"  />
+                    </controls:CircleImage.GestureRecognizers>
+                </controls:CircleImage>
                 
-                <Button StyleClass="PrimaryButton" Grid.Column="0" Image="Statistics" Text="Kamera" Clicked="Camera_Clicked" />
-                <Button StyleClass="PrimaryButton" Grid.Column="1" Image="Jaktloggen" Text="Bilder" Clicked="Library_Clicked"/>
+                <!--<Button StyleClass="PrimaryButton" Grid.Column="0" Image="Buttons/camera.png" Text="Kamera" Clicked="Camera_Clicked" />-->
+                <!--<Button StyleClass="PrimaryButton" Grid.Column="1" Image="Buttons/photos.png" Text="Bilder" Clicked="Library_Clicked"/>-->
                 <!--<Button Grid.Column="2" Text="Slett" IsVisible="{Binding ImageExists}" Clicked="Delete_Clicked" />-->
             </Grid>
         </Grid>

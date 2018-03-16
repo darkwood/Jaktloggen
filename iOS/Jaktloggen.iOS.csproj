@@ -296,6 +296,9 @@
     <BundleResource Include="Resources\Launch\gevir_black.png" />
     <BundleResource Include="Resources\Launch\gevir_black%402x.png" />
     <BundleResource Include="Resources\Launch\gevir_black%403x.png" />
+    <BundleResource Include="Resources\Buttons\photos.png" />
+    <BundleResource Include="Resources\Buttons\camera.png" />
+    <BundleResource Include="Resources\Buttons\trash.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\placeholder_photo.png" />
@@ -305,6 +308,7 @@
     <Folder Include="Resources\Tabbar\" />
     <Folder Include="Assets.xcassets\Launch_Icon.imageset\" />
     <Folder Include="Resources\Launch\" />
+    <Folder Include="Resources\Buttons\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />

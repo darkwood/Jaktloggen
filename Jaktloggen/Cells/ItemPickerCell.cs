@@ -229,8 +229,8 @@ namespace Jaktloggen.Cells
             var gestureRecognizer = new TapGestureRecognizer();
             gestureRecognizer.Tapped += async (s, e) =>
             {
-                await btnImage.ScaleTo(1.3, 70, Easing.Linear);
-                await btnImage.ScaleTo(1, 70, Easing.Linear);
+                await btnImage.ScaleTo(0.75, 50, Easing.Linear);
+                await btnImage.ScaleTo(1, 50, Easing.Linear);
 
                 if (Command != null && Command.CanExecute(null))
                 {

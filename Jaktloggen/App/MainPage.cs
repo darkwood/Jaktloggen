@@ -6,7 +6,7 @@ namespace Jaktloggen
     {
         public MainPage()
         {
-            Page itemsPage, aboutPage, huntersPage, dogsPage, speciesPage, statsPage = null;
+            Page itemsPage, aboutPage, huntersPage, dogsPage, speciesPage, statsPage, fieldsPage = null;
 
             switch (Device.RuntimePlatform)
             {
@@ -36,7 +36,14 @@ namespace Jaktloggen
                     {
                         Title = "Statistikk"
                     };
-
+                    statsPage = new NavigationPage(new StatsPage())
+                    {
+                        Title = "Statistikk"
+                    };
+                    fieldsPage = new NavigationPage(new CustomFieldsPage())
+                    {
+                        Title = "Ekstra felter"
+                    };
                     itemsPage.Icon = "Tabbar/gevir.png";
                     huntersPage.Icon = "Tabbar/hunters.png";
                     dogsPage.Icon = "Tabbar/dog.png";
@@ -69,7 +76,7 @@ namespace Jaktloggen
                         Title = "Info"
                     };
                     statsPage = new StatsPage() { Title = "Statistikk" };
-
+                    fieldsPage = new CustomFieldsPage() { Title = "Ekstra felter" };
                     break;
 
             }
@@ -77,6 +84,7 @@ namespace Jaktloggen
             Children.Add(itemsPage);
             Children.Add(huntersPage);
             Children.Add(speciesPage);
+            Children.Add(fieldsPage);
             Children.Add(dogsPage);
             Children.Add(statsPage);
 

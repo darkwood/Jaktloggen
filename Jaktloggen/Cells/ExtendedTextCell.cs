@@ -209,7 +209,7 @@ namespace Jaktloggen.Cells
                 Orientation=StackOrientation.Horizontal,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 Padding = 10,
-                MinimumHeightRequest=50
+                MinimumHeightRequest=60
             };
 
             CellImage = new CircleImage

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage 
+    xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+    xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Jaktloggen.MapPage" 
+    xmlns:controls="clr-namespace:Jaktloggen.Controls;assembly=Jaktloggen"
+    xmlns:local="clr-namespace:Jaktloggen;assembly=Jaktloggen"
+    Title="Kart"
+    xmlns:vm="clr-namespace:Jaktloggen;">
+
+    <ContentPage.Content>
+        <controls:ExtendedMap 
+                    x:Name="MyMap"
+                    MapType="Hybrid"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand" 
+                />
+    </ContentPage.Content>
+</ContentPage>

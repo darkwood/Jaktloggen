@@ -9,27 +9,34 @@
 		<ToolbarItem Icon="Toolbar/add.png" Clicked="AddItem_Clicked" />
 	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
-		<StackLayout>
-			<ListView x:Name="ItemsListView" ItemsSource="{Binding Items}" 
-                VerticalOptions="FillAndExpand" HasUnevenRows="true" 
-                RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" 
-                IsRefreshing="{Binding IsBusy, Mode=OneWay}" RowHeight="70"
-                CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
-                <ListView.ItemTemplate>
-					<DataTemplate>
+		<ListView x:Name="ItemsListView" 
+                  ItemsSource="{Binding Items}" 
+                  IsGroupingEnabled="true"
+                  GroupDisplayBinding="{Binding Name}"
+                  GroupShortNameBinding="{Binding ShortName}"
+                  VerticalOptions="FillAndExpand" 
+                  HasUnevenRows="true"
+                  RefreshCommand="{Binding LoadItemsCommand}" 
+                  IsPullToRefreshEnabled="true" 
+                  IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
+                  RowHeight="70"
+                CachingStrategy="RecycleElement" 
+                  ItemSelected="OnItemSelected">
+            <ListView.ItemTemplate>
+				<DataTemplate>
 
-                        <cells:ExtendedTextCell 
-                            Detail="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" 
-                            ImageSource="{Binding Image}" 
-                            Text="{Binding Location}">
-                            <cells:ExtendedTextCell.ContextActions>
-                                <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
-                                   Text="Slett" IsDestructive="True" />
-                            </cells:ExtendedTextCell.ContextActions>
-                        </cells:ExtendedTextCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
-		</StackLayout>
+                    <cells:ExtendedTextCell 
+                        Text="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" 
+                        ImageSource="{Binding Image}" 
+                        Detail="{Binding Location}">
+                        <cells:ExtendedTextCell.ContextActions>
+                            <MenuItem Clicked="OnDelete" CommandParameter="{Binding .}"
+                               Text="Slett" IsDestructive="True" />
+                        </cells:ExtendedTextCell.ContextActions>
+                    </cells:ExtendedTextCell>
+                    
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
 	</ContentPage.Content>
 </ContentPage>

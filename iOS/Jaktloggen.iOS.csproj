@@ -281,8 +281,6 @@
     <BundleResource Include="Resources\Statistics.png" />
     <BundleResource Include="Resources\checked.png" />
     <BundleResource Include="Resources\checked_off.png" />
-    <BundleResource Include="Resources\calendar.png" />
-    <BundleResource Include="Resources\clock.png" />
     <BundleResource Include="Resources\Toolbar\add%402x.png" />
     <BundleResource Include="Resources\Toolbar\add%403x.png" />
     <BundleResource Include="Resources\Tabbar\gevir%403x.png" />
@@ -299,9 +297,13 @@
     <BundleResource Include="Resources\Buttons\photos.png" />
     <BundleResource Include="Resources\Buttons\camera.png" />
     <BundleResource Include="Resources\Buttons\trash.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\placeholder_photo.png" />
+    <BundleResource Include="Resources\Tabbar\stats.png" />
+    <BundleResource Include="Resources\Tabbar\stats%402x.png" />
+    <BundleResource Include="Resources\Tabbar\stats%403x.png" />
+    <BundleResource Include="Resources\pictureframe.png" />
+    <BundleResource Include="Resources\Buttons\calendar.png" />
+    <BundleResource Include="Resources\Buttons\clock.png" />
+    <BundleResource Include="Resources\markers.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Toolbar\" />

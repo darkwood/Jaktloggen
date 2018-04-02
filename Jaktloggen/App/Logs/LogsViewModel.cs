@@ -15,7 +15,7 @@ namespace Jaktloggen
         public Command LoadItemsCommand { get; set; }
         private bool isLoaded { get; set; }
 
-        bool _hasItems;
+        bool _hasItems = true;
         public bool HasItems
         {
             get => _hasItems;
@@ -62,6 +62,13 @@ namespace Jaktloggen
                 Items.Add(new LogViewModel(Hunt, item, Navigation));
             }
             HasItems = items.Count > 0;
+        }
+
+        public async Task ShowNewItem()
+        {
+            var newLog = new LogViewModel(Hunt, new Logg(), Navigation);
+            Items.Add(newLog);
+            await Navigation.PushAsync(new LogPage(newLog));
         }
     }
 }

@@ -18,6 +18,9 @@
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="BorderRadius" Value="4" />
             </Style>
+            <Style Class="SmallText" TargetType="Label">
+                <Setter Property="FontSize" Value="12" />
+            </Style>
 	    </ResourceDictionary>
     </Application.Resources>
 </Application>

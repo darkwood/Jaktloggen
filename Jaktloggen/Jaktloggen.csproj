@@ -80,6 +80,18 @@
     <EmbeddedResource Include="Xml\artgroup.xml" />
     <EmbeddedResource Include="Xml\loggtypegroup.xml" />
     <EmbeddedResource Include="Xml\loggtyper.xml" />
+    <EmbeddedResource Include="App\Stats\StatsPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\Stats\Map\MapPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\CustomFields\CustomFieldPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\CustomFields\CustomFieldsPage.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -188,6 +200,25 @@
     <Compile Include="Utils\LogFactory.cs" />
     <Compile Include="Services\LocationService.cs" />
     <Compile Include="Cells\DateTimeCell.cs" />
+    <Compile Include="App\Stats\StatsPage.xaml.cs">
+      <DependentUpon>StatsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App\Stats\StatsViewModel.cs" />
+    <Compile Include="Utils\MediaHelper.cs" />
+    <Compile Include="App\Stats\Map\MapPage.xaml.cs">
+      <DependentUpon>MapPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App\CustomFields\CustomFieldPage.xaml.cs">
+      <DependentUpon>CustomFieldPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App\CustomFields\CustomFieldsPage.xaml.cs">
+      <DependentUpon>CustomFieldsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App\CustomFields\CustomFieldsViewModel.cs" />
+    <Compile Include="App\CustomFields\CustomFieldViewModel.cs" />
+    <Compile Include="App\CustomFields\CustomField.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Plugin.Permissions.Abstractions">
@@ -268,6 +299,8 @@
     <Folder Include="Assets\" />
     <Folder Include="Models\" />
     <Folder Include="App\Stats\" />
+    <Folder Include="App\Stats\Map\" />
+    <Folder Include="App\CustomFields\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.5.0.280555\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.0.280555\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />

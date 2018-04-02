@@ -48,7 +48,7 @@ namespace Jaktloggen
 
         public string ImageFilename
         {
-            get => Utility.GetImageFileName(Item.ImagePath);
+            get => Utility.GetImageFilename(Item.ImagePath);
             set
             {
                 Item.ImagePath = value;
@@ -79,11 +79,14 @@ namespace Jaktloggen
 
         private void CreateCommands(Jeger item)
         {
-            ImageCommand = new Command(async () =>
+            ImageCommand = new Command(async (arg) =>
             {
-                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, obj => {
+                InputImage page = new InputImage("Bilde", ImageFilename, async obj =>
+                {
                     ImageFilename = obj.ImageFilename;
-                }));
+                });
+                await Navigation.PushAsync(page);
+                await page.Initialize(arg as string);
             });
             FirstnameCommand = new Command(async () =>
             {

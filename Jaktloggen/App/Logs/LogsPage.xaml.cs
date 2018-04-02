@@ -53,12 +53,8 @@ namespace Jaktloggen
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(
-                new LogPage(
-                    new LogViewModel(
-                        viewModel.Hunt,
-                        new Logg(), 
-                        Navigation)));
+            await Utility.AnimateButton(sender as VisualElement);
+            await viewModel.ShowNewItem();
         }
 
         protected override async void OnAppearing()

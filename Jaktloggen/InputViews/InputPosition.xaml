@@ -11,18 +11,20 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid> 
-            <StackLayout VerticalOptions="FillAndExpand">
-                <controls:ExtendedMap 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <controls:ExtendedMap 
                     x:Name="MyMap"
                     IsShowingUser="true" 
                     MapType="Hybrid"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
                 />
-            </StackLayout>
-            <StackLayout VerticalOptions="End">
-
-                <Grid Margin="10">
+            
+            <Grid Grid.Row="1" Margin="5">
                    
                     <Button 
                         Grid.Column="0" 
@@ -30,6 +32,7 @@
                         Clicked="OnGetPositionClicked"
                         StyleClass="PrimaryButton"
                     />
+
                       <ActivityIndicator 
                         Grid.Column="1"
                         HorizontalOptions="Center" 
@@ -38,6 +41,7 @@
                     />
                     <Label
                         Grid.Column="1"
+                        IsVisible="false"
                         Text="{Binding PositionText}" 
                         VerticalOptions="Center"
                         HorizontalTextAlignment="Center"
@@ -54,7 +58,6 @@
                         StyleClass="PrimaryButton"
                     />
                 </Grid>
-            </StackLayout>
             
        </Grid>
        

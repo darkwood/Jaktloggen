@@ -76,10 +76,7 @@
                                 Tapped="Delete_Clicked"  />
                     </controls:CircleImage.GestureRecognizers>
                 </controls:CircleImage>
-                
-                <!--<Button StyleClass="PrimaryButton" Grid.Column="0" Image="Buttons/camera.png" Text="Kamera" Clicked="Camera_Clicked" />-->
-                <!--<Button StyleClass="PrimaryButton" Grid.Column="1" Image="Buttons/photos.png" Text="Bilder" Clicked="Library_Clicked"/>-->
-                <!--<Button Grid.Column="2" Text="Slett" IsVisible="{Binding ImageExists}" Clicked="Delete_Clicked" />-->
+
             </Grid>
         </Grid>
 

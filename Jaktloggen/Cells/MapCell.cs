@@ -96,7 +96,7 @@ namespace Jaktloggen.Cells
 
             MyMap.MoveToRegion(
                 MapSpan.FromCenterAndRadius(
-                    Position, Distance.FromMeters(10)));
+                    Position, Distance.FromMeters(50)));
 
             var pin = new Pin()
             {

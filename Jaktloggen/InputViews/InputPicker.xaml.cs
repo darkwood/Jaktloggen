@@ -45,15 +45,21 @@ namespace Jaktloggen.InputViews
 
             var item = ((PickerItem)e.SelectedItem);
 
-            if(!CanSelectMany)
-            {
-                PickerItems.ForEach(p => p.Selected = false);
-                item.Selected = true;
-                await Done();
-            } 
-            else
+            if (CanSelectMany)
             {
                 item.Selected = !item.Selected;
+            }
+            else
+            {
+                if (item.Selected)
+                {
+                    item.Selected = false;
+                }
+                else
+                {
+                    PickerItems.ForEach(p => p.Selected = p.ID == item.ID);
+                    await Done();
+                }
             }
 
             ((ListView)sender).SelectedItem = null;

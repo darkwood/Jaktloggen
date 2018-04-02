@@ -19,7 +19,7 @@ namespace Jaktloggen
         public HuntViewModel Hunt
         {
             get { return hunt; }
-            set { hunt = value; Item.JaktId = value.ID; }
+            set { hunt = value;  }
         }
 
         public Logg Item { get; set; }
@@ -118,7 +118,8 @@ namespace Jaktloggen
 
         public string ImageFilename
         {
-            get => Utility.GetImageFileName(Item.ImagePath);
+            //get => Utility.GetImageFilename(Item.ImagePath);
+            get => Item.ImagePath;
             set
             {
                 Item.ImagePath = value;
@@ -170,18 +171,7 @@ namespace Jaktloggen
         }
 
 
-        public ImageSource Image
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(ImageFilename)) 
-                { 
-                    return null; 
-                }
-
-                return  Utility.GetImageSource(ImageFilename);
-            }
-        }
+        public ImageSource Image => Utility.GetImageSource(ImageFilename);
 
         string infoMessage = "Posisjon";
         public string InfoMessage
@@ -343,14 +333,14 @@ namespace Jaktloggen
 
         public LogViewModel(HuntViewModel huntVm, Logg item, INavigation navigation)
         {
-            Item = item;
+            Item = item ?? new Logg();
             Navigation = navigation;
-            Hunt = huntVm;
+            Hunt = huntVm ?? new HuntViewModel(new Jakt(), navigation);
+            Item.JaktId = Hunt.ID;
 
             Title = string.IsNullOrEmpty(item.ID) ? "Ny loggføring" : Date.ToString();
             CreateCommands(item);
-
-                    }
+        }
         
         public async Task OnAppearing()
         {
@@ -358,14 +348,14 @@ namespace Jaktloggen
             Dogs = await App.DogDataStore.GetItemsAsync();
             Species = await App.SpecieDataStore.GetItemsAsync(); //TODO: Need this call?
 
-            PickerSpecies = await LogFactory.CreatePickerSpecies(Item.ArtId);
-            PickerHunters = await LogFactory.CreatePickerHunters(Item.JegerId);
-            PickerDogs = await LogFactory.CreatePickerDogs(Item.DogId);
+            PickerSpecies = await LogFactory.CreatePickerSpecies(Item.ArtId, 4);
+            PickerHunters = await LogFactory.CreatePickerHunters(Item.JegerId, 4);
+            PickerDogs = await LogFactory.CreatePickerDogs(Item.DogId, 4);
             if (string.IsNullOrEmpty(Item.ID))
             {
                 Date = DateTime.Now;
                 if (Hunt.HunterIds.Count == 1) { Hunter = Hunters.SingleOrDefault(x => x.ID == Hunt.HunterIds[0]); }
-                if (Hunt.DogIds.Count == 1) { Dog = Dogs.SingleOrDefault(x => x.ID == Hunt.DogIds[0]); }
+                //if (Hunt.DogIds.Count == 1) { Dog = Dogs.SingleOrDefault(x => x.ID == Hunt.DogIds[0]); }
                 await SetPositionAsync();
                 await SaveAsync();
             }
@@ -398,13 +388,15 @@ namespace Jaktloggen
 
         private void CreateCommands(Logg item)
         {
-            ImageCommand = new Command(async () =>
+            ImageCommand = new Command(async (arg) =>
             {
-                await Navigation.PushAsync(new InputImage("Bilde", ImageFilename, async obj =>
+                InputImage page = new InputImage("Bilde", ImageFilename, async obj =>
                 {
                     ImageFilename = obj.ImageFilename;
                     await SaveAsync();
-                }));
+                });
+                await Navigation.PushAsync(page);
+                await page.Initialize(arg as string);
             });
 
             HitsCommand = new Command(async (object isMoreButton) =>
@@ -486,26 +478,17 @@ namespace Jaktloggen
                         {
                             var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
                             Hunter = _hunters.SingleOrDefault(h => h.ID == id);
-                            PickerHunters = await LogFactory.CreatePickerHunters(id);
+                            PickerHunters = await LogFactory.CreatePickerHunters(id, 4);
                             await SaveAsync();
                         }, async () =>
                         {
-                            Hunters = await App.HunterDataStore.GetItemsAsync();
-                            var huntersVM = Hunters.Select(h => new HunterViewModel(h, Navigation));
-                            var items = huntersVM.Select(h => new PickerItem
-                            {
-                                ID = h.ID,
-                                Title = h.Name,
-                                ImageSource = h.Image,
-                                Selected = Hunter != null && h.ID == Hunter.ID
-                            }).ToList();
-
-                            return items;
+                            return await LogFactory.CreatePickerHunters(Item.JegerId);
                         });
 
                     await Navigation.PushAsync(inputView);
                 }
             });
+
             SpeciesCommand = new Command(async (object selectedPickerItem) =>
             {
                 if (selectedPickerItem != null && selectedPickerItem as PickerItem != null)
@@ -522,19 +505,12 @@ namespace Jaktloggen
                         {
                             var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
                             Specie = _species.SingleOrDefault(h => h.ID == id);
-                            PickerSpecies = await LogFactory.CreatePickerSpecies(id);
+                            PickerSpecies = await LogFactory.CreatePickerSpecies(id, 4);
                             await SaveAsync();
                         },
-                        populate: () =>
+                        populate: async () =>
                         {
-                            var speciesVM = _species.Select(h => new SpecieViewModel(h, Navigation));
-                            var items = speciesVM.Select(h => new PickerItem
-                            {
-                                ID = h.ID,
-                                Title = h.Name,
-                                Selected = Specie != null && Specie.ID == h.ID
-                            }).ToList();
-                        return Task.FromResult(items);
+                            return await LogFactory.CreatePickerSpecies(Item.ArtId);
                         });
 
                     await Navigation.PushAsync(inputView);
@@ -553,25 +529,16 @@ namespace Jaktloggen
                 {
                     var inputView = new InputPicker(
                         "Velg hund",
-                        async obj =>
+                        finished: async obj =>
                         {
                             var id = obj.PickerItems.SingleOrDefault(p => p.Selected)?.ID;
                             Dog = _dogs.SingleOrDefault(h => h.ID == id);
-                            PickerDogs = await LogFactory.CreatePickerDogs(id);
+                            PickerDogs = await LogFactory.CreatePickerDogs(id, 4);
                             await SaveAsync();
-                        }, async () =>
+                        }, 
+                        populate: async () =>
                         {
-                            Dogs = await App.DogDataStore.GetItemsAsync();
-                            var dogsVM = Dogs.Select(h => new DogViewModel(h, Navigation));
-                            var items = dogsVM.Select(h => new PickerItem
-                            {
-                                ID = h.ID,
-                                Title = h.Name,
-                                ImageSource = h.Image,
-                                Selected = Dog != null && Dog.ID == h.ID
-                            }).ToList();
-
-                            return items;
+                            return await LogFactory.CreatePickerDogs(Item.DogId);
                         });
 
                     await Navigation.PushAsync(inputView);

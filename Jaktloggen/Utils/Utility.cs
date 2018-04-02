@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Jaktloggen.Interfaces;
 using Xamarin.Forms;
 
@@ -11,7 +12,7 @@ namespace Jaktloggen
         {
             if (String.IsNullOrEmpty(imageFilename))
             {
-                return ImageSource.FromFile("Launch/gevir_black.png");
+                return ImageSource.FromFile(App.PLACEHOLDER_PHOTO);
             }
             else if (imageFilename.StartsWith("/"))
             {
@@ -24,7 +25,7 @@ namespace Jaktloggen
             }
         }
 
-        public static string GetImageFileName(string filePath)
+        public static string GetImageFilename(string filePath)
         {
             if (!String.IsNullOrEmpty(filePath) && filePath.Contains("/"))
             {
@@ -35,6 +36,12 @@ namespace Jaktloggen
         public static void LogError(Exception ex)
         {
             Debug.WriteLine(ex.Message, ex.InnerException, ex.StackTrace);
+        }
+
+        public static async Task AnimateButton(VisualElement btn)
+        {
+            await btn.ScaleTo(0.75, 50, Easing.Linear);
+            await btn.ScaleTo(1, 50, Easing.Linear);
         }
     }
 }

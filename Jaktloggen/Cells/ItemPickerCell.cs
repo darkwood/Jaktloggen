@@ -214,7 +214,7 @@ namespace Jaktloggen.Cells
         {
             foreach (var img in _circleImages)
             {
-                SetSelectionStyle(img, item.ID == img.StyleId);
+                SetSelectionStyle(img, item?.ID == img.StyleId);
             }
         }
 

@@ -52,6 +52,7 @@ namespace Jaktloggen.InputViews
             get{ return loading; }
             set{ loading = value; OnPropertyChanged(nameof(Loading)); }
         }
+
         public InputPosition(){
             Longitude = 73.234234234;
             Latitude = 134.323423424;
@@ -95,6 +96,23 @@ namespace Jaktloggen.InputViews
             Latitude = e.Position.Latitude;
             Longitude = e.Position.Longitude;
             SetMapPosition();
+        }
+
+        void Handle_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            var mapTypeString = ((Picker)sender).SelectedItem as string;
+            switch (mapTypeString)
+            {
+                case "Kart":
+                    MyMap.MapType = MapType.Street;
+                    break;
+                case "Satelitt":
+                    MyMap.MapType = MapType.Satellite;
+                    break;
+                case "Hybrid":
+                    MyMap.MapType = MapType.Hybrid;
+                    break;
+            }
         }
 
         async void OnGetPositionClicked(object sender, System.EventArgs e)

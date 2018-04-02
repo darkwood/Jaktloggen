@@ -16,7 +16,7 @@ namespace Jaktloggen.Utils.Converters
             var date = value as DateTime?;
             if (date != null)
             {
-                return date.Value.ToString("D", new CultureInfo("nb-no"));
+                return date.Value.ToString("d", new CultureInfo("nb-no"));
             }
 
             return string.Empty;

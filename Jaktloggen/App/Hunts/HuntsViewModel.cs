@@ -9,9 +9,21 @@ using Xamarin.Forms;
 
 namespace Jaktloggen
 {
+    public class JaktGroup : ObservableCollection<HuntViewModel>
+    {
+        public String Name { get; private set; }
+        public String ShortName { get; private set; }
+
+        public JaktGroup(String Name, String ShortName)
+        {
+            this.Name = Name;
+            this.ShortName = ShortName;
+        }
+    }
+
     public class HuntsViewModel : BaseViewModel
     {
-        public ObservableCollection<HuntViewModel> Items { get; set; }
+        public ObservableCollection<JaktGroup> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
         private bool isLoaded { get; set; }
 
@@ -20,7 +32,7 @@ namespace Jaktloggen
             Navigation = navigation;
             Title = "Jaktloggen";
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand(), () => !IsBusy);
-            Items = new ObservableCollection<HuntViewModel>();
+            Items = new ObservableCollection<JaktGroup>();
         }
 
         private async Task PopulateItems()
@@ -31,11 +43,18 @@ namespace Jaktloggen
             await App.DogDataStore.GetItemsAsync(true);
             await App.LogDataStore.GetItemsAsync(true);
             await App.SpecieDataStore.GetItemsAsync(true);
+            await App.CustomFieldDataStore.GetItemsAsync(true);
 
             var items = await App.HuntDataStore.GetItemsAsync(true);
-            foreach (var item in items.OrderByDescending(o => o.DatoFra))
+            var groups = items.GroupBy(g => g.DatoFra.Year).OrderByDescending(o => o.Key);
+            foreach (var g in groups)
             {
-                Items.Add(new HuntViewModel(item, Navigation));
+                var jg = new JaktGroup(g.Key.ToString(), "");
+                foreach(var hunt in g.OrderByDescending(o => o.DatoFra))
+                {
+                    jg.Add(new HuntViewModel(hunt, Navigation));
+                }
+                Items.Add(jg);
             }
         }
 

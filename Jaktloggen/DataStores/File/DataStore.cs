@@ -39,6 +39,10 @@ namespace Jaktloggen.DataStores.File
             {
                 Filename = "artgroup.xml";
             }
+            else if (p == typeof(CustomField))
+            {
+                Filename = "loggtyper.xml";
+            }
             else
             {
                 throw new NotImplementedException(typeof(T).ToString() + " sitt filnavn er ikke implementert.");

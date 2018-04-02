@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage 
+    xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+    xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Jaktloggen.StatsPage" 
+    xmlns:local="clr-namespace:Jaktloggen;assembly=Jaktloggen"
+    Title="Statistikk"
+    xmlns:vm="clr-namespace:Jaktloggen;">
+
+    <ContentPage.Content>
+        <local:JTableView HasUnevenRows="true" Intent="Data">
+            <TableRoot>
+                <TableSection Title="Filter">
+                    <ViewCell>
+                        <StackLayout Padding="20">
+                            <Label FontSize="10" TextColor="Gray" Text="Filter" />
+                            <BoxView Color="Gray" HeightRequest="1" />
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                
+                                <Label StyleClass="SmallText" Grid.Row="0" Grid.Column="0" Text="Jeger"/>
+                                <Label StyleClass="SmallText"  Grid.Row="0" Grid.Column="1" Text="Dato fra" />
+                                <Label StyleClass="SmallText"  Grid.Row="0" Grid.Column="2" Text="Dato til" />
+
+                                <Button 
+                                    Grid.Row="1" 
+                                    Grid.Column="0" 
+                                    Text="{Binding HunterName}" 
+                                    StyleClass="PrimaryButton" 
+                                    Command="{Binding PickHunterCommand}"
+                                />
+                                <DatePicker Grid.Row="1" Grid.Column="1" Date="{Binding DateFrom}" />
+                                <DatePicker Grid.Row="1" Grid.Column="2" Date="{Binding DateTo}"/>    
+                               
+                            </Grid>
+
+                        </StackLayout>
+                    </ViewCell>
+                </TableSection>
+                <TableSection Title="">
+                    
+                    <cells:ExtendedTextCell Text="Antall felte dyr" Text2="{Binding Hits}" />
+                    <cells:ExtendedTextCell Text="Treffprosent" Text2="{Binding HitsPercent}" />
+                    
+                </TableSection>
+
+                <TableSection Title="Geografisk oversikt">
+                    <cells:ExtendedTextCell ImageSource="markers.png" Text2="Vis loggføringer i kart" Command="{Binding MapCommand}" />
+                </TableSection>
+            </TableRoot>
+        </local:JTableView>
+    </ContentPage.Content>
+</ContentPage>

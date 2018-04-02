@@ -3,10 +3,12 @@
     xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
     xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    x:Class="Jaktloggen.LogsPage">
+    xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+    x:Class="Jaktloggen.LogsPage"
+    Title="Loggføringer">
     
     <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="Toolbar/add.png" Clicked="AddItem_Clicked" />
+        <!--<ToolbarItem Icon="Toolbar/add.png" Clicked="AddItem_Clicked" />-->
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
@@ -33,15 +35,24 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Grid BackgroundColor="Aqua" IsVisible="{Binding IsBusy}">
+            <Grid IsVisible="{Binding IsBusy}">
                 <ActivityIndicator IsRunning="true" IsVisible="true"/>
             </Grid>
-            <Button 
-                Text="Ny loggføring"
-                IsVisible="{Binding HasItems, Converter={Converters:InvertedBooleanConverter}}" 
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-            />
+
+            <controls:CircleImage 
+                    HorizontalOptions="End"
+                    VerticalOptions="End"
+                    Margin="0, 0, 10, 30"
+                    BackgroundColor="Green"
+                    Source="Toolbar/add.png" 
+                    Aspect="AspectFit" 
+                    HeightRequest="60" 
+                    WidthRequest="60" >
+                    <controls:CircleImage.GestureRecognizers>
+                        <TapGestureRecognizer
+                                Tapped="AddItem_Clicked"  />
+                    </controls:CircleImage.GestureRecognizers>
+                </controls:CircleImage>
         </Grid>
 	</ContentPage.Content>
 </ContentPage>

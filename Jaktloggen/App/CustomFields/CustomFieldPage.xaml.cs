@@ -5,24 +5,23 @@ using Xamarin.Forms;
 
 namespace Jaktloggen
 {
-    public partial class DogPage : ContentPage
+    public partial class CustomFieldPage : ContentPage
     {
-        DogViewModel viewModel;
+        CustomFieldViewModel viewModel;
 
-        public DogPage()
+        public CustomFieldPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new DogViewModel(new Dog(), null);
+            BindingContext = viewModel = new CustomFieldViewModel(new CustomField(), null);
         }
 
-        public DogPage(DogViewModel dogViewModel)
+        public CustomFieldPage(CustomFieldViewModel viewModel)
         {
             InitializeComponent();
 
-            BindingContext = viewModel = dogViewModel;
+            BindingContext = this.viewModel = viewModel;
         }
-
 
         async void Save_Clicked(object sender, EventArgs e)
         {

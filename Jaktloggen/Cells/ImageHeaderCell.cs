@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using ImageCircle.Forms.Plugin.Abstractions;
 using Xamarin.Forms;
 
 namespace Jaktloggen.Cells
@@ -14,23 +15,24 @@ namespace Jaktloggen.Cells
             set { SetValue(CommandProperty, value); }
         }
 
-        public static readonly BindableProperty SourceProperty =
+        public static readonly BindableProperty ImagePathProperty =
             BindableProperty.Create(
-                nameof(Source), 
-                typeof(ImageSource), 
+                nameof(ImagePath), 
+                typeof(string), 
                 typeof(ImageHeaderCell), 
                 null,
                 propertyChanged: (bindable, oldValue, newValue) => {
-                    ((ImageHeaderCell)bindable).CellImage.Source = newValue as ImageSource;
+                    var path = newValue as string;
+                    ((ImageHeaderCell)bindable).CellImage.Source = path == null ? null : Utility.GetImageSource(path);
                     ((ImageHeaderCell)bindable).CellImage.IsVisible = newValue != null;
-                    ((ImageHeaderCell)bindable).ChooseImageLabel.IsVisible = newValue == null;
+                    ((ImageHeaderCell)bindable).Buttons.IsVisible = newValue == null;
                 }
             );
         
-        public ImageSource Source
+        public string ImagePath
         {
-            get { return (ImageSource)GetValue(SourceProperty); }
-            set { SetValue(SourceProperty, value); }
+            get { return (string)GetValue(ImagePathProperty); }
+            set { SetValue(ImagePathProperty, value); }
         }
 
         public static readonly BindableProperty HeightRequestProperty = BindableProperty.Create(
@@ -49,44 +51,75 @@ namespace Jaktloggen.Cells
         }
 
         public Image CellImage { get; private set; }
-        public Label ChooseImageLabel { get; private set; }
+        public Grid Buttons { get; private set; }
 
         public ImageHeaderCell()
         {
             var viewLayout = new Grid();
+            CreateImage();
 
-            CellImage = new Image();
-            CellImage.Aspect = Aspect.AspectFill;
+            Buttons = GetButtons();
 
             viewLayout.Children.Add(CellImage);
-
-            ChooseImageLabel = new Label
-                          {
-                              VerticalOptions = LayoutOptions.CenterAndExpand,
-                              HorizontalOptions = LayoutOptions.CenterAndExpand,
-                              Text = "Velg bilde",
-                              FontSize = 20,
-                              TextColor = Color.White,
-                              BackgroundColor = Color.LightGray
-                          };
-            viewLayout.Children.Add(ChooseImageLabel);
-
-            var gestureRecognizer = new TapGestureRecognizer();
-
-            gestureRecognizer.Tapped += (s, e) => {
-                if (Command != null && Command.CanExecute(null))
-                {
-                    Command.Execute(null);
-                }
-            };
-
-            //You can either set the binding here or you can set the binding in the xaml. You only need one or the other.
-            //Xaml for this is below
-            //SetBinding(CommandProperty, new Binding("ItemSelectedCommand"));
-
-            viewLayout.GestureRecognizers.Add(gestureRecognizer);
+            viewLayout.Children.Add(Buttons);
 
             View = viewLayout;
+        }
+
+        private void CreateImage()
+        {
+            CellImage = new Image
+            {
+                Aspect = Aspect.AspectFill
+            };
+            CellImage.GestureRecognizers.Add(CreateTapGestureRecognizer());
+        }
+
+        private Grid GetButtons()
+        {
+            var g = new Grid
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.LightGray
+            };
+            g.Children.Add(CreateCircleImageButton("Buttons/camera.png", "takephoto"), 0, 0);
+            g.Children.Add(CreateCircleImageButton("Buttons/photos.png", "openlibrary"), 1, 0);
+            return g;
+        }
+
+        private CircleImage CreateCircleImageButton(string imagepath, string commandArg)
+        {
+            var img = new CircleImage
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                BorderThickness = 2,
+                BorderColor = Color.Black,
+                FillColor = Color.FromHex("#66FFFFFF"),
+                Source = ImageSource.FromFile(imagepath),
+                Aspect = Aspect.AspectFit,
+                Opacity = 0.8,
+                HeightRequest = 80,
+                WidthRequest = 80,
+                Margin = 40,
+            };
+            img.GestureRecognizers.Add(CreateTapGestureRecognizer(commandArg));
+            return img;
+        }
+
+        private TapGestureRecognizer CreateTapGestureRecognizer(string commandArg = null)
+        {
+            var gestureRecognizer = new TapGestureRecognizer();
+
+            gestureRecognizer.Tapped += (s, e) =>
+            {
+                if (Command != null && Command.CanExecute(null))
+                {
+                    Command.Execute(commandArg);
+                }
+            };
+            return gestureRecognizer;
         }
     }
 }

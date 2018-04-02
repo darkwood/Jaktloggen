@@ -62,7 +62,7 @@ namespace Jaktloggen
                     FileService.Delete(item.ImageFilename);
                 }
                 await App.HuntDataStore.DeleteItemAsync(item.ID);
-                viewModel.Items.Remove(item);
+                //viewModel.Items.Remove(item);
 
                 await Navigation.PopToRootAsync();
             }

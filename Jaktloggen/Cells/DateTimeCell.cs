@@ -45,6 +45,7 @@ namespace Jaktloggen.Cells
                 typeof(DateTimeCell),
                 DateTime.Now,
                 propertyChanged: (bindable, oldValue, newValue) => {
+                ((DateTimeCell)bindable).DateButton.IsVisible = true;
                 ((DateTimeCell)bindable).DateButton.Text = ((DateTime)newValue).ToString("dd.MM", new CultureInfo("nb-no"));
                 ((DateTimeCell)bindable).DatePicker.Date = ((DateTime)newValue);
                 }
@@ -68,7 +69,8 @@ namespace Jaktloggen.Cells
                 DateTime.Now.TimeOfDay,
                 propertyChanged: (bindable, oldValue, newValue) => {
                     TimeSpan t = ((TimeSpan)newValue);
-                ((DateTimeCell)bindable).TimeButton.Text = ((TimeSpan) newValue).ToString(@"hh\:mm", new CultureInfo("nb-no"));
+                    ((DateTimeCell)bindable).TimeButton.IsVisible = true;
+                    ((DateTimeCell)bindable).TimeButton.Text = ((TimeSpan) newValue).ToString(@"hh\:mm", new CultureInfo("nb-no"));
                     ((DateTimeCell)bindable).TimePicker.Time = t;
                 }
             );
@@ -154,7 +156,8 @@ namespace Jaktloggen.Cells
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.End,
-                Image = "clock.png",
+                Image = "Buttons/clock.png",
+                IsVisible = false
             };
             TimeButton.Clicked += TimeButton_Clicked;
         }
@@ -165,7 +168,8 @@ namespace Jaktloggen.Cells
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.End,
-                Image = "calendar.png",
+                Image = "Buttons/calendar.png",
+                IsVisible = false
             };
             DateButton.Clicked += DateButton_Clicked;
         }

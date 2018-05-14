@@ -14,7 +14,7 @@ namespace Jaktloggen.Services
     {
         public static void SaveToLocalStorage<T>(this T objToSerialize, string filename)
         {
-            if (filename.ToLower().EndsWith(".json"))
+            if (filename.ToLower().EndsWith(".json", StringComparison.CurrentCultureIgnoreCase))
             {
                 var jsonString = JsonConvert.SerializeObject(objToSerialize);
                 DependencyService.Get<IFileUtility>().Save(filename, jsonString);
@@ -36,7 +36,7 @@ namespace Jaktloggen.Services
         {
             var localObj = (T)Activator.CreateInstance(typeof(T));
             // 1 read json
-            if (filename.EndsWith(".json") && Exists(filename))
+            if (filename.EndsWith(".json", StringComparison.CurrentCultureIgnoreCase) && Exists(filename))
             {
                 var jsonString = DependencyService.Get<IFileUtility>().Load(filename);
 

@@ -27,7 +27,11 @@
                     <cells:DateTimeCell Text="Tidspunkt" Date="{Binding Date, Mode=TwoWay}" Time="{Binding Time, Mode=TwoWay}" />
                     <cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />
 
+                    <cells:ExtendedTextCell IsVisible="{Binding GenderVisible}" Command="{Binding GenderCommand}" Text="Kjønn" Text2="{Binding Gender}" />
+                    <cells:ExtendedTextCell IsVisible="{Binding WeatherVisible}" Command="{Binding GenderCommand}" Text="Vær" Text2="{Binding Weather}" />
+
                 </TableSection>
+               
             </TableRoot>
         </local:JTableView>
 	</ContentPage.Content>

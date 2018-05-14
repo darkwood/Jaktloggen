@@ -39,7 +39,7 @@ namespace Jaktloggen.DataStores.File
             {
                 Filename = "artgroup.xml";
             }
-            else if (p == typeof(CustomField))
+            else if (p == typeof(LoggType))
             {
                 Filename = "loggtyper.xml";
             }

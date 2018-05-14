@@ -196,7 +196,7 @@ namespace Jaktloggen.Cells
                 CornerRadius = 0,
                 HeightRequest = SIZE,
                 WidthRequest = SIZE,
-                OutlineColor = green,
+				BorderColor = green,
                 HasShadow = false,
                 Padding = 0,
                 Content = new Label

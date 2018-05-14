@@ -3,10 +3,7 @@
              xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
              xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
              x:Class="Jaktloggen.CustomFieldsPage"
-             Title="Jegere">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="Toolbar/add.png" Clicked="AddItem_Clicked" />
-    </ContentPage.ToolbarItems>
+             Title="Flere felter">
    <ContentPage.Content>
         <StackLayout>
             <ListView x:Name="ItemsListView" 
@@ -19,7 +16,12 @@
                 ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <cells:ExtendedTextCell Text="{Binding Name}" Text2="{Binding Value}" />
+                        <cells:ExtendedTextCell 
+                        Text="{Binding Name}" 
+                        Detail="{Binding Description}"
+                        Selected="{Binding Selected}"
+                        ShowCheckBox="true"
+                        />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

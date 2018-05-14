@@ -81,7 +81,7 @@ namespace Jaktloggen
         {
             ImageCommand = new Command(async (arg) =>
             {
-                InputImage page = new InputImage("Bilde", ImageFilename, async obj =>
+                InputImage page = new InputImage("Bilde", ImageFilename, obj =>
                 {
                     ImageFilename = obj.ImageFilename;
                 });

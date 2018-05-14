@@ -58,13 +58,16 @@ namespace Jaktloggen
                     _selectedIds.Add(specie.ID);
                     _selectedIds.SaveToLocalStorage(App.FILE_SELECTED_SPECIE_IDS);
                 }
-            } else{
+            } 
+			else 
+			{
                 var i = _selectedIds.IndexOf(specie.ID);
                 if(i > -1){
                     _selectedIds.RemoveAt(i);
                     _selectedIds.SaveToLocalStorage(App.FILE_SELECTED_SPECIE_IDS);
                 }
             }
+			await Task.Delay(10);
         }
 
         public async Task OnAppearing()

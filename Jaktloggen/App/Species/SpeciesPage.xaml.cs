@@ -19,8 +19,8 @@ namespace Jaktloggen
 
             MessagingCenter.Subscribe<SpecieViewModel>(this, "Delete", async (item) =>
             {
-                await DeleteItem(item);
-
+				//await DeleteItem(item);
+				await Task.Delay(500);
             });
         }
 
@@ -60,8 +60,8 @@ namespace Jaktloggen
             await viewModel.OnAppearing();
         }
 
-        public async Task DeleteItem(SpecieViewModel item)
-        {
+        //public async Task DeleteItem(SpecieViewModel item)
+        //{
             //var doit = await DisplayAlert("Bekreft sletting", "Hund blir permanent slettet", "OK", "Avbryt");
             //if (doit)
             //{
@@ -75,6 +75,6 @@ namespace Jaktloggen
 
             //    await Navigation.PopToRootAsync();
             //}
-        }
+        //}
     }
 }

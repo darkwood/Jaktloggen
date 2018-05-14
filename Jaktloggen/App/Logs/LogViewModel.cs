@@ -62,15 +62,6 @@ namespace Jaktloggen
                 OnPropertyChanged(nameof(Date)); }
         }
 
-        public string DateFormatted
-        {
-            get
-            {
-                return string.Format("{0} kl. {1}",
-                            Date.ToString(@"dd.MM", new CultureInfo("nb-NO")),
-                            Time.ToString(@"hh\:mm", new CultureInfo("nb-NO")));
-            }
-        }
 
         public TimeSpan Time
         {
@@ -95,7 +86,6 @@ namespace Jaktloggen
             {
                 Item.Latitude = value.ToString();
                 OnPropertyChanged(nameof(Latitude));
-                OnPropertyChanged(nameof(PositionInfo));
             }
         }
 
@@ -111,14 +101,12 @@ namespace Jaktloggen
             {
                 Item.Longitude = value.ToString();
                 OnPropertyChanged(nameof(Longitude));
-                OnPropertyChanged(nameof(PositionInfo));
             }
         }
 
 
         public string ImageFilename
         {
-            //get => Utility.GetImageFilename(Item.ImagePath);
             get => Item.ImagePath;
             set
             {
@@ -170,14 +158,24 @@ namespace Jaktloggen
             set { Item.Tags = value; OnPropertyChanged(nameof(Tags)); }
         }
 
+        /*------------------ Other properties -----------------------*/
+        public string DateFormatted
+        {
+            get
+            {
+                return string.Format("{0} kl. {1}",
+                            Date.ToString(@"dd.MM", new CultureInfo("nb-NO")),
+                            Time.ToString(@"hh\:mm", new CultureInfo("nb-NO")));
+            }
+        }
 
         public ImageSource Image => Utility.GetImageSource(ImageFilename);
 
-        string infoMessage = "Posisjon";
+        string infoMessage;
         public string InfoMessage
         {
             get { return infoMessage; }
-            set { SetProperty(ref infoMessage, value); OnPropertyChanged(nameof(PositionInfo)); }
+            set { SetProperty(ref infoMessage, value); }
         }
 
         List<Jeger> _hunters = new List<Jeger>();
@@ -275,23 +273,11 @@ namespace Jaktloggen
         private List<PickerItem> _pickerSpecies;
         public List<PickerItem> PickerSpecies
         {
-            get { return _pickerSpecies; }
-            set { _pickerSpecies = value; OnPropertyChanged(nameof(PickerSpecies)); }
+            get => _pickerSpecies;
+            set => SetProperty(ref _pickerSpecies, value);
         }
 
         public PickerItem SelectedPickerSpecie => PickerSpecies?.SingleOrDefault(p => p.ID == Specie?.ID);
-
-        public string PositionInfo
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(InfoMessage))
-                {
-                    return InfoMessage;
-                }
-                return Latitude <= 0 ? "" : $"{Latitude}, {Longitude}";
-            }
-        }
 
         public string HunterText => Hunter?.Fornavn;
         public string DogText => Dog?.Navn;
@@ -318,6 +304,20 @@ namespace Jaktloggen
             } 
         }
 
+        bool _genderVisible;
+        public bool GenderVisible
+        {
+            get => _genderVisible;
+            set => SetProperty(ref _genderVisible, value);
+        }
+
+        bool _weatherVisible;
+        public bool WeatherVisible
+        {
+            get => _weatherVisible;
+            set => SetProperty(ref _weatherVisible, value);
+        }
+
         public ICommand LoadItemsCommand { protected get; set; }
         public ICommand PositionCommand { protected set; get; }
         public ICommand ImageCommand { protected set; get; }
@@ -330,6 +330,7 @@ namespace Jaktloggen
         public ICommand ObservedCommand { protected set; get; }
         public ICommand HitsCommand { protected set; get; }
         public ICommand ShotsCommand { protected set; get; }
+        public ICommand GenderCommand { protected set; get; }
 
         public LogViewModel(HuntViewModel huntVm, Logg item, INavigation navigation)
         {
@@ -359,6 +360,15 @@ namespace Jaktloggen
                 await SetPositionAsync();
                 await SaveAsync();
             }
+
+            await ShowCustomFields();
+        }
+
+        private async Task ShowCustomFields()
+        {
+            var fields = await FileService.LoadFromLocalStorage<List<string>>(App.FILE_SELECTED_LOGGTYPEIDS);
+            GenderVisible = fields.Contains("Gender");
+            WeatherVisible = fields.Contains("Weather");
         }
 
         private async Task SetPositionAsync()
@@ -372,9 +382,6 @@ namespace Jaktloggen
 
                 Latitude = position.Latitude;
                 Longitude = position.Longitude;
-
-                OnPropertyChanged(nameof(PositionInfo));
-
             }
             catch (Exception)
             {
@@ -564,6 +571,16 @@ namespace Jaktloggen
                     await SaveAsync();
                 });
                 inputView.Multiline = true;
+                await Navigation.PushAsync(inputView);
+            });
+
+            GenderCommand = new Command(async () =>
+            {
+                var inputView = new InputEntry("Kjønn", Gender, async obj =>
+                {
+                    Gender = obj.Value;
+                    await SaveAsync();
+                });
                 await Navigation.PushAsync(inputView);
             });
         }

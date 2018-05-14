@@ -13,7 +13,7 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new CustomFieldViewModel(new CustomField(), null);
+            BindingContext = viewModel = new CustomFieldViewModel(new LoggType(), null);
         }
 
         public CustomFieldPage(CustomFieldViewModel viewModel)

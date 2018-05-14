@@ -19,14 +19,14 @@ namespace Jaktloggen
 
         }
 
-         void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
+        void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as CustomField;
+            var item = args.SelectedItem as CustomFieldViewModel;
             if (item == null)
                 return;
-            
-            //await Navigation.PushAsync(new CustomFieldPage(item));
 
+            item.Selected = !item.Selected;
+            viewModel.UpdateItem(item);
             // Manually deselect item
             ItemsListView.SelectedItem = null;
         }

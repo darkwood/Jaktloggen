@@ -11,12 +11,24 @@ namespace Jaktloggen
 {
     public class CustomFieldViewModel : BaseViewModel
     {
-        public CustomField CustomField { get; }
+        private LoggType _customField { get; }
 
-        public CustomFieldViewModel(CustomField customField, INavigation navigation)
+        public string Name => _customField.Navn;
+        public string Description => _customField.Beskrivelse;
+        public string GroupId => _customField.GroupId;
+
+        bool selected;
+        public bool Selected
+        {
+            get => selected;
+            set { selected = value; OnPropertyChanged(nameof(Selected)); }
+        }
+
+        public CustomFieldViewModel(LoggType customField, INavigation navigation)
         {
             Navigation = navigation;
-            CustomField = customField;
+            _customField = customField;
+            ID = _customField.Key;
         }
     }
 }

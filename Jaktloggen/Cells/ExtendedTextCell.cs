@@ -197,6 +197,32 @@ namespace Jaktloggen.Cells
             }
         }
 
+
+        /***************************************************************************/
+
+        public static readonly BindableProperty IsVisibleProperty = BindableProperty.Create(
+            nameof(IsVisible),
+            typeof(bool),
+            typeof(ExtendedTextCell),
+            true,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                if(!(bool)newValue)
+                {
+                    ((ExtendedTextCell)bindable).ViewLayout.HeightRequest = 0;
+                    ((ExtendedTextCell)bindable).ViewLayout.Padding = 0;
+                }
+            });
+
+        public bool IsVisible
+        {
+            get { return (bool)GetValue(IsVisibleProperty); }
+            set
+            {
+                SetValue(IsVisibleProperty, value);
+            }
+        }
+
         public CircleImage CellImage { get; private set; }
         public StackLayout ViewLayout { get; private set; }
         public TapGestureRecognizer GestureRecognizer { get; private set; }

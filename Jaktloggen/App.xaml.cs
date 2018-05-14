@@ -20,19 +20,18 @@ namespace Jaktloggen
         public static IDataStore<Dog> DogDataStore => DependencyService.Get<IDataStore<Dog>>();
         public static IDataStore<Art> SpecieDataStore => DependencyService.Get<IDataStore<Art>>();
         public static IDataStore<ArtGroup> SpecieGroupDataStore => DependencyService.Get<IDataStore<ArtGroup>>();
-        public static IDataStore<CustomField> CustomFieldDataStore => DependencyService.Get<IDataStore<CustomField>>();
+        public static IDataStore<LoggType> CustomFieldDataStore => DependencyService.Get<IDataStore<LoggType>>();
 
         private static string FILE_ART = "arter.xml";
         private static string FILE_LOGGTYPE_GROUP = "loggtypegroup.xml";
         private static string FILE_LOGGTYPER = "loggtyper.xml";
         private static string FILE_ARTGROUP = "artgroup.xml";
-        public static string FILE_SELECTED_SPECIE_IDS = "selectedartids.json";
-        internal static string PLACEHOLDER_PHOTO = "pictureframe.png";
 
-        //private static string FILE_SELECTED_ARTIDS = "selectedartids.json";
-        //private static string FILE_SELECTED_LOGGTYPEIDS = "selectedloggtypeids.json";
+        public static string FILE_SELECTED_SPECIE_IDS = "selectedartids.json";
+        public static string FILE_SELECTED_LOGGTYPEIDS = "selectedloggtypeids.json";
         //private static string FILE_MY_ART = "myspecies.json";
 
+        internal static string PLACEHOLDER_PHOTO = "pictureframe.png";
         public static Color PRIMARY_COLOR => Color.FromHex("#597a59");
 
         public App()
@@ -88,7 +87,7 @@ namespace Jaktloggen
                 DependencyService.Register<DataStores.File.DataStore<Dog>>();
                 DependencyService.Register<DataStores.File.DataStore<Art>>();
                 DependencyService.Register<DataStores.File.DataStore<ArtGroup>>();
-                DependencyService.Register<DataStores.File.DataStore<CustomField>>();
+                DependencyService.Register<DataStores.File.DataStore<LoggType>>();
             }
         }
 

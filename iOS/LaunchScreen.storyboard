@@ -42,15 +42,15 @@
         <image name="checked_off.png" width="512" height="512"/>
         <image name="calendar.png" width="32" height="32"/>
         <image name="clock.png" width="32" height="32"/>
-        <image name="Toolbar/add.png" width="24" height="24"/>
+        <image name="add.png" width="24" height="24"/>
         <image name="Tabbar/gevir.png" width="25" height="25"/>
         <image name="Tabbar/hunters.png" width="25" height="25"/>
         <image name="Tabbar/info.png" width="25" height="25"/>
         <image name="Tabbar/dog.png" width="25" height="25"/>
         <image name="Launch/gevir_black.png" width="100" height="100"/>
-        <image name="Buttons/photos.png" width="200" height="200"/>
-        <image name="Buttons/camera.png" width="200" height="200"/>
-        <image name="Buttons/trash.png" width="200" height="200"/>
+        <image name="photos.png" width="200" height="200"/>
+        <image name="camera.png" width="200" height="200"/>
+        <image name="trash.png" width="200" height="200"/>
         <image name="Tabbar/stats.png" width="25" height="25"/>
         <image name="pictureframe.png" width="200" height="200"/>
     </resources>

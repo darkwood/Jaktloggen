@@ -83,8 +83,8 @@ namespace Jaktloggen.Cells
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 BackgroundColor = Color.LightGray
             };
-            g.Children.Add(CreateCircleImageButton("Buttons/camera.png", "takephoto"), 0, 0);
-            g.Children.Add(CreateCircleImageButton("Buttons/photos.png", "openlibrary"), 1, 0);
+            g.Children.Add(CreateCircleImageButton("camera.png", "takephoto"), 0, 0);
+            g.Children.Add(CreateCircleImageButton("photos.png", "openlibrary"), 1, 0);
             return g;
         }
 

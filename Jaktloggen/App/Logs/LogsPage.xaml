@@ -8,7 +8,7 @@
     Title="Loggføringer">
     
     <ContentPage.ToolbarItems>
-        <!--<ToolbarItem Icon="Toolbar/add.png" Clicked="AddItem_Clicked" />-->
+        <!--<ToolbarItem Icon="add.png" Clicked="AddItem_Clicked" />-->
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
@@ -44,7 +44,7 @@
                     VerticalOptions="End"
                     Margin="0, 0, 10, 30"
                     BackgroundColor="Green"
-                    Source="Toolbar/add.png" 
+                    Source="add.png" 
                     Aspect="AspectFit" 
                     HeightRequest="60" 
                     WidthRequest="60" >

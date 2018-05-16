@@ -156,7 +156,7 @@ namespace Jaktloggen.Cells
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.End,
-                Image = "Buttons/clock.png",
+                Image = "clock.png",
                 IsVisible = false
             };
             TimeButton.Clicked += TimeButton_Clicked;
@@ -168,7 +168,7 @@ namespace Jaktloggen.Cells
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.End,
-                Image = "Buttons/calendar.png",
+                Image = "calendar.png",
                 IsVisible = false
             };
             DateButton.Clicked += DateButton_Clicked;

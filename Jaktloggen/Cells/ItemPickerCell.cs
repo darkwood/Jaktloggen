@@ -222,6 +222,7 @@ namespace Jaktloggen.Cells
         {
             b.BackgroundColor = selected ? green : Color.Transparent;
             b.BorderColor = selected ? Color.DarkOrange : green;
+            b.Opacity = selected ? 1 : 0.5;
         }
 
         private TapGestureRecognizer CreateTapGestureRecognizer(PickerItem i, View btnImage)

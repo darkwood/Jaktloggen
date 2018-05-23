@@ -31,14 +31,11 @@
                 
                 <TableSection Title="">
 
-                    <cells:ExtendedTextCell SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Text="Sted" Text2="{Binding Location}" Command="{Binding LocationCommand}" />
+                    <cells:ExtendedTextCell  Text="Sted" Text2="{Binding Location}" SpinnerActive="{Binding InfoMessage, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" Command="{Binding LocationCommand}" />
                     <cells:ExtendedTextCell Text="Jaktlag" Text2="{Binding HuntersText}" Command="{Binding HuntersCommand}" />
                     <cells:ExtendedTextCell Text="Hunder" Text2="{Binding DogsText}" Command="{Binding DogsCommand}" />
                     <cells:MapCell Text="Posisjon" Latitude="{Binding Latitude}" Longitude="{Binding Longitude}" Command="{Binding PositionCommand}" />
                       
-                </TableSection>
-                
-                <TableSection Title="">
                     <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Text2="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:ExtendedTextCell Command="{Binding DateToCommand}" Text="Dato til" Text2="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />

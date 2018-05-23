@@ -42,6 +42,7 @@ namespace Jaktloggen
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
+            await Utility.AnimateButton((VisualElement)sender);
             await Navigation.PushAsync(new HuntPage(new HuntViewModel(new Jakt(), Navigation)));
         }
 

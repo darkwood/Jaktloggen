@@ -204,6 +204,7 @@ namespace Jaktloggen
             Dogs = await App.DogDataStore.GetItemsAsync();
             
             IsLoaded = true;
+            OnPropertyChanged(nameof(ID));
         }
         
         private async Task SetPositionAsync()
@@ -419,6 +420,7 @@ namespace Jaktloggen
             {
                 await App.HuntDataStore.AddItemAsync(Item);
             }
+
         }
     }
 }

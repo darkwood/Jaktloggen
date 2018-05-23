@@ -14,10 +14,10 @@ namespace Jaktloggen
             {
                 return ImageSource.FromFile(App.PLACEHOLDER_PHOTO);
             }
-            else if (imageFilename.StartsWith("/"))
-            {
-                return ImageSource.FromFile(imageFilename);
-            }
+            //else if (imageFilename.StartsWith("/"))
+            //{
+            //    return ImageSource.FromFile(imageFilename);
+            //}
             else
             {
                 var filepath = DependencyService.Get<IFileUtility>().GetFilePath(imageFilename);

@@ -304,20 +304,6 @@ namespace Jaktloggen
             } 
         }
 
-        bool _genderVisible;
-        public bool GenderVisible
-        {
-            get => _genderVisible;
-            set => SetProperty(ref _genderVisible, value);
-        }
-
-        bool _weatherVisible;
-        public bool WeatherVisible
-        {
-            get => _weatherVisible;
-            set => SetProperty(ref _weatherVisible, value);
-        }
-
         public ICommand LoadItemsCommand { protected get; set; }
         public ICommand PositionCommand { protected set; get; }
         public ICommand ImageCommand { protected set; get; }
@@ -331,6 +317,13 @@ namespace Jaktloggen
         public ICommand HitsCommand { protected set; get; }
         public ICommand ShotsCommand { protected set; get; }
         public ICommand GenderCommand { protected set; get; }
+        public ICommand WeatherCommand { protected set; get; }
+        public ICommand WeightCommand { protected set; get; }
+        public ICommand ButchWeightCommand { protected set; get; }
+        public ICommand TagsCommand { protected set; get; }
+        public ICommand WeaponTypeCommand { protected set; get; }
+
+        public List<string> CustomFields { get; private set; }
 
         public LogViewModel(HuntViewModel huntVm, Logg item, INavigation navigation)
         {
@@ -361,15 +354,10 @@ namespace Jaktloggen
                 await SaveAsync();
             }
 
-            await ShowCustomFields();
+            CustomFields = await FileService.LoadFromLocalStorage<List<string>>(App.FILE_SELECTED_LOGGTYPEIDS);
+
         }
 
-        private async Task ShowCustomFields()
-        {
-            var fields = await FileService.LoadFromLocalStorage<List<string>>(App.FILE_SELECTED_LOGGTYPEIDS);
-            GenderVisible = fields.Contains("Gender");
-            WeatherVisible = fields.Contains("Weather");
-        }
 
         private async Task SetPositionAsync()
         {
@@ -579,6 +567,60 @@ namespace Jaktloggen
                 var inputView = new InputEntry("Kjønn", Gender, async obj =>
                 {
                     Gender = obj.Value;
+                    await SaveAsync();
+                });
+                await Navigation.PushAsync(inputView);
+            });
+
+            WeatherCommand = new Command(async () =>
+            {
+                var inputView = new InputEntry("Vær", Weather, async obj =>
+                {
+                    Weather = obj.Value;
+                    await SaveAsync();
+                });
+                await Navigation.PushAsync(inputView);
+            });
+
+            TagsCommand = new Command(async () =>
+            {
+                var inputView = new InputEntry("Antall tagger", Tags.ToString(), async obj =>
+                {
+                    Tags = int.Parse(obj.Value);
+                    await SaveAsync();
+                });
+                inputView.Numeric = true;
+                await Navigation.PushAsync(inputView);
+            });
+
+
+            WeightCommand = new Command(async () =>
+            {
+                var inputView = new InputEntry("Vekt (kg)", Weight.ToString(), async obj =>
+                {
+                    Weight = int.Parse(obj.Value);
+                    await SaveAsync();
+                });
+                inputView.Numeric = true;
+                await Navigation.PushAsync(inputView);
+            });
+
+            ButchWeightCommand = new Command(async () =>
+            {
+                var inputView = new InputEntry("Slaktevekt (kg)", ButchWeight.ToString(), async obj =>
+                {
+                    ButchWeight = int.Parse(obj.Value);
+                    await SaveAsync();
+                });
+                inputView.Numeric = true;
+                await Navigation.PushAsync(inputView);
+            });
+
+            WeaponTypeCommand = new Command(async () =>
+            {
+                var inputView = new InputEntry("Våpentype", WeaponType, async obj =>
+                {
+                    WeaponType = obj.Value;
                     await SaveAsync();
                 });
                 await Navigation.PushAsync(inputView);

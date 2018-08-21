@@ -222,6 +222,7 @@
     <Compile Include="App\CustomFields\LoggType.cs" />
     <Compile Include="App\Logs\Fields\ILogField.cs" />
     <Compile Include="App\Logs\Fields\LogFieldImage.cs" />
+    <Compile Include="App\Logs\LogPageCode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Plugin.Permissions.Abstractions">

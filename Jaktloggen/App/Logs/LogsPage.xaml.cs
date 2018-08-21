@@ -40,7 +40,7 @@ namespace Jaktloggen
             if (item == null)
                 return;
 
-            await Navigation.PushAsync(new LogPage(item));
+            await Navigation.PushAsync(new LogPageCode(item));
             ItemsListView.SelectedItem = null;
         }
 

@@ -6,9 +6,6 @@
              x:Class="Jaktloggen.HuntsPage" 
              Title="{Binding Title}" 
             >
-	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="+" Clicked="AddItem_Clicked" />
-	</ContentPage.ToolbarItems>
 	<ContentPage.Content>
         <Grid>
             <ListView x:Name="ItemsListView" 
@@ -22,8 +19,7 @@
                       IsPullToRefreshEnabled="true" 
                       IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
                       RowHeight="70"
-                      CachingStrategy="RecycleElement" 
-                      ItemSelected="OnItemSelected">
+                      CachingStrategy="RecycleElement"  ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
 

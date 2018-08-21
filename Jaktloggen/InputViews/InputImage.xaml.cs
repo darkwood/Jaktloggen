@@ -32,6 +32,7 @@ namespace Jaktloggen.InputViews
             {
                 _source = null;
                 m_filepath = value;
+                IsDirty = true;
                 OnPropertyChanged(nameof(ImageFilename));
                 OnPropertyChanged(nameof(Source));
             }
@@ -44,11 +45,17 @@ namespace Jaktloggen.InputViews
             set { isLoading = value; OnPropertyChanged(nameof(IsLoading)); }
         }
 
+        public bool IsDirty
+        {
+            get;
+            set;
+        }
+
         private Action<InputImage> _callback { get; set; }
 
         public InputImage(string title, string filepath, Action<InputImage> callback)
         {
-            ImageFilename = filepath;
+            m_filepath = filepath;
             Title = title;
             _callback = callback;
             BindingContext = this;
@@ -118,6 +125,14 @@ namespace Jaktloggen.InputViews
         async void Done_Clicked(object sender, EventArgs e)
         {
             await Done();
+        }
+
+        async void Cancel_Clicked(object sender, EventArgs e)
+        {
+            if(!IsDirty || await DisplayAlert("Bekreft avbryt", "Alle endringer vil gå tapt", "OK", "Avbryt"))
+            {
+                await Navigation.PopAsync();
+            }
         }
 
         public async Task Done()

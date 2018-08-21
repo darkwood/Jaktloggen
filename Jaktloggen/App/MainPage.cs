@@ -13,7 +13,7 @@ namespace Jaktloggen
                 case Device.iOS:
                     itemsPage = new NavigationPage(new HuntsPage())
                                 {
-                                    Title = "Jaktloggen"
+                                    Title = "Jaktturer"
                                 };
 
                     huntersPage = new NavigationPage(new HuntersPage())
@@ -36,10 +36,6 @@ namespace Jaktloggen
                     {
                         Title = "Statistikk"
                     };
-                    statsPage = new NavigationPage(new StatsPage())
-                    {
-                        Title = "Statistikk"
-                    };
                     fieldsPage = new NavigationPage(new CustomFieldsPage())
                     {
                         Title = "Ekstra felter"
@@ -50,6 +46,7 @@ namespace Jaktloggen
                     speciesPage.Icon = "Arter.png";
                     aboutPage.Icon = "Tabbar/info.png";
                     statsPage.Icon = "Tabbar/stats.png";
+                    fieldsPage.Icon = "Felter.png";
                     break;
                 default:
                     itemsPage = new HuntsPage()

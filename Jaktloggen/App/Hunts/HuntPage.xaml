@@ -39,10 +39,6 @@
                     <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Text2="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:ExtendedTextCell Command="{Binding DateToCommand}" Text="Dato til" Text2="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />
-                </TableSection>
-
-        
-                <TableSection Title="">
                     <ViewCell>
                         <Button Command="{Binding DeleteCommand}" Text="Slett jakt"  IsVisible="{Binding ID, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" />
                     </ViewCell>

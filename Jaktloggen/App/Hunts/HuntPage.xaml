@@ -35,10 +35,13 @@
                     <cells:ExtendedTextCell Text="Jaktlag" Text2="{Binding HuntersText}" Command="{Binding HuntersCommand}" />
                     <cells:ExtendedTextCell Text="Hunder" Text2="{Binding DogsText}" Command="{Binding DogsCommand}" />
                     <cells:MapCell Text="Posisjon" Latitude="{Binding Latitude}" Longitude="{Binding Longitude}" Command="{Binding PositionCommand}" />
-                      
-                    <cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Text2="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
+
+                    <cells:DateCell  Command="{Binding DateFromCommand}" Text="Dato fra" Date="{Binding DateFrom, Mode=TwoWay}" DateField="DateFrom" />
+                    <cells:DateCell  Command="{Binding DateToCommand}" Text="Dato til" Date="{Binding DateTo, Mode=TwoWay}" DateField="DateTo"  />
+                    
+                    <!--<cells:ExtendedTextCell Command="{Binding DateFromCommand}" Text="Dato fra" Text2="{Binding DateFrom, Converter={Converters:DateTimeToShortDateConverter}}" />
                     <cells:ExtendedTextCell Command="{Binding DateToCommand}" Text="Dato til" Text2="{Binding DateTo, Converter={Converters:DateTimeToShortDateConverter}}" />
-                    <cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />
+                    --><cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />
                     <ViewCell>
                         <Button Command="{Binding DeleteCommand}" Text="Slett jakt"  IsVisible="{Binding ID, Converter={Converters:InvertedEmptyStringToBooleanConverter}}" />
                     </ViewCell>

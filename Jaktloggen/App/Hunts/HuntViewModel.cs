@@ -294,27 +294,22 @@ namespace Jaktloggen
 
             DateFromCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputDate("Dato fra", DateFrom, async obj => {
-                    DateFrom = obj.Value;
-                    if (DateTo < DateFrom){
-                        DateTo = DateFrom;
-                    }
-                    await SaveAsync();
-                }));
+                if (DateTo < DateFrom)
+                {
+                    DateTo = DateFrom;
+                }
+
+                await SaveAsync();
             });
 
             DateToCommand = new Command(async () =>
             {
-                await Navigation.PushAsync(new InputDate("Dato til", DateTo, async obj =>
+                if (DateFrom > DateTo)
                 {
-                    DateTo = obj.Value;
-                    if (DateFrom > DateTo)
-                    {
-                        DateFrom = DateTo;
-                    }
+                    DateFrom = DateTo;
+                }
 
-                    await SaveAsync();
-                }));
+                await SaveAsync();
             });
 
             HuntersCommand = new Command(async () =>
@@ -395,7 +390,7 @@ namespace Jaktloggen
                 }
 
                 await Navigation.PushAsync(
-                    new LogPage(
+                    new LogPageCode(
                         new LogViewModel(
                             this, new Logg(), Navigation)));
             });

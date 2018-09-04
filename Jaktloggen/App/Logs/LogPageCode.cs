@@ -72,13 +72,25 @@ namespace Jaktloggen
                 Longitude = log.Longitude,
                 Command = log.PositionCommand
             });
-            section.Add(new DateTimeCell
+
+            DateCell dateCell = new DateCell
+            {
+                Text = "Dato",
+                Command = log.DateCommand, 
+                DateField = "Date"
+            };
+            dateCell.SetBinding(DateCell.DateProperty, "Date", BindingMode.TwoWay);
+            section.Add(dateCell);
+
+            TimeCell timeCell = new TimeCell
             {
                 Text = "Tidspunkt",
-                Date = log.Date,
-                Time = log.Time,
-                Command = log.DateCommand
-            });
+                Command = log.TimeCommand
+            };
+            timeCell.SetBinding(TimeCell.TimeProperty, "Time", BindingMode.TwoWay);
+            section.Add(timeCell);
+
+
             section.Add(new ExtendedTextCell
             {
                 Command = log.NotesCommand,

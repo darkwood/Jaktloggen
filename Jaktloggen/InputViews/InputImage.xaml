@@ -10,11 +10,6 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <StackLayout>
-            <Grid Grid.Row="0" VerticalOptions="Start" Margin="40 20">
-                <Button Text="Avbryt" Grid.Column="0" HorizontalOptions="Start" Clicked="Cancel_Clicked" />
-                <Button Text="Lagre" Grid.Column="1" HorizontalOptions="End" Clicked="Done_Clicked" />
-            </Grid>
             
         <Grid VerticalOptions="FillAndExpand">
             
@@ -86,6 +81,5 @@
 
             </Grid>
         </Grid>
-        </StackLayout>
 	</ContentPage.Content>
 </ContentPage>

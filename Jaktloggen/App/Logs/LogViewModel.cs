@@ -59,7 +59,8 @@ namespace Jaktloggen
                                                 Item.Dato.Hour, Item.Dato.Minute, Item.Dato.Second);
 
                 Item.Dato = dateWithTime;  
-                OnPropertyChanged(nameof(Date)); }
+                OnPropertyChanged(nameof(Date));
+            }
         }
 
 
@@ -308,6 +309,7 @@ namespace Jaktloggen
         public ICommand PositionCommand { protected set; get; }
         public ICommand ImageCommand { protected set; get; }
         public ICommand DateCommand { protected set; get; }
+        public ICommand TimeCommand { protected set; get; }
         public ICommand NotesCommand { protected set; get; }
         public ICommand DeleteCommand { protected set; get; }
         public ICommand HunterCommand { protected set; get; }
@@ -540,17 +542,17 @@ namespace Jaktloggen
                 }
             });
 
-            DateCommand = new Command(async () =>
+            DateCommand = new Command(async (object date) =>
             {
-                var inputDate = new InputDate("Tidspunkt", Date, async obj =>
-                {
-                    Date = obj.Value;
-                    await SaveAsync();
-                }, 
-                true);
-                await Navigation.PushAsync(inputDate);
+                Date = (DateTime)date;
+                await SaveAsync();
             });
 
+            TimeCommand = new Command(async (object time) =>
+            {
+                Time = (TimeSpan)time;
+                await SaveAsync();
+            });
             NotesCommand = new Command(async () =>
             {
                 var inputView = new InputEntry("Notater", Notes, async obj =>

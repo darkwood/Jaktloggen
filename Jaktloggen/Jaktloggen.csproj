@@ -223,6 +223,8 @@
     <Compile Include="App\Logs\Fields\ILogField.cs" />
     <Compile Include="App\Logs\Fields\LogFieldImage.cs" />
     <Compile Include="App\Logs\LogPageCode.cs" />
+    <Compile Include="Cells\DateCell.cs" />
+    <Compile Include="Cells\TimeCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Plugin.Permissions.Abstractions">

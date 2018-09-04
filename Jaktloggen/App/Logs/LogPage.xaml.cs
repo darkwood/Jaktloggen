@@ -9,12 +9,12 @@ namespace Jaktloggen
     {
         LogViewModel viewModel;
 
-        public LogPage()
-        {
-            InitializeComponent();
+        //public LogPage()
+        //{
+        //    InitializeComponent();
 
-            BindingContext = viewModel = new LogViewModel(null, new Logg(), null);
-        }
+        //    BindingContext = viewModel = new LogViewModel(null, new Logg(), null);
+        //}
 
         public LogPage(LogViewModel viewModel)
         {

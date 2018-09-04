@@ -66,9 +66,10 @@ namespace Jaktloggen
 
         public async Task ShowNewItem()
         {
-            var newLog = new LogViewModel(Hunt, new Logg(), Navigation);
+            var log = new Logg { Dato = DateTime.Now };
+            var newLog = new LogViewModel(Hunt, log, Navigation);
             Items.Add(newLog);
-            await Navigation.PushAsync(new LogPage(newLog));
+            await Navigation.PushAsync(new LogPageCode(newLog));
         }
     }
 }

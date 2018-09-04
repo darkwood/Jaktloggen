@@ -8,31 +8,5 @@
     Title="{Binding Title}">
 
     <ContentPage.Content>
-       <local:JTableView HasUnevenRows="true" Intent="Settings">
-            <TableRoot>
-
-                <TableSection Title="">
-                    <cells:ImageHeaderCell HeightRequest="200" ImagePath="{Binding ImageFilename}"  Command="{Binding ImageCommand}" />
-                    
-                    <cells:ItemPickerCell Text="Art" Items="{Binding PickerSpecies}" SelectedItem="{Binding SelectedPickerSpecie}" Command="{Binding SpeciesCommand}" />
-
-                    <cells:CountCell Text="Treff" Count="{Binding Hits, Mode=TwoWay}" Command="{Binding HitsCommand}" />
-                    <cells:CountCell Text="Skudd" Count="{Binding Shots, Mode=TwoWay}" Command="{Binding ShotsCommand}" />
-                    <cells:CountCell Text="Sett" Count="{Binding Observed, Mode=TwoWay}" Command="{Binding ObservedCommand}" />
-
-                    <cells:ItemPickerCell Text="Jeger" Items="{Binding PickerHunters}" SelectedItem="{Binding SelectedPickerHunter}" Command="{Binding HunterCommand}" />
-                    <cells:ItemPickerCell Text="Hund" Items="{Binding PickerDogs}" SelectedItem="{Binding SelectedPickerDog}" Command="{Binding DogCommand}" />
-
-                    <cells:MapCell Text="{Binding InfoMessage}" Latitude="{Binding Latitude}" Longitude="{Binding Longitude}" Command="{Binding PositionCommand}" />
-                    <cells:DateTimeCell Text="Tidspunkt" Date="{Binding Date, Mode=TwoWay}" Time="{Binding Time, Mode=TwoWay}" />
-                    <cells:ExtendedTextCell Command="{Binding NotesCommand}" Text="Notater" Text2="{Binding Notes}" />
-
-                    <cells:ExtendedTextCell IsVisible="{Binding GenderVisible}" Command="{Binding GenderCommand}" Text="Kjønn" Text2="{Binding Gender}" />
-                    <cells:ExtendedTextCell IsVisible="{Binding WeatherVisible}" Command="{Binding GenderCommand}" Text="Vær" Text2="{Binding Weather}" />
-
-                </TableSection>
-               
-            </TableRoot>
-        </local:JTableView>
 	</ContentPage.Content>
 </ContentPage>

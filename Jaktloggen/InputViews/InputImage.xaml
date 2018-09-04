@@ -10,7 +10,9 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
+            
         <Grid VerticalOptions="FillAndExpand">
+            
             <Image 
                 Source="{Binding Source}"
                 Aspect="AspectFit" />
@@ -79,6 +81,5 @@
 
             </Grid>
         </Grid>
-
 	</ContentPage.Content>
 </ContentPage>

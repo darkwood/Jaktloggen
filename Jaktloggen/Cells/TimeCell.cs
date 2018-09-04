@@ -7,9 +7,9 @@ using Xamarin.Forms.Maps;
 
 namespace Jaktloggen.Cells
 {
-    public class DateTimeCell : ViewCell
+    public class TimeCell : ViewCell
     {
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(Command), typeof(DateTimeCell), null);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(Command), typeof(TimeCell), null);
 
         public ICommand Command
         {
@@ -21,10 +21,10 @@ namespace Jaktloggen.Cells
             BindableProperty.Create(
                 nameof(Text), 
                 typeof(string), 
-                typeof(DateTimeCell), 
+                typeof(TimeCell), 
                 null,
                 propertyChanged: (bindable, oldValue, newValue) => {
-                ((DateTimeCell)bindable).TextLabel.Text = newValue as string;
+                ((TimeCell)bindable).TextLabel.Text = newValue as string;
                 }
             );
         
@@ -36,28 +36,29 @@ namespace Jaktloggen.Cells
 
         public Label TextLabel { get; private set; }
         public Label ValueLabel { get; private set; }
+        public TimePicker TimePicker { get; private set; }
 
         /***************************************************************************/
 
-        public static readonly BindableProperty DateProperty =
+        public static readonly BindableProperty TimeProperty =
             BindableProperty.Create(
-                nameof(Date),
-                typeof(DateTime),
-                typeof(DateTimeCell),
-                DateTime.Now,
+                nameof(Time),
+                typeof(TimeSpan),
+                typeof(TimeCell),
+                DateTime.Now.TimeOfDay,
                 propertyChanged: (bindable, oldValue, newValue) => {
-                    ((DateTimeCell)bindable).ValueLabel.Text = ((DateTime)newValue).ToString("g", new CultureInfo("nb-no"));
+                ((TimeCell)bindable).ValueLabel.Text = ((TimeSpan)newValue).ToString("h\\:mm", new CultureInfo("nb-no"));
                 }
             );
 
-        public DateTime Date
+        public TimeSpan Time
         {
-            get { return (DateTime)GetValue(DateProperty); }
-            set { SetValue(DateProperty, value); }
+            get { return (TimeSpan)GetValue(TimeProperty); }
+            set { SetValue(TimeProperty, value); OnPropertyChanged(nameof(ValueLabel)); }
         }
 
 
-        public DateTimeCell()
+        public TimeCell()
         {
             View = CreateLayout();
         }
@@ -66,6 +67,7 @@ namespace Jaktloggen.Cells
         {
             CreateTextLabel();
             CreateValueLabel();
+            CreateTimePicker();
 
             var viewLayout = new StackLayout
             {
@@ -75,9 +77,17 @@ namespace Jaktloggen.Cells
 
             viewLayout.Children.Add(TextLabel);
             viewLayout.Children.Add(ValueLabel);
+            viewLayout.Children.Add(TimePicker);
             viewLayout.GestureRecognizers.Add(CreateTapGestureRecognizer());
 
             return viewLayout;
+        }
+
+        private void CreateTimePicker()
+        {
+            TimePicker = new TimePicker();
+            TimePicker.SetBinding(TimePicker.TimeProperty, "Time");;
+            TimePicker.IsVisible = false;
         }
 
         private TapGestureRecognizer CreateTapGestureRecognizer()
@@ -85,10 +95,7 @@ namespace Jaktloggen.Cells
             var gestureRecognizer = new TapGestureRecognizer();
             gestureRecognizer.Tapped += (s, e) =>
             {
-                if (Command != null && Command.CanExecute(null))
-                {
-                    Command.Execute(Date);
-                } 
+                TimePicker.Focus();
             };
             return gestureRecognizer;
         }

@@ -11,6 +11,7 @@ namespace Jaktloggen.DataStores.File
         List<T> _items = new List<T>();
         public string Filename { get; set; }
         private bool firstLoad = true;
+        private int delay = 250;
 
         public DataStore()
         {
@@ -69,6 +70,8 @@ namespace Jaktloggen.DataStores.File
 
             _items.SaveToLocalStorage(Filename);
 
+            await Task.Delay(delay);
+
             return await Task.FromResult(true);
         }
 
@@ -76,6 +79,8 @@ namespace Jaktloggen.DataStores.File
         {
             _items = items;
             _items.SaveToLocalStorage(Filename);
+
+            await Task.Delay(delay);
 
             return await Task.FromResult(true);  
         }
@@ -86,6 +91,9 @@ namespace Jaktloggen.DataStores.File
             _items.Remove(_item);
 
             _items.SaveToLocalStorage(Filename);
+
+            await Task.Delay(delay);
+
             return await Task.FromResult(true);
         }
 
@@ -101,7 +109,7 @@ namespace Jaktloggen.DataStores.File
                 _items = await FileService.LoadFromLocalStorage<List<T>>(Filename);
                 firstLoad = false;
             }
-
+            await Task.Delay(delay);
             return await Task.FromResult(_items);
         }
     }

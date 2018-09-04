@@ -30,7 +30,7 @@ namespace Jaktloggen
         public HuntsViewModel(INavigation navigation)
         {
             Navigation = navigation;
-            Title = "Jaktloggen";
+            Title = "Jaktturer";
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand(), () => !IsBusy);
             Items = new ObservableCollection<JaktGroup>();
         }

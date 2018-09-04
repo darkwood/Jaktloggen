@@ -14,11 +14,11 @@ namespace Jaktloggen
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new LogsViewModel(null, Navigation);
-            viewModel.Items.Add(new LogViewModel(null, new Logg{
-                Dato = DateTime.Now,
-                Notes = "Lorem ipsum"
-            }, null));
+            //BindingContext = viewModel = new LogsViewModel(null, Navigation);
+            //viewModel.Items.Add(new LogViewModel(null, new Logg{
+            //    Dato = DateTime.Now,
+            //    Notes = "Lorem ipsum"
+            //}, null));
         }
 
         public LogsPage(LogsViewModel viewModel)
@@ -39,8 +39,8 @@ namespace Jaktloggen
             var item = args.SelectedItem as LogViewModel;
             if (item == null)
                 return;
-
-            await Navigation.PushAsync(new LogPage(item));
+            
+            await Navigation.PushAsync(new LogPageCode(item));
             ItemsListView.SelectedItem = null;
         }
 

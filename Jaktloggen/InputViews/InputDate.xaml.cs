@@ -15,6 +15,16 @@ namespace Jaktloggen.InputViews
             get { return _value ?? DateTime.Now; }
             set { _value = value; OnPropertyChanged(nameof(Value)); }
         }
+        public TimeSpan Time
+        {
+            get { return Value.TimeOfDay; }
+            set {
+                var dateWithTime = new DateTime(Value.Year, Value.Month, Value.Day,
+                                                value.Hours, value.Minutes, value.Seconds);
+                
+                Value = dateWithTime; 
+            }
+        }
         private Action<InputDate> _callback { get; set; }
 
         private bool _timeVisible;
@@ -46,26 +56,11 @@ namespace Jaktloggen.InputViews
             await Navigation.PopAsync();
         }
 
-        void Date_Tapped(object sender, System.EventArgs e)
-        {
-            date.Focus();
-        }
-
-        void Time_Tapped(object sender, System.EventArgs e)
-        {
-            time.Focus();
-        }
 
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            if(TimeVisible){
-                time.Focus();
-            } else {
-                date.Focus();
-            }
 
         }
     }

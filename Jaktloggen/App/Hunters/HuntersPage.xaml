@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+             xmlns:Abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              xmlns:cells="clr-namespace:Jaktloggen.Cells;assembly=Jaktloggen"
              x:Class="Jaktloggen.HuntersPage"
              Title="Jegere">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="add.png" Clicked="AddItem_Clicked" />
-    </ContentPage.ToolbarItems>
    <ContentPage.Content>
-        <StackLayout>
+        <Grid>
             <ListView x:Name="ItemsListView" 
                 ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand" 
                 HasUnevenRows="false" RowHeight="70"
@@ -27,6 +25,23 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackLayout>
+
+            <Abstractions:CircleImage 
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="40 20"
+                FillColor="White"
+                Source="add.png" 
+                Aspect="AspectFit"
+                HeightRequest="60" 
+                WidthRequest="60">
+                <Abstractions:CircleImage.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="AddItem_Clicked"  />
+                </Abstractions:CircleImage.GestureRecognizers>
+            </Abstractions:CircleImage>
+
+        </Grid>
+            
     </ContentPage.Content>
 </ContentPage>

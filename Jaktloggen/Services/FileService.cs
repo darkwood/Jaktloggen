@@ -12,6 +12,7 @@ namespace Jaktloggen.Services
 {
     public static class FileService
     {
+
         public static void SaveToLocalStorage<T>(this T objToSerialize, string filename)
         {
             if (filename.ToLower().EndsWith(".json", StringComparison.CurrentCultureIgnoreCase))
@@ -38,7 +39,7 @@ namespace Jaktloggen.Services
             // 1 read json
             if (filename.EndsWith(".json", StringComparison.CurrentCultureIgnoreCase) && Exists(filename))
             {
-                var jsonString = DependencyService.Get<IFileUtility>().Load(filename);
+                string jsonString = ReadFile(filename);
 
                 try
                 {
@@ -58,7 +59,7 @@ namespace Jaktloggen.Services
 
                 if (localFileExists)
                 {
-                    var xmlString = DependencyService.Get<IFileUtility>().Load(xmlFilename);
+                    var xmlString = ReadFile(xmlFilename);
                     try
                     {
                         using (var reader = new StringReader(xmlString))
@@ -75,6 +76,11 @@ namespace Jaktloggen.Services
                 }
             }
             return await Task.FromResult<T>(localObj);
+        }
+
+        public static string ReadFile(string filename)
+        {
+            return DependencyService.Get<IFileUtility>().Load(filename);
         }
 
         public static bool Exists(string filename)

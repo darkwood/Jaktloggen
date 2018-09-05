@@ -84,8 +84,7 @@ namespace Jaktloggen
             Children.Add(fieldsPage);
             Children.Add(dogsPage);
             Children.Add(statsPage);
-
-            //Children.Add(aboutPage);
+            Children.Add(aboutPage);
         }
 
         protected override void OnCurrentPageChanged()

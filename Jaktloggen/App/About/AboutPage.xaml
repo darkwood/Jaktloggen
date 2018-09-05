@@ -55,6 +55,10 @@
 					</Label.FormattedText>
 				</Label>
 				<Button Margin="0,10,0,0" Text="Learn more" Command="{Binding OpenWebCommand}" BackgroundColor="{StaticResource Primary}" TextColor="White" />
+                
+                <Button Command="{Binding ExportDataCommand}" Text="Eksporter data" />
+			    <Button Command="{Binding ImportDataCommand}" Text="Importer data" />
+                
 			</StackLayout>
 		</ScrollView>
 	</Grid>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.AboutPage" xmlns:vm="clr-namespace:Jaktloggen;" Title="{Binding Title}">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Jaktloggen.AboutPage" xmlns:vm="clr-namespace:Jaktloggen;"
+             xmlns:Converters="clr-namespace:Jaktloggen.Utils.Converters;assembly=Jaktloggen"
+             Title="{Binding Title}">
 	<ContentPage.BindingContext>
 		<vm:AboutViewModel />
 	</ContentPage.BindingContext>
@@ -58,7 +60,7 @@
                 
                 <Button Command="{Binding ExportDataCommand}" Text="Eksporter data" />
 			    <Button Command="{Binding ImportDataCommand}" Text="Importer data" />
-                
+                <Label Text="{Binding ExportMessage}" />
 			</StackLayout>
 		</ScrollView>
 	</Grid>

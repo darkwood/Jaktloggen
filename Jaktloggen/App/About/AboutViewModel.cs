@@ -22,6 +22,14 @@ namespace Jaktloggen
         public ICommand ExportDataCommand { get; }
         public ICommand OpenWebCommand { get; }
         public int ExportCount { get; set; }
+
+        private string m_exportMessage;
+
+        public string ExportMessage {
+            get { return m_exportMessage; }
+            set { SetProperty(ref m_exportMessage, value); }
+        }
+
         public HttpStatusCode ImportStatusCode { get; set; }
         private string[] _fileList { get; }
 
@@ -55,6 +63,7 @@ namespace Jaktloggen
                     }    
                 }
             }
+            ExportMessage = "Data eksportert.";
         }
 
         public async Task ImportData()

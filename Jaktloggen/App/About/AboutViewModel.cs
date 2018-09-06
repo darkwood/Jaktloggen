@@ -44,12 +44,15 @@ namespace Jaktloggen
             ExportCount = 0;
             foreach (var filename in _fileList)
             {
-                var data = FileService.ReadFile(filename);
-                var content = new StringContent(data, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(_servicePath + filename, content);
-                if (response.IsSuccessStatusCode)
+                if(FileService.Exists(filename))
                 {
-                    ExportCount++;
+                    var data = FileService.ReadFile(filename);
+                    var content = new StringContent(data, Encoding.UTF8, "application/json");
+                    HttpResponseMessage response = await client.PostAsync(_servicePath + filename, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        ExportCount++;
+                    }    
                 }
             }
         }
